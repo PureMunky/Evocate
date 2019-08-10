@@ -3,12 +3,12 @@ WORKDIR /app
 
 # Copy everything else and build
 COPY . ./
-RUN dotnet publish -c Release -o out core-api/core-api.csproj
+RUN dotnet publish -c Release -o out Tete.Api/Tete.Api.csproj
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/core/aspnet:2.2
 EXPOSE 5000
 EXPOSE 5001
 WORKDIR /app
-COPY --from=build-env /app/core-api/out .
-ENTRYPOINT ["dotnet", "core-api.dll"]
+COPY --from=build-env /app/Tete.Api/out .
+ENTRYPOINT ["dotnet", "Tete.Api.dll"]

@@ -1,16 +1,20 @@
 # stop existing container
-docker stop tete-core-app
+docker stop tete-api
+docker stop tete-web
 
 # remove existing container
-docker rm tete-core-app
+docker rm tete-api
+docker rm tete-web
 
 # clean the dotnet build files
 dotnet clean
 
 # build a new version of core
-docker build -t tete-core .
+docker build -f Api.Dockerfile -t tete-api-img .
+docker build -f Web.Dockerfile -t tete-web-img .
 
 # run core app
-docker run -dit --name tete-core-app -p 80:80 tete-core
+docker run -dit --name tete-api -p 80:80 tete-api-img
+docker run -dit --name tete-web -p 80:80 tete-web-img
 
 # ./run.sh

@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Tete.Models\Tete.Models.csproj" />
+    <ProjectReference Include="..\Tete.Core\Tete.Core.csproj" />
   </ItemGroup>
 
 </Project>

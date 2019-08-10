@@ -7,8 +7,7 @@ RUN dotnet publish -c Release -o out Tete.Api/Tete.Api.csproj
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/core/aspnet:2.2
-EXPOSE 5000
-EXPOSE 5001
+EXPOSE 88
 WORKDIR /app
 COPY --from=build-env /app/Tete.Api/out .
 ENTRYPOINT ["dotnet", "Tete.Api.dll"]

@@ -7,7 +7,10 @@ RUN dotnet publish -c Release -o out Tete.Api/Tete.Api.csproj
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/core/aspnet:2.2
-EXPOSE 88
+EXPOSE 80
+
+ENV SQLCONNSTR_DefaultConnection=Tete.DB.Test
+
 WORKDIR /app
 COPY --from=build-env /app/Tete.Api/out .
 ENTRYPOINT ["dotnet", "Tete.Api.dll"]

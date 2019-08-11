@@ -1,4 +1,4 @@
-using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Tete.Models.Config
 {
@@ -13,6 +13,9 @@ namespace Tete.Models.Config
     /// The name to reference this flag by.
     /// </summary>
     /// <value></value>
+    [Key]
+    [MaxLength(30)]
+    [Required]
     public string Key { get; set; }
 
     /// <summary>
@@ -25,6 +28,7 @@ namespace Tete.Models.Config
     /// Additional data that can be set for the flag.
     /// </summary>
     /// <value></value>
+    [MaxLength(200)]
     public string Data { get; set; }
   }
 }

@@ -43,8 +43,11 @@ namespace Tete.Api
         app.UseHsts();
       }
       
-      Console.WriteLine("Default Connection");
-      Console.WriteLine(Configuration["ConnecionStrings:DefaultConnection"]);
+      foreach(string s in Configuration.Keys)
+      {
+        Console.WriteLine(String.Format("{0}: {1}", s, Configuration[s]));
+      }
+      
       app.UseHttpsRedirection();
       app.UseMvc();
     }

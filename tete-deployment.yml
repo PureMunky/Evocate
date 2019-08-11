@@ -1,0 +1,51 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tete-api
+  namespace: tete
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: tete-api
+  template:
+    metadata:
+      labels:
+        app: tete-api
+    spec:
+      containers:
+      - name: tete-api
+        image: tete-api-img:latest
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tete-web
+  namespace: tete
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: tete-web
+  template:
+    metadata:
+      labels:
+        app: tete-web
+    spec:
+      containers:
+      - name: tete-web
+        image: tete-web-img:latest
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80

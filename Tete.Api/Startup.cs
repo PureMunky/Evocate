@@ -27,7 +27,7 @@ namespace Tete.Api
     public void ConfigureServices(IServiceCollection services)
     {
       services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-      services.AddDbContext<Contexts.MainContext>(options => options.UseSqlServer(Configuration["ConnectionString:DefaultConnect"]));
+      services.AddDbContext<Contexts.MainContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]));
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,11 +43,8 @@ namespace Tete.Api
         app.UseHsts();
       }
       
-      foreach(string s in Configuration.Keys)
-      {
-        Console.WriteLine(String.Format("{0}: {1}", s, Configuration[s]));
-      }
-      
+      Console.WriteLine("Default Connection");
+      Console.WriteLine(Configuration["ConnectionStrings:DefaultConnection"]);
       app.UseHttpsRedirection();
       app.UseMvc();
     }

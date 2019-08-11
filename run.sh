@@ -1,13 +1,17 @@
 # stop existing container
 docker stop tete-api
 docker stop tete-web
+docker stop tete-db
 
 # remove existing container
 docker rm tete-api
 docker rm tete-web
+docker rm tete-db
 
 # clean the dotnet build files
 dotnet clean
+
+docker run --name tete-db -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=tetePassword!' -p 1433:1433 -d mcr.microsoft.com/mssql/server:2017-CU8-ubuntu
 
 # build a new version of core
 docker build -f Api.Dockerfile -t tete-api-img .

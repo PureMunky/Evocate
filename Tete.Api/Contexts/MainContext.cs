@@ -10,7 +10,7 @@ namespace Tete.Api.Contexts
 
     public MainContext(DbContextOptions options) : base(options)
     {
-      // Database.Migrate();
+      Database.Migrate();
     }
 
   }

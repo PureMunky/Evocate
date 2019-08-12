@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tete.Web", "Tete.Web\Tete.W
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tete.Tests", "Tete.Tests\Tete.Tests.csproj", "{9E5EE3D3-5480-4EA1-B54B-A026471B7435}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tete.Job", "Tete.Job\Tete.Job.csproj", "{A8B941BE-DF71-495A-AC94-16CB6CF3BB23}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tete.Api", "Tete.Api\Tete.Api.csproj", "{D4528A45-F2DD-4715-886E-22FDF99A34CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -142,5 +142,17 @@ Global
 		{A8B941BE-DF71-495A-AC94-16CB6CF3BB23}.Release|x64.Build.0 = Release|Any CPU
 		{A8B941BE-DF71-495A-AC94-16CB6CF3BB23}.Release|x86.ActiveCfg = Release|Any CPU
 		{A8B941BE-DF71-495A-AC94-16CB6CF3BB23}.Release|x86.Build.0 = Release|Any CPU
+		{D4528A45-F2DD-4715-886E-22FDF99A34CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4528A45-F2DD-4715-886E-22FDF99A34CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4528A45-F2DD-4715-886E-22FDF99A34CC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D4528A45-F2DD-4715-886E-22FDF99A34CC}.Debug|x64.Build.0 = Debug|Any CPU
+		{D4528A45-F2DD-4715-886E-22FDF99A34CC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D4528A45-F2DD-4715-886E-22FDF99A34CC}.Debug|x86.Build.0 = Debug|Any CPU
+		{D4528A45-F2DD-4715-886E-22FDF99A34CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4528A45-F2DD-4715-886E-22FDF99A34CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4528A45-F2DD-4715-886E-22FDF99A34CC}.Release|x64.ActiveCfg = Release|Any CPU
+		{D4528A45-F2DD-4715-886E-22FDF99A34CC}.Release|x64.Build.0 = Release|Any CPU
+		{D4528A45-F2DD-4715-886E-22FDF99A34CC}.Release|x86.ActiveCfg = Release|Any CPU
+		{D4528A45-F2DD-4715-886E-22FDF99A34CC}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

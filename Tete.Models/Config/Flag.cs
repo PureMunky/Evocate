@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Tete.Models.Config
@@ -30,5 +31,22 @@ namespace Tete.Models.Config
     /// <value></value>
     [MaxLength(200)]
     public string Data { get; set; }
+
+    /// <summary>
+    /// When the flag was initially created.
+    /// </summary>
+    /// <value></value>
+    public DateTime Created { get; set; }
+    /// <summary>
+    /// The last time the flag was modified.
+    /// </summary>
+    /// <value></value>
+    public DateTime Modified { get; set; }
+
+    public Flag()
+    {
+      this.Created = DateTime.UtcNow;
+      this.Modified = DateTime.UtcNow;
+    }
   }
 }

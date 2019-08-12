@@ -10,17 +10,17 @@ namespace Tete.Api.Controllers
   [ApiController]
   public class FlagsController : ControllerBase
   {
-    private Contexts.MainContext context;
 
+    private Api.Services.FlagService service;
     public FlagsController(Contexts.MainContext mainContext)
     {
-      this.context = mainContext;
+      this.service = new Services.FlagService(mainContext);
     }
     // GET api/values
     [HttpGet]
     public ActionResult<IEnumerable<Tete.Models.Config.Flag>> Get()
     {
-      return this.context.Flags;
+      return this.service.Get();
     }
 
     // GET api/values/5

@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Tete.Services\Tete.Services.csproj" />
     <ProjectReference Include="..\Tete.Models\Tete.Models.csproj" />
   </ItemGroup>
 

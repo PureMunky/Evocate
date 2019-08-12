@@ -42,7 +42,7 @@ namespace Tete.Api
         // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
         app.UseHsts();
       }
-      
+
       Console.WriteLine("Default Connection");
       Console.WriteLine(Configuration["ConnectionStrings:DefaultConnection"]);
       app.UseHttpsRedirection();

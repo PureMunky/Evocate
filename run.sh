@@ -12,6 +12,10 @@ docker rm tete-db
 dotnet clean
 
 docker run --name tete-db -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=tetePassword!' -p 1433:1433 -d mcr.microsoft.com/mssql/server:2017-CU8-ubuntu
+#docker run -dit --name tete-db -p 1433:1433 tete-db-img
+#sleep 5
+
+#dotnet ef database update -p Tete.Api
 
 # build a new version of core
 docker build -f Api.Dockerfile -t tete-api-img .

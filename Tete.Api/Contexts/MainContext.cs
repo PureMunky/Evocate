@@ -1,3 +1,4 @@
+using System;
 using Microsoft.EntityFrameworkCore;
 
 namespace Tete.Api.Contexts
@@ -10,6 +11,7 @@ namespace Tete.Api.Contexts
 
     public MainContext(DbContextOptions options) : base(options)
     {
+      Console.WriteLine("hello");
       Database.Migrate();
     }
 

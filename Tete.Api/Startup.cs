@@ -45,7 +45,7 @@ namespace Tete.Api
 
       Console.WriteLine("Default Connection");
       Console.WriteLine(Configuration["ConnectionStrings:DefaultConnection"]);
-      app.UseHttpsRedirection();
+      // app.UseHttpsRedirection();
       app.UseMvc();
     }
   }

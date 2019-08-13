@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 
 namespace Tete.Api.Services
 {
@@ -5,7 +6,8 @@ namespace Tete.Api.Services
   {
     IEnumerable<T> Get();
     T New();
-    T Get(string id);
+    T Get(string Id);
+    void Save(T Object);
     
   }
 }

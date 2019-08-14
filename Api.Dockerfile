@@ -9,7 +9,7 @@ RUN dotnet publish -c Release -o out Tete.Api/Tete.Api.csproj
 FROM mcr.microsoft.com/dotnet/core/aspnet:2.2
 EXPOSE 80
 
-ENV SQLCONNSTR_DefaultConnection "Server=localhost; Database=Tete; User Id=sa; Password=tetePassword!;"
+ENV SQLCONNSTR_DefaultConnection "Server=tete-db; Database=Tete; User Id=sa; Password=tetePassword!;"
 
 WORKDIR /app
 COPY --from=build-env /app/Tete.Api/out .

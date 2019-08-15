@@ -16,11 +16,7 @@ spec:
     spec:
       containers:
       - name: tete-api
-        image: tete-api-img:latest
-        resources:
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
+        image: puremunky/tete-api:latest
         ports:
         - containerPort: 80
 
@@ -42,10 +38,28 @@ spec:
     spec:
       containers:
       - name: tete-web
-        image: tete-web-img:latest
-        resources:
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
+        image: puremunky/tete-web:latest
+        ports:
+        - containerPort: 80
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tete-db
+  namespace: tete
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tete-db
+  template:
+    metadata:
+      labels:
+        app: tete-db
+    spec:
+      containers:
+      - name: tete-db
+        image: puremunky/tete-db:latest
         ports:
         - containerPort: 80

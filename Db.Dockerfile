@@ -6,4 +6,4 @@ ENV SA_PASSWORD=tetePassword!
 
 EXPOSE 1433
 
-CMD /bin/bash ./entrypoint.sh
+CMD /opt/mssql/bin/sqlservr

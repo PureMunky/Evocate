@@ -11,7 +11,7 @@ namespace Tete.Api.Contexts
 
     public MainContext(DbContextOptions options) : base(options)
     {
-      Console.WriteLine("hello");
+      Console.WriteLine("Initializing MainContext");
       Database.Migrate();
     }
 

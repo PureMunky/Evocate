@@ -2,35 +2,24 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build",
+            "label": "build-api",
             "command": "dotnet",
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/core-api/core-api.csproj"
+                "${workspaceFolder}/Tete.Api/Tete.Api.csproj"
             ],
             "problemMatcher": "$tsc"
         },
         {
-            "label": "publish",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "publish",
-                "${workspaceFolder}/core-api/core-api.csproj"
-            ],
-            "problemMatcher": "$tsc"
-        },
-        {
-            "label": "watch",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "watch",
-                "run",
-                "${workspaceFolder}/core-api/core-api.csproj"
-            ],
-            "problemMatcher": "$tsc"
-        }
+          "label": "build-web",
+          "command": "dotnet",
+          "type": "process",
+          "args": [
+              "build",
+              "${workspaceFolder}/Tete.Web/Tete.Web.csproj"
+          ],
+          "problemMatcher": "$tsc"
+      },
     ]
 }

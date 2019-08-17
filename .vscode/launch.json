@@ -4,21 +4,44 @@
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
+
     {
-      "name": ".NET Core Launch (web)",
+      "name": ".NET Core Launch (Tete.Web)",
       "type": "coreclr",
       "request": "launch",
-      "preLaunchTask": "build",
-      "program": "${workspaceFolder}/core/bin/Debug/netcoreapp2.2/core.dll",
+      "preLaunchTask": "build-web",
+      "program": "${workspaceFolder}/Tete.Web/bin/Debug/netcoreapp2.2/Tete.Web.dll",
       "args": [],
-      "cwd": "${workspaceFolder}/core",
+      "cwd": "${workspaceFolder}/Tete.Web",
       "stopAtEntry": false,
       "serverReadyAction": {
         "action": "openExternally",
         "pattern": "^\\s*Now listening on:\\s+(https?://\\S+)"
       },
       "env": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "http://localhost:5001"
+      },
+      "sourceFileMap": {
+        "/Views": "${workspaceFolder}/Views"
+      }
+    },
+    {
+      "name": ".NET Core Launch (Tete.Api)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build-api",
+      "program": "${workspaceFolder}/Tete.Api/bin/Debug/netcoreapp2.2/Tete.Api.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/Tete.Api",
+      "stopAtEntry": false,
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "^\\s*Now listening on:\\s+(https?://\\S+)"
+      },
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "http://localhost:5000"
       },
       "sourceFileMap": {
         "/Views": "${workspaceFolder}/Views"

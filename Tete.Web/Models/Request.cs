@@ -3,10 +3,12 @@ namespace Tete.Web.Models
 {
   public class Request
   {
-    public string url;
-    public string method;
+    
+    public string Url { get; set; }
 
-    public string body;
+    public string Method { get; set; }
+
+    public string Body { get; set; }
 
   }
 }

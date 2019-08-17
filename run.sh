@@ -22,7 +22,7 @@ docker build -f Api.Dockerfile -t tete-api-img .
 #docker build -f Web.Dockerfile -t tete-web-img .
 
 # run core app
-docker run -dit --name tete-api -p 80:80 tete-api-img --link tete-db
+docker run -dit --name tete-api -p 80:80 tete-api-img 
 #docker run -dit --name tete-web -p 80:80 tete-web-img
 
 dotnet run --project Tete.Web/Tete.Web.csproj

@@ -1,10 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using System.IO;
 using System.Net.Http;
 using Tete.Web.Models;
 
@@ -21,19 +18,38 @@ namespace Tete.Web.Controllers
     }
 
     [HttpGet]
-    public Request Get()
+    public Response Get()
     {
-      return new Request();
+      return new Response();
     }
 
     [HttpGet("{id}")]
-    public async Task<HttpResponseMessage> Get(string id)
+    public async Task<Response> Get(string id)
     {
-      HttpResponseMessage response;
+      Request request = new Request()
+      {
+        Url = Configuration["Tete:ApiEndpoint"] + "/v1/Flags",
+        Method = "Post",
+        Body = String.Empty
+      };
+      Response response = new Response()
+      {
+        Request = request
+      };
 
       using (var client = new HttpClient())
       {
-        response = await client.GetAsync(Path.Join(Configuration["Tete:ApiEndpoint"], "v1/Flags"));
+        try
+        {
+          HttpResponseMessage res = await client.GetAsync(request.Url);
+          response.Data = await res.Content.ReadAsStringAsync();
+          response.Status = res.StatusCode;
+        }
+        catch (Exception e)
+        {
+          response.Error = true;
+          response.Message = e.Message;
+        }
       }
 
       return response;
@@ -46,7 +62,7 @@ namespace Tete.Web.Controllers
 
       using (var client = new HttpClient())
       {
-        response = await client.GetAsync(Path.Join(Configuration["Tete:ApiEndpoint"], "v1/Flags"));
+        response = await client.GetAsync(Configuration["Tete:ApiEndpoint"] + "/v1/Flags");
       }
 
       return response;

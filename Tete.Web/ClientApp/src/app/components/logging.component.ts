@@ -6,12 +6,17 @@ import { ApiService } from "../services/api.service";
   templateUrl: "./logging.component.html"
 })
 export class LoggingComponent {
-  private Logs;
+  public Logs;
   constructor(private apiService: ApiService) {
-    this.Logs = apiService.get({
-      Url: "/v1/Logs",
-      Method: "Get",
-      Body: ""
-    });
+    apiService
+      .get({
+        url: "/v1/Logs",
+        method: "Get",
+        body: ""
+      })
+      .then(result => {
+        console.log(result);
+        this.Logs = result;
+      });
   }
 }

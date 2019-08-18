@@ -13,12 +13,13 @@ export class ApiService {
     this.http = http;
     this.baseUrl = baseUrl;
   }
-  get(request: Request): Subscription {
+  get(request: Request) {
     return this.http
       .post<Response>(this.baseUrl + "api/Request", request)
-      .subscribe(
+      .toPromise()
+      .then(
         result => {
-          return result.Data;
+          return result.data;
         },
         error => console.error(error)
       );
@@ -26,15 +27,15 @@ export class ApiService {
 }
 
 interface Response {
-  Request: Request;
-  Data: string;
-  Error: boolean;
-  Message: string;
-  Status: number;
+  request: Request;
+  data: string;
+  error: boolean;
+  message: string;
+  status: number;
 }
 
 interface Request {
-  Url: string;
-  Method: string;
-  Body: string;
+  url: string;
+  method: string;
+  body: string;
 }

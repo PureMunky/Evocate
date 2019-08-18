@@ -5,6 +5,8 @@ namespace Tete.Models.Logging
 
   public class Log
   {
+    public Guid LogId { get; set; }
+
     public DateTime Occured { get; set; }
 
     public string Description { get; set; }
@@ -26,6 +28,7 @@ namespace Tete.Models.Logging
 
     private void Init()
     {
+      this.LogId = Guid.NewGuid();
       this.Occured = DateTime.UtcNow;
       this.MachineName = Environment.MachineName;
       this.StackTrace = Environment.StackTrace;

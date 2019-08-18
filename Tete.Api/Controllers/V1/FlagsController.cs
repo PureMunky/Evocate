@@ -13,14 +13,18 @@ namespace Tete.Api.Controllers
   {
 
     private Api.Services.Service<Flag> service;
+    private Api.Services.Logging.LogService logService;
+
     public FlagsController(Contexts.MainContext mainContext)
     {
       this.service = new Services.Service<Flag>(mainContext.Flags);
+      this.logService = new Services.Logging.LogService(mainContext);
     }
     // GET api/values
     [HttpGet]
     public IEnumerable<Flag> Get()
     {
+      this.logService.Save(new Models.Logging.Log("Call Flags.Get()"));
       return this.service.Get();
     }
 
@@ -28,6 +32,7 @@ namespace Tete.Api.Controllers
     [HttpGet("{id}")]
     public ActionResult<Flag> Get(string id)
     {
+
       return this.service.Get(id);
     }
 

@@ -8,6 +8,7 @@ namespace Tete.Api.Contexts
 
     public DbSet<Tete.Models.Config.Flag> Flags { get; set; }
     public DbSet<Tete.Models.Config.Setting> Settings { get; set; }
+    public DbSet<Tete.Models.Logging.Log> Logs { get; set; }
 
     public MainContext(DbContextOptions options) : base(options)
     {

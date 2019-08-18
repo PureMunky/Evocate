@@ -12,10 +12,10 @@ namespace Tete.Api.Controllers
   public class FlagsController : ControllerBase
   {
 
-    private Api.Services.FlagService service;
+    private Api.Services.Service<Flag> service;
     public FlagsController(Contexts.MainContext mainContext)
     {
-      this.service = new Services.FlagService(mainContext);
+      this.service = new Services.Service<Flag>(mainContext.Flags);
     }
     // GET api/values
     [HttpGet]

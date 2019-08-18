@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.Net.Http;
 using Tete.Web.Models;
+using Newtonsoft.Json;
 
 namespace Tete.Web.Controllers
 {
@@ -42,7 +44,7 @@ namespace Tete.Web.Controllers
         try
         {
           HttpResponseMessage res = await client.GetAsync(request.Url);
-          response.Data = await res.Content.ReadAsStringAsync();
+          response.Data = JsonConvert.DeserializeObject<dynamic>(await res.Content.ReadAsStringAsync());
           response.Status = res.StatusCode;
         }
         catch (Exception e)
@@ -69,7 +71,7 @@ namespace Tete.Web.Controllers
         try
         {
           HttpResponseMessage res = await client.GetAsync(request.Url);
-          response.Data = await res.Content.ReadAsStringAsync();
+          response.Data = JsonConvert.DeserializeObject<dynamic>(await res.Content.ReadAsStringAsync());
           response.Status = res.StatusCode;
         }
         catch (Exception e)

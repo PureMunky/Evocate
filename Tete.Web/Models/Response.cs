@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 
 namespace Tete.Web.Models
 {
@@ -11,13 +11,13 @@ namespace Tete.Web.Models
     /// <value></value>
     public Request Request { get; set; }
 
-    public string Data { get; set; }
+    public IEnumerable<dynamic> Data { get; set; }
 
     public bool Error { get; set; }
 
     public string Message { get; set; }
 
-    public System.Net.HttpStatusCode Status {get; set;}
+    public System.Net.HttpStatusCode Status { get; set; }
 
   }
 }

@@ -56,13 +56,27 @@ namespace Tete.Web.Controllers
     }
 
     [HttpPost]
-    public async Task<HttpResponseMessage> Post([FromBody] Request value)
+    public async Task<Response> Post([FromBody] Request request)
     {
-      HttpResponseMessage response;
+      request.Url = Configuration["Tete:ApiEndpoint"] + request.Url;
+      Response response = new Response()
+      {
+        Request = request
+      };
 
       using (var client = new HttpClient())
       {
-        response = await client.GetAsync(Configuration["Tete:ApiEndpoint"] + "/v1/Flags");
+        try
+        {
+          HttpResponseMessage res = await client.GetAsync(request.Url);
+          response.Data = await res.Content.ReadAsStringAsync();
+          response.Status = res.StatusCode;
+        }
+        catch (Exception e)
+        {
+          response.Error = true;
+          response.Message = e.Message;
+        }
       }
 
       return response;

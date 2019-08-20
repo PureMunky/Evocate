@@ -24,7 +24,7 @@ namespace Tete.Api.Controllers
     [HttpGet]
     public IEnumerable<Flag> Get()
     {
-      this.logService.Save(new Models.Logging.Log("Call Flags.Get()"));
+      this.logService.Write("Api Get All Flags");
       return this.service.Get();
     }
 
@@ -32,7 +32,7 @@ namespace Tete.Api.Controllers
     [HttpGet("{id}")]
     public ActionResult<Flag> Get(string id)
     {
-
+      this.logService.Write("Get Flag", id, "API");
       return this.service.Get(id);
     }
 
@@ -40,19 +40,22 @@ namespace Tete.Api.Controllers
     [HttpPost]
     public void Post([FromBody] Flag value)
     {
+      this.logService.Write("Post Flag", value.ToString(), "API");
       this.service.Save(value);
     }
 
     // PUT api/values/5
     [HttpPut("{id}")]
-    public void Put(int id, [FromBody] string value)
+    public void Put(string id, [FromBody] string value)
     {
+      this.logService.Write("Put Flag", id, "API");
     }
 
     // DELETE api/values/5
     [HttpDelete("{id}")]
-    public void Delete(int id)
+    public void Delete(string id)
     {
+      this.logService.Write("Delete Flag", id, "API");
     }
   }
 }

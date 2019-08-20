@@ -34,5 +34,10 @@ namespace Tete.Api.Services.Logging
       this.mainContext.SaveChanges();
     }
 
+    public void Write(string Description, string Data = "", string Domain = "")
+    {
+      Save(new Log(Description, Data, Domain));
+    }
+
   }
 }

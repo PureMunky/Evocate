@@ -13,6 +13,10 @@ namespace Tete.Models.Logging
 
     public string MachineName { get; set; }
 
+    public string Data { get; set; }
+
+    public string Domain { get; set; }
+
     public string StackTrace { get; set; }
 
     public Log()
@@ -20,10 +24,12 @@ namespace Tete.Models.Logging
       Init();
     }
 
-    public Log(string Description)
+    public Log(string Description, string Data = "", string Domain = "")
     {
       Init();
       this.Description = Description;
+      this.Data = Data;
+      this.Domain = Domain;
     }
 
     private void Init()

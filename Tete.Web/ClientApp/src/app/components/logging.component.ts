@@ -15,7 +15,6 @@ export class LoggingComponent {
         body: ""
       })
       .then(result => {
-        console.log(result);
         this.Logs = result;
       });
   }

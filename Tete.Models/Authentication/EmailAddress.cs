@@ -11,7 +11,7 @@ namespace Tete.Models.Authentication
     /// The email address.
     /// </summary>
     /// <value></value>
-    public string Address {get; set;}
-    
+    public string Address { get; set; }
+
   }
 }

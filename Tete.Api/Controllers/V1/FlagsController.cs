@@ -18,7 +18,7 @@ namespace Tete.Api.Controllers
     public FlagsController(Contexts.MainContext mainContext)
     {
       this.service = new Services.Service<Flag>(mainContext.Flags);
-      this.logService = new Services.Logging.LogService(mainContext);
+      this.logService = new Services.Logging.LogService(mainContext, "Api");
     }
     // GET api/values
     [HttpGet]
@@ -32,7 +32,7 @@ namespace Tete.Api.Controllers
     [HttpGet("{id}")]
     public ActionResult<Flag> Get(string id)
     {
-      this.logService.Write("Get Flag", id, "API");
+      this.logService.Write("Get Flag", id);
       return this.service.Get(id);
     }
 
@@ -40,7 +40,7 @@ namespace Tete.Api.Controllers
     [HttpPost]
     public void Post([FromBody] Flag value)
     {
-      this.logService.Write("Post Flag", value.ToString(), "API");
+      this.logService.Write("Post Flag", value.ToString());
       this.service.Save(value);
     }
 
@@ -48,14 +48,14 @@ namespace Tete.Api.Controllers
     [HttpPut("{id}")]
     public void Put(string id, [FromBody] string value)
     {
-      this.logService.Write("Put Flag", id, "API");
+      this.logService.Write("Put Flag", id);
     }
 
     // DELETE api/values/5
     [HttpDelete("{id}")]
     public void Delete(string id)
     {
-      this.logService.Write("Delete Flag", id, "API");
+      this.logService.Write("Delete Flag", id);
     }
   }
 }

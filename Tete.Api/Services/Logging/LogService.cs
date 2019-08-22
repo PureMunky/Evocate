@@ -8,9 +8,11 @@ namespace Tete.Api.Services.Logging
   public class LogService : IService<Log>
   {
     private MainContext mainContext;
-    public LogService(MainContext mainContext)
+    private string DefaultDomain;
+    public LogService(MainContext mainContext, string Domain)
     {
       this.mainContext = mainContext;
+      this.DefaultDomain = Domain;
     }
 
     public Log New()
@@ -36,7 +38,7 @@ namespace Tete.Api.Services.Logging
 
     public void Write(string Description, string Data = "", string Domain = "")
     {
-      Save(new Log(Description, Data, Domain));
+      Save(new Log(Description, Data, (Domain.Length > 0 ? Domain : DefaultDomain)));
     }
 
   }

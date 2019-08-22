@@ -13,30 +13,30 @@ namespace Tete.Api.Services
     public FlagService(MainContext mainContext)
     {
       this.mainContext = mainContext;
-      this.logService = new Logging.LogService(mainContext);
+      this.logService = new Logging.LogService(mainContext, "Service");
     }
 
     public Flag New()
     {
-      this.logService.Write("Get Flag", "New", "Service");
+      this.logService.Write("Get Flag", "New");
       return new Flag();
     }
 
     public IEnumerable<Flag> Get()
     {
-      this.logService.Write("Get Flags", "All", "Service");
+      this.logService.Write("Get Flags", "All");
       return this.mainContext.Flags;
     }
 
     public Flag Get(string Id)
     {
-      this.logService.Write("Getting Flag", Id, "Service");
+      this.logService.Write("Getting Flag", Id);
       return this.mainContext.Flags.Find(Id);
     }
 
     public void Save(Flag Object)
     {
-      this.logService.Write("Saving Flag", Object.ToString(), "Service");
+      this.logService.Write("Saving Flag", Object.ToString());
       this.mainContext.Flags.Add(Object);
       this.mainContext.SaveChanges();
     }

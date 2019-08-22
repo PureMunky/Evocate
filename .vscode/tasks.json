@@ -3,12 +3,12 @@
   "tasks": [
     {
       "label": "buildDockerDb",
+      "dependsOn": ["build-api"],
       "type": "shell",
       "command": "./run-db.sh"
     },
     {
       "label": "build-api",
-      "dependsOn": ["buildDockerDb"],
       "command": "dotnet",
       "type": "process",
       "args": ["build", "${workspaceFolder}/Tete.Api/Tete.Api.csproj"],

@@ -1,0 +1,21 @@
+@{
+  Layout = "_Layout";
+}
+
+<h1>Register New Account</h1>
+
+<section>
+  <div>
+    <label for="userEmail">Email</label>
+    <input type="textbox" id="userEmail" />
+  </div>
+  <div>
+    <label for="userPassword">Password</label>
+    <input type="password" id="userPassword" />
+  </div>
+  <div>
+    <label for="userName">Name</label>
+    <input type="textbox" id="userName" />
+  </div>
+  <button id="submit" asp-controller="Login" asp-action="Register">Create Account</button>
+</section>

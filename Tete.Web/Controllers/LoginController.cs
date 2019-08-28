@@ -25,6 +25,20 @@ namespace Tete.Web.Controllers
       return Redirect("/");
     }
 
+    [HttpGet]
+    public void Test()
+    {
+      if (!HttpContext.Request.Cookies.Keys.Contains(Constants.SessionTokenName))
+      {
+        HttpContext.Response.StatusCode = 401;
+      }
+      else
+      {
+        HttpContext.Response.StatusCode = 200;
+      }
+
+    }
+
     public IActionResult Forgot()
     {
       return View("Forgot");

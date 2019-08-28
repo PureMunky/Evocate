@@ -46,7 +46,6 @@ namespace Tete.Web
       // app.UseHttpsRedirection();
       app.UseStaticFiles();
       app.UseSpaStaticFiles();
-      app.UseAuthentication();
 
       app.UseMvc(routes =>
       {
@@ -62,7 +61,6 @@ namespace Tete.Web
         // see https://go.microsoft.com/fwlink/?linkid=864501
 
         spa.Options.SourcePath = "ClientApp";
-        spa.ApplicationBuilder.UseAuthentication();
 
         if (env.IsDevelopment())
         {

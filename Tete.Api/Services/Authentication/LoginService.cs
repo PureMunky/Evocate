@@ -1,5 +1,6 @@
 using Tete.Api.Contexts;
 using Tete.Models.Authentication;
+using Tete.Api.Helpers;
 
 namespace Tete.Api.Services.Authentication
 {
@@ -12,11 +13,14 @@ namespace Tete.Api.Services.Authentication
       this.mainContext = mainContext;
     }
 
-    public string Login(Login login)
+    public string Login(LoginAttempt login)
     {
       // Select UserId from login where passwordhash = login.Password
       // Select true from user where userId = UserId and email = login.Email
-      return "";
+      byte[] salt = Crypto.NewSalt();
+      string hash = Crypto.Hash(login.Password, salt);
+      // this.mainContext.Logins.Find(login.PasswordHash);
+      return hash;
     }
   }
 }

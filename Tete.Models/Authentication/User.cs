@@ -14,19 +14,19 @@ namespace Tete.Models.Authentication
     /// The visual representation of the user.
     /// </summary>
     /// <value></value>
-    public string DisplayName {get; set;}
+    public string DisplayName { get; set; }
 
     /// <summary>
     /// The unique user id assinged to each user.
     /// </summary>
     /// <value></value>
-    public Guid Id {get; set;}
+    public Guid Id { get; set; }
 
     /// <summary>
     /// The user's email address.
     /// </summary>
     /// <value></value>
-    public EmailAddress Email {get; set;}
-    
+    public string Email { get; set; }
+
   }
 }

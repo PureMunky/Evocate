@@ -1,6 +1,6 @@
-namespace Tete.Web.Models
+namespace Tete.Models.Authentication
 {
-  public class Login
+  public class LoginAttempt
   {
     public string Email { get; set; }
     public string Password { get; set; }

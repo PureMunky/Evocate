@@ -1,11 +1,22 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
+using Microsoft.Extensions.Configuration;
 using Tete.Web.Helpers;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace Tete.Web.Controllers
 {
   public class LoginController : Controller
   {
+
+    private IConfiguration Configuration;
+
+    public LoginController(IConfiguration configuration)
+    {
+      Configuration = configuration;
+    }
+
     [HttpGet]
     public IActionResult Index()
     {
@@ -13,9 +24,29 @@ namespace Tete.Web.Controllers
     }
 
     [HttpPost]
-    public IActionResult Index(string userEmail, string userPassword)
+    public async Task<IActionResult> Index(string userEmail, string userPassword)
     {
-      HttpContext.Response.Cookies.Append(Constants.SessionTokenName, userEmail, new Microsoft.AspNetCore.Http.CookieOptions()
+      string token = "";
+      using (var client = new HttpClient())
+      {
+        try
+        {
+          string Url = Configuration["Tete:ApiEndpoint"] + "/v1/Login";
+          HttpResponseMessage res = await client.PostAsJsonAsync(Url,
+          new Tete.Models.Authentication.LoginAttempt()
+          {
+            Email = userEmail,
+            Password = userPassword
+          });
+          token = await res.Content.ReadAsStringAsync();
+        }
+        catch (Exception e)
+        {
+
+        }
+      }
+
+      HttpContext.Response.Cookies.Append(Constants.SessionTokenName, token, new Microsoft.AspNetCore.Http.CookieOptions()
       {
         HttpOnly = true,
         Expires = DateTime.Now.AddMinutes(Constants.AuthenticationCookieLife),

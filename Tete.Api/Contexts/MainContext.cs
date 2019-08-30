@@ -10,11 +10,17 @@ namespace Tete.Api.Contexts
     public DbSet<Tete.Models.Config.Setting> Settings { get; set; }
     public DbSet<Tete.Models.Logging.Log> Logs { get; set; }
     public DbSet<Tete.Models.Authentication.User> Users { get; set; }
+    public DbSet<Tete.Models.Authentication.Login> Logins { get; set; }
 
     public MainContext(DbContextOptions options) : base(options)
     {
       Console.WriteLine("Initializing MainContext");
       Database.Migrate();
+    }
+
+    public MainContext()
+    {
+
     }
 
   }

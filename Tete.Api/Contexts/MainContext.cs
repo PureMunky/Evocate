@@ -11,6 +11,7 @@ namespace Tete.Api.Contexts
     public DbSet<Tete.Models.Logging.Log> Logs { get; set; }
     public DbSet<Tete.Models.Authentication.User> Users { get; set; }
     public DbSet<Tete.Models.Authentication.Login> Logins { get; set; }
+    public DbSet<Tete.Models.Authentication.Session> Sessions { get; set; }
 
     public MainContext(DbContextOptions options) : base(options)
     {

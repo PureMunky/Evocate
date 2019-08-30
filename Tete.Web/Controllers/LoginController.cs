@@ -31,7 +31,7 @@ namespace Tete.Web.Controllers
       {
         try
         {
-          string Url = Configuration["Tete:ApiEndpoint"] + "/v1/Login";
+          string Url = Configuration["Tete:ApiEndpoint"] + "/v1/Login/Login";
           HttpResponseMessage res = await client.PostAsJsonAsync(Url,
           new Tete.Models.Authentication.LoginAttempt()
           {
@@ -75,9 +75,43 @@ namespace Tete.Web.Controllers
       return View("Forgot");
     }
 
+    [HttpGet]
     public IActionResult Register()
     {
       return View("Register");
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Register(string userEmail, string userPassword)
+    {
+      string token = "";
+      using (var client = new HttpClient())
+      {
+        try
+        {
+          string Url = Configuration["Tete:ApiEndpoint"] + "/v1/Login/Register";
+          HttpResponseMessage res = await client.PostAsJsonAsync(Url,
+          new Tete.Models.Authentication.LoginAttempt()
+          {
+            Email = userEmail,
+            Password = userPassword
+          });
+          token = await res.Content.ReadAsStringAsync();
+        }
+        catch (Exception e)
+        {
+
+        }
+      }
+
+      HttpContext.Response.Cookies.Append(Constants.SessionTokenName, token, new Microsoft.AspNetCore.Http.CookieOptions()
+      {
+        HttpOnly = true,
+        Expires = DateTime.Now.AddMinutes(Constants.AuthenticationCookieLife),
+        // Secure = true
+      });
+
+      return Redirect("/");
     }
   }
 }

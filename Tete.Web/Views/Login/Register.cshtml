@@ -4,18 +4,17 @@
 
 <h1>Register New Account</h1>
 
+@using(Html.BeginForm())
+{
 <section>
   <div>
     <label for="userEmail">Email</label>
-    <input type="textbox" id="userEmail" />
+    <input type="textbox" name="userEmail" />
   </div>
   <div>
     <label for="userPassword">Password</label>
-    <input type="password" id="userPassword" />
+    <input type="password" name="userPassword" />
   </div>
-  <div>
-    <label for="userName">Name</label>
-    <input type="textbox" id="userName" />
-  </div>
-  <button id="submit" asp-controller="Login" asp-action="Register">Create Account</button>
+  <input type="submit">
 </section>
+}

@@ -1,5 +1,5 @@
 using System;
-using System.Web;
+using System.ComponentModel.DataAnnotations;
 
 namespace Tete.Models.Authentication
 {
@@ -26,7 +26,16 @@ namespace Tete.Models.Authentication
     /// The user's email address.
     /// </summary>
     /// <value></value>
+    [Required]
     public string Email { get; set; }
+
+    [Required]
+    public byte[] Salt { get; set; }
+
+    public User()
+    {
+      this.Id = Guid.NewGuid();
+    }
 
   }
 }

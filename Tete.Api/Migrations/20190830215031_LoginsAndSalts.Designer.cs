@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Tete.Api.Contexts;
 
 namespace Tete.Api.Migrations
 {
     [DbContext(typeof(MainContext))]
-    partial class MainContextModelSnapshot : ModelSnapshot
+    [Migration("20190830215031_LoginsAndSalts")]
+    partial class LoginsAndSalts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,23 +38,6 @@ namespace Tete.Api.Migrations
                     b.HasKey("LoginId");
 
                     b.ToTable("Logins");
-                });
-
-            modelBuilder.Entity("Tete.Models.Authentication.Session", b =>
-                {
-                    b.Property<Guid>("SessionId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("Created");
-
-                    b.Property<string>("Token")
-                        .IsRequired();
-
-                    b.Property<Guid>("UserId");
-
-                    b.HasKey("SessionId");
-
-                    b.ToTable("Sessions");
                 });
 
             modelBuilder.Entity("Tete.Models.Authentication.User", b =>

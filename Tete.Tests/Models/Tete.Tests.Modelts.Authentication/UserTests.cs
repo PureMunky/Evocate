@@ -28,7 +28,7 @@ namespace Tete.Tests.Models.Authentication
     {
       var user = new User();
 
-      Assert.AreEqual(new Guid(), user.Id);
+      Assert.AreNotEqual(new Guid(), user.Id);
     }
   }
 }

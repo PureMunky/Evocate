@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Tete.Api.Contexts;
 using Tete.Models.Authentication;
 using Tete.Api.Helpers;
@@ -15,12 +18,70 @@ namespace Tete.Api.Services.Authentication
 
     public string Login(LoginAttempt login)
     {
-      // Select UserId from login where passwordhash = login.Password
-      // Select true from user where userId = UserId and email = login.Email
+      return GetNewToken(login);
+    }
+
+    public string Register(LoginAttempt login)
+    {
       byte[] salt = Crypto.NewSalt();
       string hash = Crypto.Hash(login.Password, salt);
-      // this.mainContext.Logins.Find(login.PasswordHash);
-      return hash;
+      var newUser = new User()
+      {
+        Email = login.Email,
+        Salt = salt
+      };
+      var newLogin = new Login()
+      {
+        UserId = newUser.Id,
+        PasswordHash = hash
+      };
+
+      this.mainContext.Users.Add(newUser);
+      this.mainContext.Logins.Add(newLogin);
+      this.mainContext.SaveChanges();
+
+      return GetNewToken(login);
+    }
+
+    public User GetUserFromToken(string token)
+    {
+      var session = this.mainContext.Sessions.Where(s => s.Token == token).FirstOrDefault();
+
+      User user = null;
+      if (session != null)
+      {
+        user = this.mainContext.Users.Where(u => u.Id == session.UserId).FirstOrDefault();
+      }
+
+      return user;
+    }
+
+    private string GetNewToken(LoginAttempt login)
+    {
+      // Select UserId from login where passwordhash = login.Password
+      // Select true from user where userId = UserId and email = login.Email
+      string token = "ERROR";
+      var user = this.mainContext.Users.Where(u => u.Email == login.Email).FirstOrDefault();
+
+      if (user != null)
+      {
+        string hash = Crypto.Hash(login.Password, user.Salt);
+
+        var dbLogin = this.mainContext.Logins.Where(l => l.PasswordHash == hash && l.UserId == user.Id).First();
+        if (dbLogin != null)
+        {
+          token = Crypto.Hash(Guid.NewGuid().ToString(), user.Salt);
+
+          this.mainContext.Sessions.Add(new Session()
+          {
+            UserId = user.Id,
+            Token = token
+          });
+          this.mainContext.SaveChanges();
+        }
+      }
+
+      return token;
     }
   }
 }

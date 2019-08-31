@@ -16,12 +16,12 @@ namespace Tete.Api.Services.Authentication
       this.mainContext = mainContext;
     }
 
-    public string Login(LoginAttempt login)
+    public SessionVM Login(LoginAttempt login)
     {
       return GetNewToken(login);
     }
 
-    public string Register(LoginAttempt login)
+    public SessionVM Register(LoginAttempt login)
     {
       byte[] salt = Crypto.NewSalt();
       string hash = Crypto.Hash(login.Password, salt);
@@ -69,32 +69,38 @@ namespace Tete.Api.Services.Authentication
       return userVM;
     }
 
-    private string GetNewToken(LoginAttempt login)
+    private SessionVM GetNewToken(LoginAttempt login)
     {
       // Select UserId from login where passwordhash = login.Password
       // Select true from user where userId = UserId and email = login.Email
-      string token = null;
+      SessionVM sessionVM = null;
+      Session session = null;
       var user = this.mainContext.Users.Where(u => u.Email == login.Email).FirstOrDefault();
 
       if (user != null)
       {
         string hash = Crypto.Hash(login.Password, user.Salt);
 
-        var dbLogin = this.mainContext.Logins.Where(l => l.PasswordHash == hash && l.UserId == user.Id).First();
+        var dbLogin = this.mainContext.Logins.Where(l => l.PasswordHash == hash && l.UserId == user.Id).FirstOrDefault();
         if (dbLogin != null)
         {
-          token = Crypto.Hash(Guid.NewGuid().ToString(), user.Salt);
-
-          this.mainContext.Sessions.Add(new Session()
+          string token = Crypto.Hash(Guid.NewGuid().ToString(), user.Salt);
+          session = new Session()
           {
             UserId = user.Id,
             Token = token
-          });
+          };
+          this.mainContext.Sessions.Add(session);
           this.mainContext.SaveChanges();
         }
       }
 
-      return token;
+      if (session != null)
+      {
+        sessionVM = new SessionVM(session);
+      }
+
+      return sessionVM;
     }
   }
 }

@@ -1,11 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Net;
 using Microsoft.Extensions.Configuration;
+using Tete.Models.Authentication;
 using Tete.Web.Helpers;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace Tete.Web.Controllers
 {
@@ -29,30 +28,20 @@ namespace Tete.Web.Controllers
     public async Task<IActionResult> Index(string userEmail, string userPassword)
     {
       string direction = "/";
-      string token = "";
-
-      using (var client = new HttpClient())
-      {
-        try
+      SessionVM session = await new Tete.Web.Services.RequestService(Configuration)
+      .Post<LoginAttempt, SessionVM>(
+        "/v1/Login/Login",
+        new LoginAttempt()
         {
-          string Url = Configuration["Tete:ApiEndpoint"] + "/v1/Login/Login";
-          HttpResponseMessage res = await client.PostAsJsonAsync(Url,
-          new Tete.Models.Authentication.LoginAttempt()
-          {
-            Email = userEmail,
-            Password = userPassword
-          });
-          token = await res.Content.ReadAsStringAsync();
-        }
-        catch (Exception)
-        {
-          token = null;
-        }
-      }
+          Email = userEmail,
+          Password = userPassword
+        },
+        HttpContext
+      );
 
-      if (token != null && token != String.Empty)
+      if (session != null)
       {
-        HttpContext.Response.Cookies.Append(Constants.SessionTokenName, token, new Microsoft.AspNetCore.Http.CookieOptions()
+        HttpContext.Response.Cookies.Append(Constants.SessionTokenName, session.Token, new Microsoft.AspNetCore.Http.CookieOptions()
         {
           HttpOnly = true,
           Expires = DateTime.Now.AddMinutes(Constants.AuthenticationCookieLife),
@@ -71,35 +60,7 @@ namespace Tete.Web.Controllers
     [HttpGet]
     public async Task<dynamic> CurrentUser()
     {
-      dynamic user = null;
-      var cookieContainer = new CookieContainer();
-      HttpContext.Response.StatusCode = 401;
-
-      using (var handler = new HttpClientHandler() { CookieContainer = cookieContainer })
-      {
-        using (var client = new HttpClient(handler))
-        {
-          try
-          {
-            Uri Url = new Uri(Configuration["Tete:ApiEndpoint"] + "/v1/Login/CurrentUser");
-            cookieContainer.Add(Url, new Cookie(Constants.SessionTokenName, HttpContext.Request.Cookies[Constants.SessionTokenName]));
-
-            HttpResponseMessage res = await client.GetAsync(Url);
-            string content = await res.Content.ReadAsStringAsync();
-            user = JsonConvert.DeserializeObject(content);
-          }
-          catch (Exception)
-          {
-            user = null;
-          }
-        }
-
-        if (user != null)
-        {
-          HttpContext.Response.StatusCode = 200;
-        }
-      }
-      return user;
+      return await new Tete.Web.Services.RequestService(Configuration).Get("/v1/Login/CurrentUser", HttpContext);
     }
 
     public IActionResult Forgot()
@@ -116,34 +77,34 @@ namespace Tete.Web.Controllers
     [HttpPost]
     public async Task<IActionResult> Register(string userEmail, string userPassword)
     {
-      string token = "";
-      using (var client = new HttpClient())
-      {
-        try
+      string direction = "/";
+      SessionVM session = await new Tete.Web.Services.RequestService(Configuration)
+      .Post<LoginAttempt, SessionVM>(
+        "/v1/Login/Register",
+        new LoginAttempt()
         {
-          string Url = Configuration["Tete:ApiEndpoint"] + "/v1/Login/Register";
-          HttpResponseMessage res = await client.PostAsJsonAsync(Url,
-          new Tete.Models.Authentication.LoginAttempt()
-          {
-            Email = userEmail,
-            Password = userPassword
-          });
-          token = await res.Content.ReadAsStringAsync();
-        }
-        catch (Exception e)
-        {
+          Email = userEmail,
+          Password = userPassword
+        },
+        HttpContext
+      );
 
-        }
+      if (session != null)
+      {
+        HttpContext.Response.Cookies.Append(Constants.SessionTokenName, session.Token, new Microsoft.AspNetCore.Http.CookieOptions()
+        {
+          HttpOnly = true,
+          Expires = DateTime.Now.AddMinutes(Constants.AuthenticationCookieLife),
+          // Secure = true
+        });
+      }
+      else
+      {
+        direction = "/Login";
       }
 
-      HttpContext.Response.Cookies.Append(Constants.SessionTokenName, token, new Microsoft.AspNetCore.Http.CookieOptions()
-      {
-        HttpOnly = true,
-        Expires = DateTime.Now.AddMinutes(Constants.AuthenticationCookieLife),
-        // Secure = true
-      });
 
-      return Redirect("/");
+      return Redirect(direction);
     }
   }
 }

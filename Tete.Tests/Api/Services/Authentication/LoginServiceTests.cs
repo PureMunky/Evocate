@@ -27,7 +27,7 @@ namespace Tete.Tests.Api.Services.Authentication
         Password = "fakePassword"
       };
 
-      string result = this.loginService.Login(login);
+      SessionVM result = this.loginService.Login(login);
 
       Assert.AreNotEqual("", result);
     }

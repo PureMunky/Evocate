@@ -18,14 +18,14 @@ namespace Tete.Api.Controllers
     }
 
     [HttpPost]
-    public string Login(LoginAttempt login)
+    public SessionVM Login(LoginAttempt login)
     {
       this.logService.Write("Attempting Login", login.Email);
       return this.service.Login(login);
     }
 
     [HttpPost]
-    public string Register(LoginAttempt login)
+    public SessionVM Register(LoginAttempt login)
     {
       this.logService.Write("Registering User", login.Email);
       return this.service.Register(login);

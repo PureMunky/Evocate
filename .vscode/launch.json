@@ -5,7 +5,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": ".NET Core Launch (Tete.Web)",
+      "name": "Tete.Web",
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build-web",
@@ -26,7 +26,7 @@
       }
     },
     {
-      "name": ".NET Core Launch (Tete.Api)",
+      "name": "Tete.Api",
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "buildDockerDb",

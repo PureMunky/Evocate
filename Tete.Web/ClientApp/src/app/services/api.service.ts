@@ -7,6 +7,7 @@ import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 export class ApiService {
   private http: HttpClient;
   private baseUrl: string;
+  private user;
 
   constructor(http: HttpClient, @Inject("BASE_URL") baseUrl: string) {
     this.http = http;
@@ -28,8 +29,13 @@ export class ApiService {
 
   authTest() {
     return this.http
-      .get(this.baseUrl + "Login/Test")
+      .get(this.baseUrl + "Login/CurrentUser")
       .toPromise()
+      .then(user => {
+        console.log(user);
+        this.user = user;
+        return user;
+      })
       .catch(this.handleError);
   }
 

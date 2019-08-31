@@ -32,7 +32,7 @@ namespace Tete.Api.Controllers
     }
 
     [HttpGet]
-    public User GetUser()
+    public User CurrentUser()
     {
       this.logService.Write("Getting Current User");
       var token = HttpContext.Request.Cookies["Tete.SessionToken"];

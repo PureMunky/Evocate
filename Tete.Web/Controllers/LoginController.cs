@@ -78,13 +78,13 @@ namespace Tete.Web.Controllers
             string content = await res.Content.ReadAsStringAsync();
             user = JsonConvert.DeserializeObject(content);
           }
-          catch (Exception e)
+          catch (Exception)
           {
-            Console.Write(e.Message);
+            user = null;
           }
         }
 
-        if (!HttpContext.Request.Cookies.Keys.Contains(Constants.SessionTokenName))
+        if (user == null)
         {
           HttpContext.Response.StatusCode = 401;
         }

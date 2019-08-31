@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Net;
 using Microsoft.Extensions.Configuration;
-using Tete.Models.Authentication;
 using Tete.Web.Helpers;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -29,7 +28,9 @@ namespace Tete.Web.Controllers
     [HttpPost]
     public async Task<IActionResult> Index(string userEmail, string userPassword)
     {
+      string direction = "/";
       string token = "";
+
       using (var client = new HttpClient())
       {
         try
@@ -43,20 +44,28 @@ namespace Tete.Web.Controllers
           });
           token = await res.Content.ReadAsStringAsync();
         }
-        catch (Exception e)
+        catch (Exception)
         {
-          Console.Write(e.Message);
+          token = null;
         }
       }
 
-      HttpContext.Response.Cookies.Append(Constants.SessionTokenName, token, new Microsoft.AspNetCore.Http.CookieOptions()
+      if (token != null && token != String.Empty)
       {
-        HttpOnly = true,
-        Expires = DateTime.Now.AddMinutes(Constants.AuthenticationCookieLife),
-        // Secure = true
-      });
+        HttpContext.Response.Cookies.Append(Constants.SessionTokenName, token, new Microsoft.AspNetCore.Http.CookieOptions()
+        {
+          HttpOnly = true,
+          Expires = DateTime.Now.AddMinutes(Constants.AuthenticationCookieLife),
+          // Secure = true
+        });
+      }
+      else
+      {
+        direction = "/Login";
+      }
 
-      return Redirect("/");
+
+      return Redirect(direction);
     }
 
     [HttpGet]
@@ -64,6 +73,7 @@ namespace Tete.Web.Controllers
     {
       dynamic user = null;
       var cookieContainer = new CookieContainer();
+      HttpContext.Response.StatusCode = 401;
 
       using (var handler = new HttpClientHandler() { CookieContainer = cookieContainer })
       {
@@ -84,11 +94,7 @@ namespace Tete.Web.Controllers
           }
         }
 
-        if (user == null)
-        {
-          HttpContext.Response.StatusCode = 401;
-        }
-        else
+        if (user != null)
         {
           HttpContext.Response.StatusCode = 200;
         }

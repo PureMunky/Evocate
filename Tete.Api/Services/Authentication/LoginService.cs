@@ -56,11 +56,24 @@ namespace Tete.Api.Services.Authentication
       return user;
     }
 
+    public UserVM GetUserVMFromToken(string token)
+    {
+      var user = GetUserFromToken(token);
+      UserVM userVM = null;
+
+      if (user != null)
+      {
+        userVM = new UserVM(user);
+      }
+
+      return userVM;
+    }
+
     private string GetNewToken(LoginAttempt login)
     {
       // Select UserId from login where passwordhash = login.Password
       // Select true from user where userId = UserId and email = login.Email
-      string token = "ERROR";
+      string token = null;
       var user = this.mainContext.Users.Where(u => u.Email == login.Email).FirstOrDefault();
 
       if (user != null)

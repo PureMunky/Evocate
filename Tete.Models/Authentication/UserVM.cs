@@ -8,8 +8,11 @@ namespace Tete.Models.Authentication
 
     public UserVM(User user)
     {
-      this.DisplayName = user.DisplayName;
-      this.Email = user.Email;
+      if (user != null)
+      {
+        this.DisplayName = user.DisplayName;
+        this.Email = user.Email;
+      }
     }
   }
 }

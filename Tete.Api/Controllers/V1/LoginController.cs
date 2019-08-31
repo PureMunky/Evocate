@@ -36,8 +36,7 @@ namespace Tete.Api.Controllers
     {
       this.logService.Write("Getting Current User");
       var token = HttpContext.Request.Cookies["Tete.SessionToken"];
-      User user = this.service.GetUserFromToken(token);
-      return new UserVM(user);
+      return this.service.GetUserVMFromToken(token);
     }
   }
 }

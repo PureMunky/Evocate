@@ -20,15 +20,16 @@ namespace Tete.Api.Controllers
     [HttpPost]
     public SessionVM Login(LoginAttempt login)
     {
-      this.logService.Write("Attempting Login", login.Email);
+      this.logService.Write("Attempting Login", login.UserName);
       return this.service.Login(login);
     }
 
     [HttpPost]
-    public SessionVM Register(LoginAttempt login)
+    public SessionVM Register(RegistrationAttempt registration)
     {
-      this.logService.Write("Registering User", login.Email);
-      return this.service.Register(login);
+      // TODO: Change this to a Registration Attempt.
+      this.logService.Write("Registering User", registration.UserName);
+      return this.service.Register(registration);
     }
 
     [HttpGet]

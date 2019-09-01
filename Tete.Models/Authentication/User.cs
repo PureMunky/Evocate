@@ -10,27 +10,18 @@ namespace Tete.Models.Authentication
   public class User
   {
 
-    /// <summary>
-    /// The visual representation of the user.
-    /// </summary>
-    /// <value></value>
     public string DisplayName { get; set; }
 
-    /// <summary>
-    /// The unique user id assinged to each user.
-    /// </summary>
-    /// <value></value>
     public Guid Id { get; set; }
 
-    /// <summary>
-    /// The user's email address.
-    /// </summary>
-    /// <value></value>
     [Required]
     public string Email { get; set; }
 
     [Required]
     public byte[] Salt { get; set; }
+
+    [Required]
+    public string UserName { get; set; }
 
     public User()
     {

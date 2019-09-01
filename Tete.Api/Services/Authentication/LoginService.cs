@@ -21,13 +21,15 @@ namespace Tete.Api.Services.Authentication
       return GetNewToken(login);
     }
 
-    public SessionVM Register(LoginAttempt login)
+    public SessionVM Register(RegistrationAttempt registration)
     {
       byte[] salt = Crypto.NewSalt();
-      string hash = Crypto.Hash(login.Password, salt);
+      string hash = Crypto.Hash(registration.Password, salt);
       var newUser = new User()
       {
-        Email = login.Email,
+        UserName = registration.UserName,
+        Email = registration.Email,
+        DisplayName = registration.DisplayName,
         Salt = salt
       };
       var newLogin = new Login()
@@ -39,6 +41,12 @@ namespace Tete.Api.Services.Authentication
       this.mainContext.Users.Add(newUser);
       this.mainContext.Logins.Add(newLogin);
       this.mainContext.SaveChanges();
+
+      LoginAttempt login = new LoginAttempt()
+      {
+        UserName = registration.UserName,
+        Password = registration.Password
+      };
 
       return GetNewToken(login);
     }
@@ -75,7 +83,7 @@ namespace Tete.Api.Services.Authentication
       // Select true from user where userId = UserId and email = login.Email
       SessionVM sessionVM = null;
       Session session = null;
-      var user = this.mainContext.Users.Where(u => u.Email == login.Email).FirstOrDefault();
+      var user = this.mainContext.Users.Where(u => u.UserName == login.UserName).FirstOrDefault();
 
       if (user != null)
       {

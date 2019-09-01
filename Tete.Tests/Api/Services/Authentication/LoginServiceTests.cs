@@ -23,7 +23,7 @@ namespace Tete.Tests.Api.Services.Authentication
     {
       var login = new LoginAttempt()
       {
-        Email = "helloEmail",
+        UserName = "helloUserName",
         Password = "fakePassword"
       };
 

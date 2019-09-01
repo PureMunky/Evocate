@@ -25,7 +25,7 @@ namespace Tete.Web.Controllers
     }
 
     [HttpPost]
-    public async Task<IActionResult> Index(string userEmail, string userPassword)
+    public async Task<IActionResult> Index(string userName, string userPassword)
     {
       string direction = "/";
       SessionVM session = await new Tete.Web.Services.RequestService(Configuration)
@@ -33,7 +33,7 @@ namespace Tete.Web.Controllers
         "/v1/Login/Login",
         new LoginAttempt()
         {
-          Email = userEmail,
+          UserName = userName,
           Password = userPassword
         },
         HttpContext
@@ -75,16 +75,18 @@ namespace Tete.Web.Controllers
     }
 
     [HttpPost]
-    public async Task<IActionResult> Register(string userEmail, string userPassword)
+    public async Task<IActionResult> Register(string userName, string userPassword, string userEmail, string userDisplayName)
     {
       string direction = "/";
       SessionVM session = await new Tete.Web.Services.RequestService(Configuration)
-      .Post<LoginAttempt, SessionVM>(
+      .Post<RegistrationAttempt, SessionVM>(
         "/v1/Login/Register",
-        new LoginAttempt()
+        new RegistrationAttempt()
         {
+          UserName = userName,
+          Password = userPassword,
           Email = userEmail,
-          Password = userPassword
+          DisplayName = userDisplayName
         },
         HttpContext
       );

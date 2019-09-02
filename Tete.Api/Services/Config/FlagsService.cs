@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Tete.Api.Contexts;
 using Tete.Models.Config;
 
-namespace Tete.Api.Services
+namespace Tete.Api.Services.Config
 {
 
   public class FlagService : IService<Flag>

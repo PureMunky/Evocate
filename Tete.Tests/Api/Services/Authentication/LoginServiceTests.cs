@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using Microsoft.EntityFrameworkCore;
 using Moq;
 using Tete.Api.Services.Authentication;
 using Tete.Models.Authentication;

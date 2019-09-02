@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Tete.Api.Contexts;
 using Tete.Models.Logging;
+using System;
 
 namespace Tete.Api.Services.Logging
 {
@@ -27,7 +28,7 @@ namespace Tete.Api.Services.Logging
 
     public Log Get(string Id)
     {
-      return this.mainContext.Logs.Find(Id);
+      return this.mainContext.Logs.Find(Guid.Parse(Id));
     }
 
     public void Save(Log Object)

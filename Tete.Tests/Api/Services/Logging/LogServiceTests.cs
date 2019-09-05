@@ -1,18 +1,16 @@
-using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Moq;
+using NUnit.Framework;
 using Tete.Api.Services.Logging;
 using Tete.Models.Logging;
 using Tete.Tests.Setup;
-using System.Collections.Generic;
-using System.Linq;
-using System;
-using Microsoft.EntityFrameworkCore;
 
-namespace Tete.Tests.Api.Services.Logging
-{
+namespace Tete.Tests.Api.Services.Logging {
 
-  public class LogServiceTests
-  {
+  public class LogServiceTests {
 
     Mock<Tete.Api.Contexts.MainContext> mockContext;
     LogService logService;
@@ -21,18 +19,15 @@ namespace Tete.Tests.Api.Services.Logging
     Mock<DbSet<Log>> mockLogs;
 
     [SetUp]
-    public void Setup()
-    {
-      Log testLog = new Log()
-      {
+    public void Setup() {
+      Log testLog = new Log() {
         Data = "testData",
         Description = "testDescription",
         Domain = Domain,
         LogId = logId
       };
 
-      IQueryable<Log> logs = new List<Log>
-      {
+      IQueryable<Log> logs = new List<Log> {
         testLog
       }.AsQueryable();
 
@@ -44,14 +39,12 @@ namespace Tete.Tests.Api.Services.Logging
     }
 
     [Test]
-    public void SetupTest()
-    {
+    public void SetupTest() {
       Assert.IsTrue(true);
     }
 
     [Test]
-    public void NewTest()
-    {
+    public void NewTest() {
       var expected = new Tete.Models.Logging.Log();
       var log = this.logService.New();
 
@@ -60,24 +53,21 @@ namespace Tete.Tests.Api.Services.Logging
     }
 
     [Test]
-    public void GetTest()
-    {
+    public void GetTest() {
       var result = this.logService.Get();
 
       Assert.AreEqual(1, result.Count());
     }
 
     [Test]
-    public void GetOneTest()
-    {
+    public void GetOneTest() {
       var result = this.logService.Get(logId.ToString());
 
       mockLogs.Verify(m => m.Find(logId), Times.Once);
     }
 
     [Test]
-    public void SaveTest()
-    {
+    public void SaveTest() {
       var log = new Log();
       this.logService.Save(log);
 
@@ -86,8 +76,7 @@ namespace Tete.Tests.Api.Services.Logging
     }
 
     [Test]
-    public void WriteTest()
-    {
+    public void WriteTest() {
       this.logService.Write("test");
       mockLogs.Verify(m => m.Add(It.IsAny<Log>()), Times.Once);
       mockContext.Verify(m => m.SaveChanges(), Times.Once);

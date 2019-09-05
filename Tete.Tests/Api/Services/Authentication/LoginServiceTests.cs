@@ -1,15 +1,13 @@
-using NUnit.Framework;
+using System.Collections.Generic;
+using System.Linq;
 using Moq;
+using NUnit.Framework;
 using Tete.Api.Services.Authentication;
 using Tete.Models.Authentication;
 using Tete.Tests.Setup;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace Tete.Tests.Api.Services.Authentication
-{
-  public class LoginServiceTests
-  {
+namespace Tete.Tests.Api.Services.Authentication {
+  public class LoginServiceTests {
 
     private Mock<Tete.Api.Contexts.MainContext> mockContext;
     private LoginService loginService;
@@ -18,35 +16,30 @@ namespace Tete.Tests.Api.Services.Authentication
     private const string testToken = "abcd";
 
     [SetUp]
-    public void Setup()
-    {
+    public void Setup() {
       var salt = Tete.Api.Helpers.Crypto.NewSalt();
-      User testUser = new User()
-      {
+      User testUser = new User() {
         UserName = testUserName,
         Salt = salt
       };
 
-      Login testLogin = new Login()
-      {
+      Login testLogin = new Login() {
         UserId = testUser.Id,
         PasswordHash = Tete.Api.Helpers.Crypto.Hash(testPassword, salt)
       };
 
-      IQueryable<User> users = new List<User>
-      {
+      IQueryable<User> users = new List<User> {
         testUser
       }.AsQueryable();
 
-      IQueryable<Login> logins = new List<Login>
-      {
+      IQueryable<Login> logins = new List<Login> {
         testLogin
       }.AsQueryable();
 
       IQueryable<Session> sessions = new List<Session> {
         new Session() {
           UserId = testUser.Id,
-          Token = testToken
+            Token = testToken
         }
       }.AsQueryable();
 
@@ -63,10 +56,8 @@ namespace Tete.Tests.Api.Services.Authentication
     }
 
     [Test]
-    public void LoginTest()
-    {
-      var login = new LoginAttempt()
-      {
+    public void LoginTest() {
+      var login = new LoginAttempt() {
         UserName = testUserName,
         Password = testPassword
       };
@@ -77,34 +68,28 @@ namespace Tete.Tests.Api.Services.Authentication
     }
 
     [Test]
-    public void FailedLoginIncorrectPasswordTest()
-    {
-      SessionVM results = this.loginService.Login(new LoginAttempt()
-      {
+    public void FailedLoginIncorrectPasswordTest() {
+      SessionVM results = this.loginService.Login(new LoginAttempt() {
         UserName = testUserName,
-        Password = "notTheCorrectPassword"
+          Password = "notTheCorrectPassword"
       });
 
       Assert.IsNull(results);
     }
 
     [Test]
-    public void FailedLoginIncorrectUserNameTest()
-    {
-      SessionVM results = this.loginService.Login(new LoginAttempt()
-      {
+    public void FailedLoginIncorrectUserNameTest() {
+      SessionVM results = this.loginService.Login(new LoginAttempt() {
         UserName = "wrongUserName",
-        Password = testPassword
+          Password = testPassword
       });
 
       Assert.IsNull(results);
     }
 
     [Test]
-    public void RegisterUserTest()
-    {
-      RegistrationAttempt registration = new RegistrationAttempt()
-      {
+    public void RegisterUserTest() {
+      RegistrationAttempt registration = new RegistrationAttempt() {
         UserName = testUserName,
         Email = "test@example.com",
         DisplayName = "def",
@@ -118,32 +103,28 @@ namespace Tete.Tests.Api.Services.Authentication
     }
 
     [Test]
-    public void GetUserFromTokenTest()
-    {
+    public void GetUserFromTokenTest() {
       User result = this.loginService.GetUserFromToken(testToken);
 
       Assert.AreEqual(testUserName, result.UserName);
     }
 
     [Test]
-    public void GetUserFromInvalidTokenTest()
-    {
+    public void GetUserFromInvalidTokenTest() {
       User result = this.loginService.GetUserFromToken("InvalidToken");
 
       Assert.IsNull(result);
     }
 
     [Test]
-    public void GetUserVMFromTokenTest()
-    {
+    public void GetUserVMFromTokenTest() {
       UserVM result = this.loginService.GetUserVMFromToken(testToken);
 
       Assert.AreEqual(testUserName, result.UserName);
     }
 
     [Test]
-    public void GetUserVMFromInvalidTokenTest()
-    {
+    public void GetUserVMFromInvalidTokenTest() {
       UserVM result = this.loginService.GetUserVMFromToken("InvalidToken");
 
       Assert.IsNull(result);

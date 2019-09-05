@@ -27,7 +27,8 @@ namespace Tete.Tests.Setup {
     }
 
     public static void TestContext(Mock<MainContext> context) {
-      context.Verify(m => m.Logs, Times.AtLeastOnce);
+      context.Verify(m => m.Logs.Add(It.IsAny<Log>()), Times.AtLeastOnce);
+      context.Verify(m => m.SaveChanges(), Times.AtLeastOnce);
     }
   }
 }

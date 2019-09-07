@@ -54,7 +54,8 @@ namespace Tete.Tests.Api.Controllers {
 
     [Test]
     public void PutTest() {
-      this.controller.Put("123", "Blah");
+      Flag testFlag = new Flag();
+      this.controller.Put(testFlag);
 
       mockContext.Verify(m => m.Flags.Add(It.IsAny<Flag>()), Times.Once);
     }

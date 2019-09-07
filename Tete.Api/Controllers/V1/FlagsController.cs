@@ -40,14 +40,10 @@ namespace Tete.Api.Controllers {
 
     // PUT api/values/5
     [HttpPut("{id}")]
-    public void Put(string id, [FromBody] string value) {
-      this.logService.Write("Put Flag", id);
+    public void Put([FromBody] Flag value) {
+      this.logService.Write("Put Flag", value.Key);
+      this.service.Save(value);
     }
 
-    // DELETE api/values/5
-    [HttpDelete("{id}")]
-    public void Delete(string id) {
-      this.logService.Write("Delete Flag", id);
-    }
   }
 }

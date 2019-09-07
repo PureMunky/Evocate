@@ -7,36 +7,57 @@ using Tete.Models.Authentication;
 namespace Tete.Tests.Setup {
   public abstract class LoginTestBase {
     protected Mock<Tete.Api.Contexts.MainContext> mockContext;
-    protected const string testUserName = "helloUserName";
+    protected const string newUserName = "helloUserName";
     protected const string testPassword = "testPassword";
-    protected const string testToken = "abcd";
+    protected const string existingUserToken = "abcd";
+    protected const string newUserToken = "efgh";
+    protected const string existingUserName = "existingUser";
 
     [SetUp]
     public void Setup() {
       var salt = Tete.Api.Helpers.Crypto.NewSalt();
-      User testUser = new User() {
-        UserName = testUserName,
+      User existingUser = new User() {
+        UserName = existingUserName,
         Salt = salt
       };
 
-      Login testLogin = new Login() {
-        UserId = testUser.Id,
+      User newUser = new User() {
+        UserName = newUserName,
+        Salt = salt
+      };
+
+      Login existingUserLogin = new Login() {
+        UserId = existingUser.Id,
+        PasswordHash = Tete.Api.Helpers.Crypto.Hash(testPassword, salt)
+      };
+
+      Login newUserLogin = new Login() {
+        UserId = newUser.Id,
         PasswordHash = Tete.Api.Helpers.Crypto.Hash(testPassword, salt)
       };
 
       IQueryable<User> users = new List<User> {
-        testUser
+        existingUser
       }.AsQueryable();
 
       IQueryable<Login> logins = new List<Login> {
-        testLogin
+        existingUserLogin,
+        newUserLogin
       }.AsQueryable();
 
+      Session existingUserSession = new Session() {
+        UserId = existingUser.Id,
+        Token = existingUserToken
+      };
+
+      Session newUserSession = new Session() {
+        UserId = newUser.Id,
+        Token = newUserToken
+      };
+
       IQueryable<Session> sessions = new List<Session> {
-        new Session() {
-          UserId = testUser.Id,
-            Token = testToken
-        }
+        existingUserSession,
+        newUserSession
       }.AsQueryable();
 
       var mockUsers = MockContext.MockDBSet<User>(users);

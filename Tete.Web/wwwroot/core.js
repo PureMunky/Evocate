@@ -1,9 +1,9 @@
 (function() {
   function init() {
     console.log("init");
-    document
-      .getElementById("registrationForm")
-      .addEventListener("submit", testForm);
+    // document
+    //   .getElementById("registrationForm")
+    //   .addEventListener("submit", testForm);
   }
 
   function testForm(event) {

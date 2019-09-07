@@ -23,7 +23,11 @@ namespace Tete.Api.Controllers {
     [HttpPost]
     public SessionVM Register(RegistrationAttempt registration) {
       this.logService.Write("Registering User", registration.UserName);
-      return this.service.Register(registration);
+      this.service.Register(registration);
+      return this.service.Login(new LoginAttempt() {
+        UserName = registration.UserName,
+          Password = registration.Password
+      });
     }
 
     [HttpGet]

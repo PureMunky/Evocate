@@ -1,5 +1,4 @@
-using System.Collections.Generic;
-using System.Linq;
+using System;
 using Moq;
 using NUnit.Framework;
 using Tete.Api.Services.Authentication;
@@ -19,7 +18,7 @@ namespace Tete.Tests.Api.Services.Authentication {
     [Test]
     public void LoginTest() {
       var login = new LoginAttempt() {
-        UserName = testUserName,
+        UserName = existingUserName,
         Password = testPassword
       };
 
@@ -31,7 +30,7 @@ namespace Tete.Tests.Api.Services.Authentication {
     [Test]
     public void FailedLoginIncorrectPasswordTest() {
       SessionVM results = this.loginService.Login(new LoginAttempt() {
-        UserName = testUserName,
+        UserName = existingUserName,
           Password = "notTheCorrectPassword"
       });
 
@@ -40,10 +39,12 @@ namespace Tete.Tests.Api.Services.Authentication {
 
     [Test]
     public void FailedLoginIncorrectUserNameTest() {
-      SessionVM results = this.loginService.Login(new LoginAttempt() {
+      var login = new LoginAttempt() {
         UserName = "wrongUserName",
-          Password = testPassword
-      });
+        Password = testPassword
+      };
+
+      SessionVM results = this.loginService.Login(login);
 
       Assert.IsNull(results);
     }
@@ -51,23 +52,40 @@ namespace Tete.Tests.Api.Services.Authentication {
     [Test]
     public void RegisterUserTest() {
       RegistrationAttempt registration = new RegistrationAttempt() {
-        UserName = testUserName,
+        UserName = newUserName,
         Email = "test@example.com",
         DisplayName = "def",
         Password = testPassword
       };
 
-      SessionVM session = this.loginService.Register(registration);
+      this.loginService.Register(registration);
 
       mockContext.Verify(m => m.SaveChanges(), Times.AtLeastOnce);
-      Assert.IsTrue(session.Token.Length > 0);
+    }
+
+    [Test]
+    public void AlreadyRegisteredUserTest() {
+      // Test if you try to register a user that already exists that it errors.
+      var registration = new RegistrationAttempt() {
+        UserName = existingUserName,
+        Email = "test@example.com",
+        DisplayName = "anything",
+        Password = testPassword
+      };
+
+      try {
+        this.loginService.Register(registration);
+        Assert.Fail();
+      } catch (Exception) {
+        Assert.Pass();
+      }
     }
 
     [Test]
     public void GetUserFromTokenTest() {
-      User result = this.loginService.GetUserFromToken(testToken);
+      User result = this.loginService.GetUserFromToken(existingUserToken);
 
-      Assert.AreEqual(testUserName, result.UserName);
+      Assert.AreEqual(existingUserName, result.UserName);
     }
 
     [Test]
@@ -79,9 +97,9 @@ namespace Tete.Tests.Api.Services.Authentication {
 
     [Test]
     public void GetUserVMFromTokenTest() {
-      UserVM result = this.loginService.GetUserVMFromToken(testToken);
+      UserVM result = this.loginService.GetUserVMFromToken(existingUserToken);
 
-      Assert.AreEqual(testUserName, result.UserName);
+      Assert.AreEqual(existingUserName, result.UserName);
     }
 
     [Test]

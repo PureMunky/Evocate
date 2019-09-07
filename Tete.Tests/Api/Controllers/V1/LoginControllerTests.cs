@@ -23,7 +23,7 @@ namespace Tete.Tests.Api.Controllers {
     [Test]
     public void LoginTest() {
       var attempt = new LoginAttempt() {
-        UserName = testUserName,
+        UserName = existingUserName,
         Password = testPassword
       };
 
@@ -50,7 +50,7 @@ namespace Tete.Tests.Api.Controllers {
 
     [Test]
     public void CurrentUserTest() {
-      this.controller.CurrentUser(testToken);
+      this.controller.CurrentUser(existingUserToken);
 
       mockContext.Verify(c => c.Sessions, Times.Once);
       mockContext.Verify(c => c.Users, Times.Once);

@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
 using Tete.Api.Services.Logging;
@@ -10,31 +7,12 @@ using Tete.Tests.Setup;
 
 namespace Tete.Tests.Api.Services.Logging {
 
-  public class LogServiceTests {
+  public class LogServiceTests : LogsBase {
 
-    Mock<Tete.Api.Contexts.MainContext> mockContext;
     LogService logService;
-    const string Domain = "TEST";
-    Guid logId = Guid.NewGuid();
-    Mock<DbSet<Log>> mockLogs;
 
     [SetUp]
-    public void Setup() {
-      Log testLog = new Log() {
-        Data = "testData",
-        Description = "testDescription",
-        Domain = Domain,
-        LogId = logId
-      };
-
-      IQueryable<Log> logs = new List<Log> {
-        testLog
-      }.AsQueryable();
-
-      mockLogs = MockContext.MockDBSet<Log>(logs);
-      mockContext = new Mock<Tete.Api.Contexts.MainContext>();
-      mockContext.Setup(c => c.Logs).Returns(mockLogs.Object);
-
+    public void SetUp() {
       logService = new LogService(mockContext.Object, Domain);
     }
 

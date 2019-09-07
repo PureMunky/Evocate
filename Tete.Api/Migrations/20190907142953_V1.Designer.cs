@@ -10,8 +10,8 @@ using Tete.Api.Contexts;
 namespace Tete.Api.Migrations
 {
     [DbContext(typeof(MainContext))]
-    [Migration("20190818180401_LogModel")]
-    partial class LogModel
+    [Migration("20190907142953_V1")]
+    partial class V1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,63 @@ namespace Tete.Api.Migrations
                 .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("Tete.Models.Authentication.Login", b =>
+                {
+                    b.Property<Guid>("LoginId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("Created");
+
+                    b.Property<DateTime>("LastAccessed");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired();
+
+                    b.Property<Guid>("UserId");
+
+                    b.HasKey("LoginId");
+
+                    b.ToTable("Logins");
+                });
+
+            modelBuilder.Entity("Tete.Models.Authentication.Session", b =>
+                {
+                    b.Property<Guid>("SessionId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("Created");
+
+                    b.Property<string>("Token")
+                        .IsRequired();
+
+                    b.Property<Guid>("UserId");
+
+                    b.HasKey("SessionId");
+
+                    b.ToTable("Sessions");
+                });
+
+            modelBuilder.Entity("Tete.Models.Authentication.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("DisplayName");
+
+                    b.Property<string>("Email")
+                        .IsRequired();
+
+                    b.Property<byte[]>("Salt")
+                        .IsRequired();
+
+                    b.Property<string>("UserName")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
 
             modelBuilder.Entity("Tete.Models.Config.Flag", b =>
                 {
@@ -60,7 +117,11 @@ namespace Tete.Api.Migrations
                     b.Property<Guid>("LogId")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Data");
+
                     b.Property<string>("Description");
+
+                    b.Property<string>("Domain");
 
                     b.Property<string>("MachineName");
 

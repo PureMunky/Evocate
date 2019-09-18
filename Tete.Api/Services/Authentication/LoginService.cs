@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Tete.Api.Contexts;
 using Tete.Api.Helpers;
@@ -18,7 +17,7 @@ namespace Tete.Api.Services.Authentication {
     }
 
     public void Register(RegistrationAttempt registration) {
-      if (this.mainContext.Users.Where(u => u.UserName == registration.UserName).FirstOrDefault() == null) {
+      if (this.mainContext.Users.Where(u => u.UserName == registration.UserName || u.Email == registration.Email).FirstOrDefault() == null) {
         byte[] salt = Crypto.NewSalt();
         string hash = Crypto.Hash(registration.Password, salt);
         var newUser = new User() {

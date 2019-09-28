@@ -63,6 +63,14 @@ namespace Tete.Web.Controllers
       return await new Tete.Web.Services.RequestService(Configuration).Get("/v1/Login/CurrentUser", HttpContext);
     }
 
+    [HttpGet]
+    public IActionResult Logout()
+    {
+      HttpContext.Response.Cookies.Delete(Constants.SessionTokenName);
+
+      return Redirect("/Login");
+    }
+
     public IActionResult Forgot()
     {
       return View("Forgot");

@@ -2,9 +2,8 @@
   Layout = "_Layout";
 }
 
-<h1>Register New Account</h1>
-
 <form action="/Login/Register" method="post" id="registrationForm">
+  <h2>Register New Account</h2>
   <section>
     <div>
       <label for="userName">UserName</label>
@@ -22,6 +21,11 @@
       <label for="userPassword">Password</label>
       <input type="password" name="userPassword" />
     </div>
-    <input id="submit" type="submit" onsubmit="testForm()">
+    <div>
+      <a href="/Login">Login</a>
+    </div>
+    <div>
+      <input id="submit" type="submit" onsubmit="testForm()">
+    </div>
   </section>
 </form>

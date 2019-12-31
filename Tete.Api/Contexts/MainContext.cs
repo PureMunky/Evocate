@@ -13,6 +13,7 @@ namespace Tete.Api.Contexts
     public virtual DbSet<Tete.Models.Authentication.Login> Logins { get; set; }
     public virtual DbSet<Tete.Models.Authentication.Session> Sessions { get; set; }
 
+    public virtual DbSet<Tete.Models.Localization.UserLanguage> UserLanguages { get; set; }
     public MainContext(DbContextOptions options) : base(options)
     {
       Console.WriteLine("Initializing MainContext");

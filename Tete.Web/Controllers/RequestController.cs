@@ -70,9 +70,25 @@ namespace Tete.Web.Controllers
       {
         try
         {
-          HttpResponseMessage res = await client.GetAsync(request.Url);
-          response.Data = JsonConvert.DeserializeObject<dynamic>(await res.Content.ReadAsStringAsync());
-          response.Status = res.StatusCode;
+          if (request.Method == "get")
+          {
+            HttpResponseMessage res = await client.GetAsync(request.Url);
+            response.Data = JsonConvert.DeserializeObject<dynamic>(await res.Content.ReadAsStringAsync());
+            response.Status = res.StatusCode;
+          }
+          else if (request.Method.ToLower() == "post")
+          {
+            HttpResponseMessage res = await client.PostAsync(request.Url, new StringContent(request.Body));
+            response.Data = JsonConvert.DeserializeObject<dynamic>(await res.Content.ReadAsStringAsync());
+            response.Status = res.StatusCode;
+          }
+          else
+          {
+            response.Error = true;
+            response.Message = "HTTP Method not implemented.";
+            response.Status = System.Net.HttpStatusCode.NotImplemented;
+          }
+
         }
         catch (Exception e)
         {

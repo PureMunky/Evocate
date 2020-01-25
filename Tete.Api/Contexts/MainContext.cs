@@ -6,6 +6,7 @@ namespace Tete.Api.Contexts
   public class MainContext : DbContext
   {
 
+    // Core Functionality
     public virtual DbSet<Tete.Models.Config.Flag> Flags { get; set; }
     public virtual DbSet<Tete.Models.Config.Setting> Settings { get; set; }
     public virtual DbSet<Tete.Models.Logging.Log> Logs { get; set; }
@@ -13,6 +14,8 @@ namespace Tete.Api.Contexts
     public virtual DbSet<Tete.Models.Authentication.Login> Logins { get; set; }
     public virtual DbSet<Tete.Models.Authentication.Session> Sessions { get; set; }
 
+    // Localization/Languages
+    public virtual DbSet<Tete.Models.Localization.Language> Languages { get; set; }
     public virtual DbSet<Tete.Models.Localization.UserLanguage> UserLanguages { get; set; }
     public MainContext(DbContextOptions options) : base(options)
     {

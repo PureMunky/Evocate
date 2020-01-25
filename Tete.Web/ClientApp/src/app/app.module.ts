@@ -10,6 +10,7 @@ import { HomeComponent } from "./home/home.component";
 import { CounterComponent } from "./counter/counter.component";
 import { FetchDataComponent } from "./fetch-data/fetch-data.component";
 import { LoggingComponent } from "./components/logging/logging.component";
+import { LanguageAdminComponent } from "./components/languageAdmin/languageAdmin.component";
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { LoggingComponent } from "./components/logging/logging.component";
     HomeComponent,
     CounterComponent,
     FetchDataComponent,
-    LoggingComponent
+    LoggingComponent,
+    LanguageAdminComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
@@ -28,7 +30,8 @@ import { LoggingComponent } from "./components/logging/logging.component";
       { path: "", component: HomeComponent, pathMatch: "full" },
       { path: "counter", component: CounterComponent },
       { path: "fetch-data", component: FetchDataComponent },
-      { path: "logging", component: LoggingComponent }
+      { path: "logging", component: LoggingComponent },
+      { path: "languageAdmin", component: LanguageAdminComponent }
     ])
   ],
   providers: [],

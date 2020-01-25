@@ -7,9 +7,20 @@ import { ApiService } from "../../services/api.service";
 })
 export class LanguageAdminComponent {
   public Languages;
+  public newLanguageInput = "";
 
-  constructor(private apiService: ApiService) {
-    apiService
+  public addLanguage = function(newLanguage: String) {
+    return this.apiService
+      .get({
+        url: "/v1/Languages",
+        method: "Post",
+        body: newLanguage
+      })
+      .then(this.loadLanguages);
+  };
+
+  public loadLanguages = function() {
+    return this.apiService
       .get({
         url: "/v1/Languages",
         method: "Get",
@@ -18,5 +29,9 @@ export class LanguageAdminComponent {
       .then(result => {
         this.Languages = result;
       });
+  };
+
+  constructor(private apiService: ApiService) {
+    this.loadLanguages();
   }
 }

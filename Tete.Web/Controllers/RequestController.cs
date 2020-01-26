@@ -60,41 +60,24 @@ namespace Tete.Web.Controllers
     [HttpPost]
     public async Task<Response> Post([FromBody] Request request)
     {
-      request.Url = Configuration["Tete:ApiEndpoint"] + request.Url;
       Response response = new Response()
       {
         Request = request
       };
 
-      using (var client = new HttpClient())
-      {
-        try
-        {
-          if (request.Method == "get")
-          {
-            HttpResponseMessage res = await client.GetAsync(request.Url);
-            response.Data = JsonConvert.DeserializeObject<dynamic>(await res.Content.ReadAsStringAsync());
-            response.Status = res.StatusCode;
-          }
-          else if (request.Method.ToLower() == "post")
-          {
-            HttpResponseMessage res = await client.PostAsync(request.Url, new StringContent(request.Body));
-            response.Data = JsonConvert.DeserializeObject<dynamic>(await res.Content.ReadAsStringAsync());
-            response.Status = res.StatusCode;
-          }
-          else
-          {
-            response.Error = true;
-            response.Message = "HTTP Method not implemented.";
-            response.Status = System.Net.HttpStatusCode.NotImplemented;
-          }
 
-        }
-        catch (Exception e)
-        {
-          response.Error = true;
-          response.Message = e.Message;
-        }
+      if (request.Method.ToLower() == "get")
+      {
+        response.Data = await new Tete.Web.Services.RequestService(Configuration).Get(request.Url, HttpContext);
+      }
+      else if (request.Method.ToLower() == "post")
+      {
+        response = await new Tete.Web.Services.RequestService(Configuration).Post<string, Response>(request.Url, request.Body, HttpContext);
+      }
+      else
+      {
+        response.Error = true;
+        response.Message = "Unhandled method type. Not Implemented.";
       }
 
       return response;

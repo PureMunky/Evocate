@@ -6,7 +6,7 @@ import { ApiService } from "../../services/api.service";
   templateUrl: "./languageAdmin.component.html"
 })
 export class LanguageAdminComponent {
-  public Languages;
+  public Languages = [{ name: "none" }];
   public newLanguageInput = "";
 
   public addLanguage = function(newLanguage: String) {
@@ -27,6 +27,7 @@ export class LanguageAdminComponent {
         body: ""
       })
       .then(result => {
+        console.log(result);
         this.Languages = result;
       });
   };

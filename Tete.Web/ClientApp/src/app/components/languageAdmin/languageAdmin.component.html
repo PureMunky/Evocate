@@ -1,8 +1,16 @@
 <h1>Language Admin</h1>
 
-<select>
-  <option *ngFor="let language of Languages" value="{{ language.LanguageId }}">{{ language.name }}</option>
+<select [(ngModel)]="currentLanguage">
+  <option *ngFor="let language of Languages" [ngValue]="language">
+    {{ language.name }}
+  </option>
 </select>
 
 <input #txtNewLanguage type="text" [(ngModel)]="newLanguageInput">
 <button (click)="addLanguage(txtNewLanguage.value)">Add Language</button>
+
+<div *ngFor="let element of currentLanguage.elements">
+  <input type="text" [(ngModel)]="element.Name">
+  <input type="text" [(ngModel)]="element.Value">
+</div>
+<button (click)="addElement()">New Element</button>

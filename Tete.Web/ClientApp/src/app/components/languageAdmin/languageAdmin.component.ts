@@ -8,6 +8,7 @@ import { ApiService } from "../../services/api.service";
 export class LanguageAdminComponent {
   public Languages = [{ name: "none" }];
   public newLanguageInput = "";
+  public currentLanguage;
 
   public addLanguage = function(newLanguage: String) {
     return this.apiService
@@ -16,7 +17,7 @@ export class LanguageAdminComponent {
         method: "Post",
         body: newLanguage
       })
-      .then(this.loadLanguages);
+      .then(() => this.loadLanguages());
   };
 
   public loadLanguages = function() {
@@ -27,10 +28,21 @@ export class LanguageAdminComponent {
         body: ""
       })
       .then(result => {
-        console.log(result);
         this.Languages = result;
+        if (this.Languages.length > 0) {
+          this.currentLanguage = this.Languages[0];
+        }
       });
   };
+
+  public addElement() {
+    if (!this.currentLanguage.elements) {
+      this.currentLanguage.elements = [];
+    }
+    this.currentLanguage.elements.push({ name: "", value: "" });
+    console.log(this.currentLanguage);
+    console.log(this.Languages);
+  }
 
   constructor(private apiService: ApiService) {
     this.loadLanguages();

@@ -8,5 +8,8 @@ namespace Tete.Models.Localization
     public Guid ElementId { get; set; }
     public string Key { get; set; }
     public string Text { get; set; }
+
+    public Guid LanguageId { get; set; }
+    public virtual Language Language { get; set; }
   }
 }

@@ -1,5 +1,5 @@
 using System;
-using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace Tete.Models.Localization
 {
@@ -9,5 +9,8 @@ namespace Tete.Models.Localization
     public Guid LanguageId { get; set; }
     public string Name { get; set; }
     public bool Active { get; set; }
+
+    public ICollection<Element> Elements { get; set; }
+
   }
 }

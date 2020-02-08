@@ -7,21 +7,16 @@ using Tete.Models.Localization;
 namespace Tete.Api.Services.Localization
 {
 
-  public class LanguageService
+  public class UserLanguageService
   {
     private MainContext mainContext;
 
-    public LanguageService(MainContext mainContext)
+    public UserLanguageService(MainContext mainContext)
     {
       this.mainContext = mainContext;
     }
 
-    public List<Language> GetLanguages()
-    {
-      return this.mainContext.Languages.Where(l => l.Active == true).OrderBy(l => l.Name).ToList();
-    }
-
-    public Language CreateLanguage(string language)
+    public void CreateLanguage(string language)
     {
       Language lang = new Language()
       {
@@ -32,8 +27,6 @@ namespace Tete.Api.Services.Localization
 
       this.mainContext.Languages.Add(lang);
       this.mainContext.SaveChanges();
-
-      return lang;
     }
 
     public List<UserLanguage> GetUserLanguages(Guid UserId)

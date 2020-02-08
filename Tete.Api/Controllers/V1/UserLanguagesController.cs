@@ -9,13 +9,13 @@ namespace Tete.Api.Controllers
 {
   [Route("V1/[controller]")]
   [ApiController]
-  public class LanguagesController : ControllerBase
+  public class UserLanguagesController : ControllerBase
   {
 
     private Api.Services.Logging.LogService logService;
     private Api.Services.Localization.LanguageService service;
 
-    public LanguagesController(Contexts.MainContext mainContext)
+    public UserLanguagesController(Contexts.MainContext mainContext)
     {
       this.service = new Services.Localization.LanguageService(mainContext);
     }
@@ -35,9 +35,9 @@ namespace Tete.Api.Controllers
 
     // POST api/values
     [HttpPost]
-    public ActionResult<Language> Post([FromBody] string value)
+    public void Post([FromBody] string value)
     {
-      return this.service.CreateLanguage(value);
+      //this.service.CreateLanguage(value);
     }
 
   }

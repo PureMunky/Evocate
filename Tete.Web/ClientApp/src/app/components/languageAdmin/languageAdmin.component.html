@@ -9,8 +9,7 @@
 <input #txtNewLanguage type="text" [(ngModel)]="newLanguageInput">
 <button (click)="addLanguage(txtNewLanguage.value)">Add Language</button>
 
-<div *ngFor="let element of currentLanguage.elements">
-  <input type="text" [(ngModel)]="element.Name">
-  <input type="text" [(ngModel)]="element.Value">
+<div *ngFor="let element of fullElements">
+  {{element}} - <input type="text" [(ngModel)]="currentLanguage.elements[element]">
 </div>
 <button (click)="addElement()">New Element</button>

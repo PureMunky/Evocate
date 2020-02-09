@@ -1,14 +1,26 @@
 import { Component } from "@angular/core";
 import { ApiService } from "../../services/api.service";
+import { UserService } from "../../services/user.service";
 
 @Component({
   selector: "language-admin",
   templateUrl: "./languageAdmin.component.html"
 })
 export class LanguageAdminComponent {
-  public Languages = [{ name: "none" }];
+  public Languages = [
+    { LanguageId: "", name: "none", active: false, elements: {} }
+  ];
   public newLanguageInput = "";
-  public currentLanguage;
+  public currentLanguage = this.Languages[0];
+  public fullElements = [
+    "greeting",
+    "submit",
+    "hello",
+    "title",
+    "home",
+    "logging",
+    "logout"
+  ];
 
   public addLanguage = function(newLanguage: String) {
     return this.apiService
@@ -29,6 +41,14 @@ export class LanguageAdminComponent {
       })
       .then(result => {
         this.Languages = result;
+
+        this.Languages = this.Languages.map(l => {
+          l.elements = this.fullElements.map(e => {
+            e: "";
+          });
+          return l;
+        });
+
         if (this.Languages.length > 0) {
           this.currentLanguage = this.Languages[0];
         }
@@ -37,14 +57,15 @@ export class LanguageAdminComponent {
 
   public addElement() {
     if (!this.currentLanguage.elements) {
-      this.currentLanguage.elements = [];
+      this.currentLanguage.elements = {};
     }
-    this.currentLanguage.elements.push({ name: "", value: "" });
-    console.log(this.currentLanguage);
-    console.log(this.Languages);
+    this.currentLanguage.elements["new"] = "";
   }
 
-  constructor(private apiService: ApiService) {
+  constructor(
+    private apiService: ApiService,
+    private userService: UserService
+  ) {
     this.loadLanguages();
   }
 }

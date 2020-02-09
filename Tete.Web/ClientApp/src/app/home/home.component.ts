@@ -7,6 +7,6 @@ import { ApiService } from "../services/api.service";
 })
 export class HomeComponent {
   constructor(private apiService: ApiService) {
-    apiService.authTest();
+    // apiService.authTest();
   }
 }

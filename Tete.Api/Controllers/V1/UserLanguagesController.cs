@@ -19,9 +19,10 @@ namespace Tete.Api.Controllers
     {
       this.service = new Services.Localization.LanguageService(mainContext);
     }
+    
     // GET api/values
     [HttpGet]
-    public IEnumerable<Language> Get()
+    public IEnumerable<LanguageVM> Get()
     {
       return this.service.GetLanguages();
     }

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Tete.Models.Localization
 {
 
-    public class UserLanguage
+    public class UserLanguageVM
     {
         public Guid UserLanguageId { get; set; }
 
@@ -22,11 +22,15 @@ namespace Tete.Models.Localization
 
         public Boolean Speak { get; set; }
 
-        public UserLanguage()
+        public UserLanguageVM(UserLanguage userLanguage)
         {
-            this.UserLanguageId = Guid.NewGuid();
-            this.Read = true;
-            this.Speak = true;
+            this.UserLanguageId = userLanguage.UserLanguageId;
+            this.UserId = userLanguage.UserId;
+            this.Priority = userLanguage.Priority;
+            this.LanguageId = userLanguage.LanguageId;
+            this.Language = userLanguage.Language;
+            this.Read = userLanguage.Read;
+            this.Speak = userLanguage.Speak;
         }
     }
 }

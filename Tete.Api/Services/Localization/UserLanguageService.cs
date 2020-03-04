@@ -16,19 +16,6 @@ namespace Tete.Api.Services.Localization
       this.mainContext = mainContext;
     }
 
-    public void CreateLanguage(string language)
-    {
-      Language lang = new Language()
-      {
-        LanguageId = Guid.NewGuid(),
-        Name = language,
-        Active = true
-      };
-
-      this.mainContext.Languages.Add(lang);
-      this.mainContext.SaveChanges();
-    }
-
     public List<UserLanguage> GetUserLanguages(Guid UserId)
     {
       return this.mainContext.UserLanguages.Where(l => l.UserId == UserId).OrderBy(l => l.Priority).ToList();

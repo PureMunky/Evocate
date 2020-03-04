@@ -43,10 +43,5 @@ namespace Tete.Api.Services.Localization
       return lang;
     }
 
-    public List<UserLanguage> GetUserLanguages(Guid UserId)
-    {
-      return this.mainContext.UserLanguages.Where(l => l.UserId == UserId).OrderBy(l => l.Priority).ToList();
-    }
-
   }
 }

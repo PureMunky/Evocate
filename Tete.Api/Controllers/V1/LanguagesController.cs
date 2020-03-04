@@ -26,13 +26,6 @@ namespace Tete.Api.Controllers
       return this.service.GetLanguages();
     }
 
-    // GET api/values/5
-    [HttpGet("{id}")]
-    public ActionResult<List<UserLanguage>> Get(string id)
-    {
-      return this.service.GetUserLanguages(new Guid(id));
-    }
-
     // POST api/values
     [HttpPost]
     public ActionResult<Language> Post([FromBody] string value)

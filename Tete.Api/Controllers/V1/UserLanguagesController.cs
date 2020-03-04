@@ -13,20 +13,13 @@ namespace Tete.Api.Controllers
   {
 
     private Api.Services.Logging.LogService logService;
-    private Api.Services.Localization.LanguageService service;
+    private Api.Services.Localization.UserLanguageService service;
 
     public UserLanguagesController(Contexts.MainContext mainContext)
     {
-      this.service = new Services.Localization.LanguageService(mainContext);
+      this.service = new Services.Localization.UserLanguageService(mainContext);
     }
     
-    // GET api/values
-    [HttpGet]
-    public IEnumerable<LanguageVM> Get()
-    {
-      return this.service.GetLanguages();
-    }
-
     // GET api/values/5
     [HttpGet("{id}")]
     public ActionResult<List<UserLanguage>> Get(string id)

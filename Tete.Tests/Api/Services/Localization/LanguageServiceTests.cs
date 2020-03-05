@@ -24,6 +24,7 @@ namespace Tete.Tests.Api.Services.Localization
       Assert.IsTrue(true);
     }
 
+    [Test]
     public void GetLanguagesTest()
     {
       List<LanguageVM> languages = this.languageService.GetLanguages();
@@ -32,6 +33,7 @@ namespace Tete.Tests.Api.Services.Localization
       Assert.AreEqual(testText, languages[0].Elements[testKey]);
     }
 
+    [Test]
     public void CreateLanguageTest()
     {
       Language l = this.languageService.CreateLanguage("test");

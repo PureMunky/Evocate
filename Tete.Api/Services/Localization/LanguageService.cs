@@ -37,10 +37,15 @@ namespace Tete.Api.Services.Localization
         Active = true
       };
 
-      this.mainContext.Languages.Add(lang);
+      return CreateLanguage(lang);
+    }
+
+    public Language CreateLanguage(Language language)
+    {
+      this.mainContext.Languages.Add(language);
       this.mainContext.SaveChanges();
 
-      return lang;
+      return language;
     }
 
   }

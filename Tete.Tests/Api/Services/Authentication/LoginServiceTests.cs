@@ -83,14 +83,14 @@ namespace Tete.Tests.Api.Services.Authentication {
 
     [Test]
     public void GetUserFromTokenTest() {
-      User result = this.loginService.GetUserFromToken(existingUserToken);
+      var result = this.loginService.GetUserFromToken(existingUserToken);
 
       Assert.AreEqual(existingUserName, result.UserName);
     }
 
     [Test]
     public void GetUserFromInvalidTokenTest() {
-      User result = this.loginService.GetUserFromToken("InvalidToken");
+      var result = this.loginService.GetUserFromToken("InvalidToken");
 
       Assert.IsNull(result);
     }

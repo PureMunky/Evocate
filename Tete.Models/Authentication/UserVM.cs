@@ -4,6 +4,13 @@ using Tete.Models.Localization;
 
 namespace Tete.Models.Authentication
 {
+
+  /// <summary>
+  /// class: UserVM
+  /// Used to as the public facing view model for a user.
+  /// This includes their bio and any other information
+  /// that could be displayed for a person.
+  /// </summary>
   public class UserVM
   {
     public string DisplayName { get; set; }

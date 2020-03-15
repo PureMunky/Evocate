@@ -35,13 +35,16 @@ namespace Tete.Api.Controllers
       output.Add("User 'Admin' created.");
 
 
-      var english = new Language() {
+      var english = new Language()
+      {
         LanguageId = Guid.NewGuid(),
         Name = "English",
-        Active = true
+        Active = true,
+        Elements = new List<Element>()
       };
 
-      english.Elements.Add(new Element() {
+      english.Elements.Add(new Element()
+      {
         ElementId = Guid.NewGuid(),
         Key = "welcome",
         Text = "Welcome!",
@@ -51,9 +54,6 @@ namespace Tete.Api.Controllers
       this.languageService.CreateLanguage(english);
       output.Add("Created English Language");
 
-
-      
-      
       return output;
     }
   }

@@ -14,6 +14,8 @@ namespace Tete.Tests.Setup
     protected const string existingUserToken = "abcd";
     protected const string newUserToken = "efgh";
     protected const string existingUserName = "existingUser";
+    protected const string about = "test about";
+    protected const string privateAbout = "testing private about";
 
     [SetUp]
     public void Setup()
@@ -75,16 +77,25 @@ namespace Tete.Tests.Setup
         }
       }.AsQueryable();
 
+      IQueryable<Tete.Models.Users.Profile> userProfiles = new List<Tete.Models.Users.Profile> {
+        new Tete.Models.Users.Profile(existingUser.Id) {
+          About = about,
+          PrivateAbout = privateAbout
+        }
+      }.AsQueryable();
+
       var mockUsers = MockContext.MockDBSet<User>(users);
       var mockLogins = MockContext.MockDBSet<Login>(logins);
       var mockSessions = MockContext.MockDBSet<Session>(sessions);
       var mockUserLanguages = MockContext.MockDBSet<Tete.Models.Localization.UserLanguage>(userLanguages);
+      var mockUserProfiles = MockContext.MockDBSet<Tete.Models.Users.Profile>(userProfiles);
 
       mockContext = Tete.Tests.Setup.MockContext.GetDefaultContext();
       mockContext.Setup(c => c.Users).Returns(mockUsers.Object);
       mockContext.Setup(c => c.Logins).Returns(mockLogins.Object);
       mockContext.Setup(c => c.Sessions).Returns(mockSessions.Object);
       mockContext.Setup(c => c.UserLanguages).Returns(mockUserLanguages.Object);
+      mockContext.Setup(c => c.UserProfiles).Returns(mockUserProfiles.Object);
     }
 
   }

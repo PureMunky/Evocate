@@ -5,16 +5,15 @@ using Tete.Models;
 
 namespace Tete.Api.Services.Users
 {
-    public class ProfileService
+  public class ProfileService
+  {
+
+    private MainContext mainContext;
+
+    public ProfileService(MainContext mainContext)
     {
-
-        private MainContext mainContext;
-
-
-        public ProfileService(MainContext mainContext)
-        {
-            this.mainContext = mainContext;
-        }
-
+      this.mainContext = mainContext;
     }
+
+  }
 }

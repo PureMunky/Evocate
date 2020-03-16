@@ -22,7 +22,7 @@ export class LanguageAdminComponent {
     "logout"
   ];
 
-  public addLanguage = function(newLanguage: String) {
+  public addLanguage = function (newLanguage: String) {
     return this.apiService
       .get({
         url: "/v1/Languages",
@@ -32,7 +32,7 @@ export class LanguageAdminComponent {
       .then(() => this.loadLanguages());
   };
 
-  public loadLanguages = function() {
+  public loadLanguages = function () {
     return this.apiService
       .get({
         url: "/v1/Languages",
@@ -43,9 +43,6 @@ export class LanguageAdminComponent {
         this.Languages = result;
 
         this.Languages = this.Languages.map(l => {
-          l.elements = this.fullElements.map(e => {
-            e: "";
-          });
           return l;
         });
 

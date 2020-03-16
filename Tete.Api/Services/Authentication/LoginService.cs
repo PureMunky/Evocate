@@ -72,7 +72,9 @@ namespace Tete.Api.Services.Authentication
 
       if (user != null)
       {
-        userVM = new UserVM(user, this.userLanguageService.GetUserLanguages(user.Id));
+        userVM = new UserVM(user,
+          this.userLanguageService.GetUserLanguages(user.Id),
+          this.mainContext.UserProfiles.Where(p => p.UserId == user.Id).FirstOrDefault());
       }
 
       return userVM;

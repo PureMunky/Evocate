@@ -19,6 +19,9 @@ namespace Tete.Api.Contexts
     public virtual DbSet<Tete.Models.Localization.Element> Elements { get; set; }
     public virtual DbSet<Tete.Models.Localization.UserLanguage> UserLanguages { get; set; }
 
+    // User Details
+    public virtual DbSet<Tete.Models.Users.Profile> UserProfiles { get; set; }
+
     public MainContext(DbContextOptions options) : base(options)
     {
       Console.WriteLine("Initializing MainContext");

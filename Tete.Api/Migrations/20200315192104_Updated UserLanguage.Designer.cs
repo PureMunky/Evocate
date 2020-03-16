@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Tete.Api.Contexts;
 
 namespace Tete.Api.Migrations
 {
     [DbContext(typeof(MainContext))]
-    partial class MainContextModelSnapshot : ModelSnapshot
+    [Migration("20200315192104_Updated UserLanguage")]
+    partial class UpdatedUserLanguage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -184,22 +186,6 @@ namespace Tete.Api.Migrations
                     b.HasKey("LogId");
 
                     b.ToTable("Logs");
-                });
-
-            modelBuilder.Entity("Tete.Models.Users.Profile", b =>
-                {
-                    b.Property<Guid>("ProfileId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("About");
-
-                    b.Property<string>("PrivateAbout");
-
-                    b.Property<Guid>("UserId");
-
-                    b.HasKey("ProfileId");
-
-                    b.ToTable("UserProfiles");
                 });
 
             modelBuilder.Entity("Tete.Models.Localization.Element", b =>

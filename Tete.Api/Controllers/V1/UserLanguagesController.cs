@@ -19,11 +19,12 @@ namespace Tete.Api.Controllers
     {
       this.service = new Services.Localization.UserLanguageService(mainContext);
     }
-    
+
     // GET api/values/5
     [HttpGet("{id}")]
     public ActionResult<List<UserLanguage>> Get(string id)
     {
+      this.logService.Write("Get user Languages", id, "Api");
       return this.service.GetUserLanguages(new Guid(id));
     }
 

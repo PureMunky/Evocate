@@ -11,11 +11,13 @@ namespace Tete.Tests.Setup
   {
     protected Mock<Tete.Api.Contexts.MainContext> mockContext;
 
+    protected Guid existingUserId = Guid.NewGuid();
+
     [SetUp]
     public void Setup()
     {
       User existingUser = new User() {
-        Id = Guid.NewGuid(),
+        Id = existingUserId,
         DisplayName = "test user",
         UserName = "TestUser"
       };

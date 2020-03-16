@@ -4,6 +4,7 @@ using Moq;
 using NUnit.Framework;
 using Tete.Api.Services.Users;
 using Tete.Tests.Setup;
+using Tete.Models.Authentication;
 
 namespace Tete.Tests.Api.Services.Users
 {
@@ -26,7 +27,10 @@ namespace Tete.Tests.Api.Services.Users
         [Test]
         public void GetProfileTest()
         {
-            Assert.Inconclusive("Need to implement this.");
+            UserVM user = this.profileService.GetUser(existingUserId);
+
+            Assert.AreEqual("TestUser", user.UserName);
+            Assert.Inconclusive("Build out UserVM as a profile. Create a profile model for 'extras.'");
         }
     }
 

@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using Tete.Api.Contexts;
 using Tete.Api.Helpers;
-using Tete.Api.Services.Localization;
+using Tete.Api.Services.Users;
 using Tete.Models.Authentication;
 
 namespace Tete.Api.Services.Authentication
@@ -10,12 +10,12 @@ namespace Tete.Api.Services.Authentication
   public class LoginService
   {
     private MainContext mainContext;
-    private UserLanguageService userLanguageService;
+    private ProfileService profileService;
 
     public LoginService(MainContext mainContext)
     {
       this.mainContext = mainContext;
-      this.userLanguageService = new UserLanguageService(mainContext);
+      this.profileService = new ProfileService(mainContext);
     }
 
     public SessionVM Login(LoginAttempt login)
@@ -72,9 +72,7 @@ namespace Tete.Api.Services.Authentication
 
       if (user != null)
       {
-        userVM = new UserVM(user,
-          this.userLanguageService.GetUserLanguages(user.Id),
-          this.mainContext.UserProfiles.Where(p => p.UserId == user.Id).FirstOrDefault());
+        userVM = this.profileService.GetUser(user);
       }
 
       return userVM;

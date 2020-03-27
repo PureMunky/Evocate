@@ -20,15 +20,18 @@ namespace Tete.Api.Services.Users
 
     public UserVM GetUser(Guid UserId)
     {
-        return GetUser(this.mainContext.Users.Where(u => u.Id == UserId).FirstOrDefault());
+      return GetUser(this.mainContext.Users.Where(u => u.Id == UserId).FirstOrDefault());
     }
 
     public UserVM GetUser(User user)
     {
-        return new UserVM(user,
-          this.userLanguageService.GetUserLanguages(user.Id),
-          this.mainContext.UserProfiles.Where(p => p.UserId == user.Id).FirstOrDefault());
+      return new UserVM(user,
+        this.userLanguageService.GetUserLanguages(user.Id),
+        this.mainContext.UserProfiles.Where(p => p.UserId == user.Id).FirstOrDefault(),
+        this.mainContext.AccessRoles.Where(r => r.UserId == user.Id).ToList());
     }
+
+
 
   }
 }

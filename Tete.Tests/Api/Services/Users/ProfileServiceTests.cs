@@ -30,7 +30,6 @@ namespace Tete.Tests.Api.Services.Users
             UserVM user = this.profileService.GetUser(existingUserId);
 
             Assert.AreEqual("TestUser", user.UserName);
-            Assert.Inconclusive("Build out UserVM as a profile. Create a profile model for 'extras.'");
         }
     }
 

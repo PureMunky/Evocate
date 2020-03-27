@@ -1,12 +1,17 @@
 import { Component } from "@angular/core";
-import { ApiService } from "../services/api.service";
+import { InitService } from "../services/init.service";
+import { UserService } from "../services/user.service";
 
 @Component({
   selector: "app-home",
   templateUrl: "./home.component.html"
 })
 export class HomeComponent {
-  constructor(private apiService: ApiService) {
-    apiService.authTest();
+  public userName = 'world';
+
+  constructor(private userService: UserService, private initService: InitService) {
+    initService.Register(() => {
+      this.userName = userService.CurrentUser().displayName;
+    });
   }
 }

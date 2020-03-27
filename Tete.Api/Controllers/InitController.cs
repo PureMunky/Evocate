@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Tete.Api.Services.Localization;
+using Tete.Api.Services.Authentication;
 using Tete.Models.Authentication;
 using Tete.Models.Localization;
 
@@ -14,18 +15,20 @@ namespace Tete.Api.Controllers
   {
     private LoginController loginController;
     private LanguageService languageService;
+    private LoginService loginService;
 
     public InitController(Contexts.MainContext mainContext)
     {
       this.loginController = new LoginController(mainContext);
       this.languageService = new LanguageService(mainContext);
+      this.loginService = new LoginService(mainContext);
     }
     // GET api/values
     [HttpGet]
     public List<string> Get()
     {
       var output = new List<string>();
-      this.loginController.Register(new RegistrationAttempt()
+      var session = this.loginController.Register(new RegistrationAttempt()
       {
         UserName = "admin",
         Email = "admin@example.com",
@@ -34,6 +37,7 @@ namespace Tete.Api.Controllers
       });
       output.Add("User 'Admin' created.");
 
+      var adminuser = this.loginService.GetUserFromToken(session.Token);
 
       var english = new Language()
       {
@@ -53,6 +57,9 @@ namespace Tete.Api.Controllers
 
       this.languageService.CreateLanguage(english);
       output.Add("Created English Language");
+
+      this.loginService.GrantRole(adminuser.Id, adminuser.Id, "Admin");
+      output.Add("Granted Admin Role to Admin User.");
 
       return output;
     }

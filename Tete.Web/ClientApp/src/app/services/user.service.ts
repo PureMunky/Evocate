@@ -6,12 +6,15 @@ import { ApiService } from "./api.service";
 })
 export class UserService {
   constructor(private apiService: ApiService) {
-    this.apiService.authTest().then(u => {
-      this.currentUser = u;
-      console.log("current user: ", this.currentUser);
-    });
+
   }
   private currentUser;
+
+  public Load() {
+    return this.apiService.authTest().then(u => {
+      this.currentUser = u;
+    });
+  }
 
   public CurrentUser() {
     return this.currentUser;

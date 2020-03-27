@@ -45,6 +45,12 @@ namespace Tete.Tests.Setup
         PasswordHash = Tete.Api.Helpers.Crypto.Hash(testPassword, salt)
       };
 
+      var accessRoles = new List<AccessRole>() {
+        new AccessRole(existingUser.Id, "Admin") {
+          CreatedBy = existingUser.Id
+        }
+      };
+
       IQueryable<User> users = new List<User> {
         existingUser
       }.AsQueryable();
@@ -53,6 +59,8 @@ namespace Tete.Tests.Setup
         existingUserLogin,
         newUserLogin
       }.AsQueryable();
+
+      IQueryable<AccessRole> userAccessRoles = accessRoles.AsQueryable();
 
       Session existingUserSession = new Session()
       {
@@ -89,6 +97,7 @@ namespace Tete.Tests.Setup
       var mockSessions = MockContext.MockDBSet<Session>(sessions);
       var mockUserLanguages = MockContext.MockDBSet<Tete.Models.Localization.UserLanguage>(userLanguages);
       var mockUserProfiles = MockContext.MockDBSet<Tete.Models.Users.Profile>(userProfiles);
+      var mockUserAccessRoles = MockContext.MockDBSet<AccessRole>(userAccessRoles);
 
       mockContext = Tete.Tests.Setup.MockContext.GetDefaultContext();
       mockContext.Setup(c => c.Users).Returns(mockUsers.Object);
@@ -96,6 +105,7 @@ namespace Tete.Tests.Setup
       mockContext.Setup(c => c.Sessions).Returns(mockSessions.Object);
       mockContext.Setup(c => c.UserLanguages).Returns(mockUserLanguages.Object);
       mockContext.Setup(c => c.UserProfiles).Returns(mockUserProfiles.Object);
+      mockContext.Setup(c => c.AccessRoles).Returns(mockUserAccessRoles.Object);
     }
 
   }

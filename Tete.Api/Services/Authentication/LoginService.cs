@@ -111,5 +111,13 @@ namespace Tete.Api.Services.Authentication
 
       return sessionVM;
     }
+
+    public void GrantRole(Guid UserId, Guid CreatedById, String RoleName)
+    {
+      var role = new AccessRole(UserId, RoleName);
+      role.CreatedBy = CreatedById;
+      this.mainContext.AccessRoles.Add(role);
+      this.mainContext.SaveChanges();
+    }
   }
 }

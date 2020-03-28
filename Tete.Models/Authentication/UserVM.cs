@@ -24,13 +24,16 @@ namespace Tete.Models.Authentication
 
     public ProfileVM Profile { get; set; }
 
-    public UserVM(User user, List<UserLanguage> languages, Profile profile)
+    public List<string> Roles { get; set; }
+
+    public UserVM(User user, List<UserLanguage> languages, Profile profile, List<AccessRole> roles)
     {
       this.DisplayName = "";
       this.Email = "";
       this.UserName = "";
       this.Languages = new List<UserLanguage>();
       this.Profile = new ProfileVM();
+      this.Roles = new List<string>();
 
       if (user != null)
       {
@@ -47,6 +50,14 @@ namespace Tete.Models.Authentication
       if (profile != null)
       {
         this.Profile = new ProfileVM(profile);
+      }
+
+      if (roles != null)
+      {
+        foreach (AccessRole r in roles)
+        {
+          this.Roles.Add(r.Name);
+        }
       }
     }
   }

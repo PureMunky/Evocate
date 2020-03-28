@@ -21,6 +21,7 @@ namespace Tete.Api.Contexts
 
     // User Details
     public virtual DbSet<Tete.Models.Users.Profile> UserProfiles { get; set; }
+    public virtual DbSet<Tete.Models.Authentication.AccessRole> AccessRoles { get; set; }
 
     public MainContext(DbContextOptions options) : base(options)
     {

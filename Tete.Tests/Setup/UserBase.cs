@@ -18,18 +18,26 @@ namespace Tete.Tests.Setup
     [SetUp]
     public void Setup()
     {
-      User existingUser = new User() {
+      User existingUser = new User()
+      {
         Id = existingUserId,
         DisplayName = "test user",
         UserName = "TestUser"
       };
 
-      var userLanguage = new UserLanguage(){
+      var userLanguage = new UserLanguage()
+      {
         Language = new Language(),
         UserId = existingUserId
       };
-      
+
       var userProfile = new Profile(existingUserId);
+
+      var accessRoles = new List<AccessRole>() {
+        new AccessRole(existingUserId, "Admin") {
+          CreatedBy = existingUserId
+        }
+      };
 
       IQueryable<User> users = new List<User> {
         existingUser
@@ -43,15 +51,19 @@ namespace Tete.Tests.Setup
         userProfile
       }.AsQueryable();
 
+      IQueryable<AccessRole> userAccessRoles = accessRoles.AsQueryable();
 
       var mockUsers = MockContext.MockDBSet<User>(users);
-      var mockUserLanguages = MockContext.MockDBSet<UserLanguage>(userLanguages);      
+      var mockUserLanguages = MockContext.MockDBSet<UserLanguage>(userLanguages);
       var mockUserProfiles = MockContext.MockDBSet<Profile>(userProfiles);
+      var mockUserAccessRoles = MockContext.MockDBSet<AccessRole>(userAccessRoles);
 
       mockContext = Tete.Tests.Setup.MockContext.GetDefaultContext();
       mockContext.Setup(c => c.Users).Returns(mockUsers.Object);
       mockContext.Setup(c => c.UserLanguages).Returns(mockUserLanguages.Object);
-          mockContext.Setup(c => c.UserProfiles).Returns(mockUserProfiles.Object);
+      mockContext.Setup(c => c.UserProfiles).Returns(mockUserProfiles.Object);
+      mockContext.Setup(c => c.AccessRoles).Returns(mockUserAccessRoles.Object);
+
     }
 
   }

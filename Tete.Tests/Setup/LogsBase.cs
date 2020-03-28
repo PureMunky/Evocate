@@ -7,14 +7,13 @@ using NUnit.Framework;
 using Tete.Models.Logging;
 
 namespace Tete.Tests.Setup {
-  public abstract class LogsBase {
-    protected Mock<Tete.Api.Contexts.MainContext> mockContext;
+  public abstract class LogsBase : TestBase {
     protected const string Domain = "TEST";
     protected Guid logId = Guid.NewGuid();
     protected Mock<DbSet<Log>> mockLogs;
 
     [SetUp]
-    public void Setup() {
+    public void SetupLogs() {
       Log testLog = new Log() {
         Data = "testData",
         Description = "testDescription",
@@ -27,7 +26,6 @@ namespace Tete.Tests.Setup {
       }.AsQueryable();
 
       mockLogs = MockContext.MockDBSet<Log>(logs);
-      mockContext = new Mock<Tete.Api.Contexts.MainContext>();
       mockContext.Setup(c => c.Logs).Returns(mockLogs.Object);
     }
   }

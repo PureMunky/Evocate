@@ -31,7 +31,8 @@ namespace Tete.Tests.Api.Services.Users
 
             Assert.AreEqual("TestUser", user.UserName);
         }
-
+        
+        /*
         [Test]
         public void EditProfileTest()
         {
@@ -44,13 +45,14 @@ namespace Tete.Tests.Api.Services.Users
             // As long as I'm building security around
             // updates then it shouldn't be a problem
             // knowing any of he Guids associated with things.
-            //this.profileService.SaveProfile(user.Profile);
+            this.profileService.SaveProfile(user.Profile);
 
             UserVM result = this.profileService.GetUser(existingUserId);
 
             Assert.AreEqual(about, result.Profile.About);
 
         }
+        */
     }
 
 }

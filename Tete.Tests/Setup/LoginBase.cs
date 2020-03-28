@@ -6,9 +6,8 @@ using Tete.Models.Authentication;
 
 namespace Tete.Tests.Setup
 {
-  public abstract class LoginTestBase
+  public abstract class LoginTestBase : TestBase
   {
-    protected Mock<Tete.Api.Contexts.MainContext> mockContext;
     protected const string newUserName = "helloUserName";
     protected const string testPassword = "testPassword";
     protected const string existingUserToken = "abcd";
@@ -18,7 +17,7 @@ namespace Tete.Tests.Setup
     protected const string privateAbout = "testing private about";
 
     [SetUp]
-    public void Setup()
+    public void SetupLogin()
     {
       var salt = Tete.Api.Helpers.Crypto.NewSalt();
       User existingUser = new User()
@@ -99,7 +98,6 @@ namespace Tete.Tests.Setup
       var mockUserProfiles = MockContext.MockDBSet<Tete.Models.Users.Profile>(userProfiles);
       var mockUserAccessRoles = MockContext.MockDBSet<AccessRole>(userAccessRoles);
 
-      mockContext = Tete.Tests.Setup.MockContext.GetDefaultContext();
       mockContext.Setup(c => c.Users).Returns(mockUsers.Object);
       mockContext.Setup(c => c.Logins).Returns(mockLogins.Object);
       mockContext.Setup(c => c.Sessions).Returns(mockSessions.Object);

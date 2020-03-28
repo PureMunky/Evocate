@@ -37,6 +37,5 @@ namespace Tete.Api.Services.Users
       this.mainContext.UserProfiles.Update(profile);
       this.mainContext.SaveChanges();
     }
-
   }
 }

@@ -7,9 +7,8 @@ using Tete.Models.Localization;
 
 namespace Tete.Tests.Setup
 {
-  public abstract class LocalizationTestBase
+  public abstract class LocalizationTestBase : TestBase
   {
-    protected Mock<Tete.Api.Contexts.MainContext> mockContext;
     protected const string languageName = "English";
     protected const bool languageActive = true;
     protected Guid userId = Guid.NewGuid();
@@ -17,7 +16,7 @@ namespace Tete.Tests.Setup
     protected string testText = "TextText";
 
     [SetUp]
-    public void Setup()
+    public void SetupLocalization()
     {
       Language language = new Language()
       {
@@ -47,7 +46,6 @@ namespace Tete.Tests.Setup
       var mockLanguages = MockContext.MockDBSet<Language>(languages);
       var mockUserLanguages = MockContext.MockDBSet<UserLanguage>(userLanguages);
 
-      mockContext = Tete.Tests.Setup.MockContext.GetDefaultContext();
       mockContext.Setup(c => c.Languages).Returns(mockLanguages.Object);
       mockContext.Setup(c => c.UserLanguages).Returns(mockUserLanguages.Object);
     }

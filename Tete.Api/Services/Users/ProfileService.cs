@@ -3,6 +3,7 @@ using System.Linq;
 using Tete.Api.Contexts;
 using Tete.Api.Services.Localization;
 using Tete.Models.Authentication;
+using Tete.Models.Users;
 
 namespace Tete.Api.Services.Users
 {
@@ -28,6 +29,12 @@ namespace Tete.Api.Services.Users
         return new UserVM(user,
           this.userLanguageService.GetUserLanguages(user.Id),
           this.mainContext.UserProfiles.Where(p => p.UserId == user.Id).FirstOrDefault());
+    }
+
+    public void SaveProfile(Profile profile)
+    {
+      this.mainContext.UserProfiles.Update(profile);
+      this.mainContext.SaveChanges();
     }
 
   }

@@ -16,16 +16,11 @@ namespace Tete.Api.Services.Localization
       this.mainContext = mainContext;
     }
 
-    public List<LanguageVM> GetLanguages()
+    public List<Language> GetLanguages()
     {
       var languages = this.mainContext.Languages.Where(l => l.Active == true).OrderBy(l => l.Name).ToList();
       
-      var rtnLanguages = new List<LanguageVM>();
-      foreach(Language l in languages) {
-        rtnLanguages.Add(new LanguageVM(l));
-      }
-
-      return rtnLanguages;
+      return languages;
     }
 
     public Language CreateLanguage(string language)

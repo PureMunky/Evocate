@@ -22,7 +22,7 @@ namespace Tete.Models.Authentication
 
     public List<UserLanguage> Languages { get; set; }
 
-    public ProfileVM Profile { get; set; }
+    public Profile Profile { get; set; }
 
     public List<string> Roles { get; set; }
 
@@ -32,7 +32,7 @@ namespace Tete.Models.Authentication
       this.Email = "";
       this.UserName = "";
       this.Languages = new List<UserLanguage>();
-      this.Profile = new ProfileVM();
+      this.Profile = new Profile(user.Id);
       this.Roles = new List<string>();
 
       if (user != null)
@@ -49,7 +49,7 @@ namespace Tete.Models.Authentication
 
       if (profile != null)
       {
-        this.Profile = new ProfileVM(profile);
+        this.Profile = profile;
       }
 
       if (roles != null)

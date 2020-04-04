@@ -18,6 +18,7 @@ namespace Tete.Api.Controllers
     public UserLanguagesController(Contexts.MainContext mainContext)
     {
       this.service = new Services.Localization.UserLanguageService(mainContext);
+      this.logService = new Services.Logging.LogService(mainContext, "API");
     }
 
     // GET api/values/5

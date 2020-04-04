@@ -27,10 +27,14 @@ namespace Tete.Tests.Api.Services.Localization
     [Test]
     public void GetLanguagesTest()
     {
-      List<LanguageVM> languages = this.languageService.GetLanguages();
+      List<Language> languages = this.languageService.GetLanguages();
 
       Assert.AreEqual(1, languages.Count);
-      Assert.AreEqual(testText, languages[0].Elements[testKey]);
+      foreach (Element e in languages[0].Elements) {
+        if(e.Key == testKey) {
+          Assert.AreEqual(testText, e.Text);
+        }
+      }
     }
 
     [Test]

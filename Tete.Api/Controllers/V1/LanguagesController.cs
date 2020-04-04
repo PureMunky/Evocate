@@ -18,10 +18,11 @@ namespace Tete.Api.Controllers
     public LanguagesController(Contexts.MainContext mainContext)
     {
       this.service = new Services.Localization.LanguageService(mainContext);
+      this.logService = new Services.Logging.LogService(mainContext, "API");
     }
     // GET api/values
     [HttpGet]
-    public IEnumerable<LanguageVM> Get()
+    public IEnumerable<Language> Get()
     {
       return this.service.GetLanguages();
     }

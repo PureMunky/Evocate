@@ -34,5 +34,11 @@ namespace Tete.Api.Controllers
       return this.service.CreateLanguage(value);
     }
 
+    [HttpPut]
+    public ActionResult<Language> Update([FromBody] Language language)
+    {
+      return this.service.Update(language);
+    }
+
   }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Moq;
 using NUnit.Framework;
+using Tete.Api.Helpers;
 using Tete.Models.Authentication;
 using Tete.Models.Localization;
 using Tete.Models.Users;
@@ -18,6 +19,12 @@ namespace Tete.Tests.Setup
     [SetUp]
     public void Setup()
     {
+      UserHelper.setCurrentUser(new UserVM() {
+        Roles = new List<string>() {
+          "Admin"
+        }
+      });
+      
       User existingUser = new User()
       {
         Id = existingUserId,

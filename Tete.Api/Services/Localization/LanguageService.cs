@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Tete.Api.Contexts;
 using Tete.Models.Localization;
+using Tete.Api.Helpers;
 
 namespace Tete.Api.Services.Localization
 {
@@ -37,8 +38,21 @@ namespace Tete.Api.Services.Localization
 
     public Language CreateLanguage(Language language)
     {
+      // if (!UserHelper.CurrentUser().Roles.Contains("Admin")) throw new AccessViolationException("Incorrect user permissions.");
+      
       this.mainContext.Languages.Add(language);
       this.mainContext.SaveChanges();
+
+      return language;
+    }
+
+    public Language Update(Language language)
+    {
+      // if (!UserHelper.CurrentUser().Roles.Contains("Admin")) throw new AccessViolationException("Incorrect user permissions.");
+
+      this.mainContext.Languages.Update(language);
+      this.mainContext.SaveChanges();
+
 
       return language;
     }

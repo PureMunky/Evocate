@@ -26,7 +26,18 @@ namespace Tete.Models.Authentication
 
     public List<string> Roles { get; set; }
 
+    public UserVM()
+    {
+      var user = new User();
+      FillData(user, new List<UserLanguage>(), new Profile(user.Id), new List<AccessRole>());
+    }
+
     public UserVM(User user, List<UserLanguage> languages, Profile profile, List<AccessRole> roles)
+    {
+      FillData(user, languages, profile, roles);
+    }
+
+    private void FillData(User user, List<UserLanguage> languages, Profile profile, List<AccessRole> roles)
     {
       this.DisplayName = "";
       this.Email = "";
@@ -60,5 +71,6 @@ namespace Tete.Models.Authentication
         }
       }
     }
+
   }
 }

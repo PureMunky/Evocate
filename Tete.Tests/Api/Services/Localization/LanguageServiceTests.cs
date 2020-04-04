@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
+using Tete.Api.Helpers;
 using Tete.Api.Services.Localization;
 using Tete.Models.Localization;
 using Tete.Tests.Setup;
@@ -46,5 +47,30 @@ namespace Tete.Tests.Api.Services.Localization
       Assert.AreEqual("test", l.Name);
     }
 
+    [Test]
+    public void UpdateTest()
+    {
+      Language l = this.languageService.GetLanguages()[0];
+
+      l.Elements.Add(new Element() {
+        Key = "net"
+      });
+
+      this.languageService.Update(l);
+
+      mockContext.Verify(m => m.SaveChanges(), Times.Once);
+    }
+
+    [Test]
+    public void CreateAccessFailureTest()
+    {
+      UserHelper.setCurrentUser(new Tete.Models.Authentication.UserVM());
+
+      try {
+        this.languageService.CreateLanguage("test");
+      } catch (Exception e) {
+        Assert.AreEqual("Incorrect user permissions.", e.Message);
+      }
+    }
   }
 }

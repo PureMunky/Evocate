@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Tete.Models.Localization;
+using Tete.Api.Helpers;
 
 namespace Tete.Api.Controllers
 {
@@ -17,7 +18,7 @@ namespace Tete.Api.Controllers
 
     public LanguagesController(Contexts.MainContext mainContext)
     {
-      this.service = new Services.Localization.LanguageService(mainContext);
+      this.service = new Services.Localization.LanguageService(mainContext, UserHelper.CurrentUser(HttpContext, mainContext));
       this.logService = new Services.Logging.LogService(mainContext, "API");
     }
     // GET api/values

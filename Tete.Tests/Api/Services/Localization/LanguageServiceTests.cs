@@ -16,7 +16,7 @@ namespace Tete.Tests.Api.Services.Localization
     [SetUp]
     public void SetupTests()
     {
-      languageService = new LanguageService(mockContext.Object);
+      languageService = new LanguageService(mockContext.Object, new Tete.Models.Authentication.UserVM());
     }
 
     [Test]
@@ -64,8 +64,6 @@ namespace Tete.Tests.Api.Services.Localization
     [Test]
     public void CreateAccessFailureTest()
     {
-      UserHelper.setCurrentUser(new Tete.Models.Authentication.UserVM());
-
       try {
         this.languageService.CreateLanguage("test");
       } catch (Exception e) {

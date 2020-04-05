@@ -5,6 +5,7 @@ using Tete.Api.Services.Localization;
 using Tete.Api.Services.Authentication;
 using Tete.Models.Authentication;
 using Tete.Models.Localization;
+using Tete.Api.Services.Users;
 
 
 namespace Tete.Api.Controllers
@@ -13,15 +14,18 @@ namespace Tete.Api.Controllers
   [ApiController]
   public class InitController : ControllerBase
   {
+    private Contexts.MainContext mainContext;
     private LoginController loginController;
     private LanguageService languageService;
     private LoginService loginService;
+    private ProfileService profileService;
 
     public InitController(Contexts.MainContext mainContext)
     {
+      this.mainContext = mainContext;
       this.loginController = new LoginController(mainContext);
-      this.languageService = new LanguageService(mainContext);
       this.loginService = new LoginService(mainContext);
+      this.profileService = new ProfileService(mainContext);
     }
     // GET api/values
     [HttpGet]
@@ -38,6 +42,14 @@ namespace Tete.Api.Controllers
       output.Add("User 'Admin' created.");
 
       var adminuser = this.loginService.GetUserFromToken(session.Token);
+
+
+      this.loginService.GrantRole(adminuser.Id, adminuser.Id, "Admin");
+      output.Add("Granted Admin Role to Admin User.");
+
+      var adminUserVM = this.profileService.GetUser(adminuser);
+
+      this.languageService = new LanguageService(this.mainContext, adminUserVM);
 
       var english = new Language()
       {
@@ -57,9 +69,6 @@ namespace Tete.Api.Controllers
 
       this.languageService.CreateLanguage(english);
       output.Add("Created English Language");
-
-      this.loginService.GrantRole(adminuser.Id, adminuser.Id, "Admin");
-      output.Add("Granted Admin Role to Admin User.");
 
       return output;
     }

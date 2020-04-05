@@ -1,5 +1,8 @@
 using System;
 using Tete.Models.Authentication;
+using Tete.Api.Contexts;
+using Microsoft.AspNetCore.Http;
+using Tete.Api.Services.Authentication;
 
 namespace Tete.Api.Helpers
 {
@@ -7,10 +10,9 @@ namespace Tete.Api.Helpers
     {
         private static UserVM CurrentUserOverride;
 
-        public static UserVM CurrentUser() {
-            var user = new UserVM();
-
-            // var token = Microsoft.AspNetCore.Http.HttpContext.Current.Request.Cookies["Tete.SessionToken"];
+        public static UserVM CurrentUser(HttpContext current, MainContext mainContext) {
+            var token = current.Request.Cookies["Tete.SessionToken"];
+            var user = new LoginService(mainContext).GetUserVMFromToken(token);
 
             if (CurrentUserOverride != null) {
                 user = CurrentUserOverride;
@@ -22,5 +24,6 @@ namespace Tete.Api.Helpers
         public static void setCurrentUser(UserVM user) {
             CurrentUserOverride = user;
         }
+
     }
 }

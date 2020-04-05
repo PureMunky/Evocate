@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using Tete.Api.Contexts;
 using Tete.Models.Localization;
-using Tete.Api.Helpers;
+using Tete.Models.Authentication;
 
 namespace Tete.Api.Services.Localization
 {
 
-  public class LanguageService
+  public class LanguageService : ServiceBase
   {
-    private MainContext mainContext;
 
-    public LanguageService(MainContext mainContext)
+    public LanguageService(MainContext mainContext, UserVM actor)
     {
       this.mainContext = mainContext;
+      this.Actor = actor;
     }
 
     public List<Language> GetLanguages()
@@ -38,7 +38,7 @@ namespace Tete.Api.Services.Localization
 
     public Language CreateLanguage(Language language)
     {
-      // if (!UserHelper.CurrentUser().Roles.Contains("Admin")) throw new AccessViolationException("Incorrect user permissions.");
+      if (!this.Actor.Roles.Contains("Admin")) throw new AccessViolationException("Incorrect user permissions.");
       
       this.mainContext.Languages.Add(language);
       this.mainContext.SaveChanges();
@@ -48,7 +48,7 @@ namespace Tete.Api.Services.Localization
 
     public Language Update(Language language)
     {
-      // if (!UserHelper.CurrentUser().Roles.Contains("Admin")) throw new AccessViolationException("Incorrect user permissions.");
+      if (!this.Actor.Roles.Contains("Admin")) throw new AccessViolationException("Incorrect user permissions.");
 
       this.mainContext.Languages.Update(language);
       this.mainContext.SaveChanges();

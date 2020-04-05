@@ -19,12 +19,6 @@ namespace Tete.Tests.Setup
     [SetUp]
     public void Setup()
     {
-      UserHelper.setCurrentUser(new UserVM() {
-        Roles = new List<string>() {
-          "Admin"
-        }
-      });
-      
       User existingUser = new User()
       {
         Id = existingUserId,

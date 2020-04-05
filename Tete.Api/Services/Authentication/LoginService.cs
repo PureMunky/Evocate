@@ -18,11 +18,21 @@ namespace Tete.Api.Services.Authentication
       this.profileService = new ProfileService(mainContext);
     }
 
+    /// <summary>
+    /// Takes a login attempt and returns a valid sessionVM.
+    /// </summary>
+    /// <param name="login"></param>
+    /// <returns></returns>
     public SessionVM Login(LoginAttempt login)
     {
       return GetNewToken(login);
     }
 
+    /// <summary>
+    /// Attempts to register a new user with the provided
+    /// registration attempt.
+    /// </summary>
+    /// <param name="registration"></param>
     public void Register(RegistrationAttempt registration)
     {
       if (this.mainContext.Users.Where(u => u.UserName == registration.UserName || u.Email == registration.Email).FirstOrDefault() == null)
@@ -52,6 +62,12 @@ namespace Tete.Api.Services.Authentication
       }
     }
 
+    /// <summary>
+    /// Parses a passed token and returns the user associated
+    /// with that token.
+    /// </summary>
+    /// <param name="token"></param>
+    /// <returns></returns>
     public User GetUserFromToken(string token)
     {
       var session = this.mainContext.Sessions.Where(s => s.Token == token).FirstOrDefault();
@@ -65,6 +81,12 @@ namespace Tete.Api.Services.Authentication
       return user;
     }
 
+    /// <summary>
+    /// Parses a passed token and returns the full
+    /// user view model for that token.
+    /// </summary>
+    /// <param name="token"></param>
+    /// <returns></returns>
     public UserVM GetUserVMFromToken(string token)
     {
       var user = GetUserFromToken(token);
@@ -78,6 +100,12 @@ namespace Tete.Api.Services.Authentication
       return userVM;
     }
 
+    /// <summary>
+    /// Creates a new session and returns that session
+    /// along with it's token for a passed in login attempt.
+    /// </summary>
+    /// <param name="login"></param>
+    /// <returns></returns>
     private SessionVM GetNewToken(LoginAttempt login)
     {
       // Select UserId from login where passwordhash = login.Password
@@ -112,6 +140,14 @@ namespace Tete.Api.Services.Authentication
       return sessionVM;
     }
 
+    /// <summary>
+    /// Grants a specific security role to a passed in user
+    /// provided the created by user is allowed to perform
+    /// that action.
+    /// </summary>
+    /// <param name="UserId"></param>
+    /// <param name="CreatedById"></param>
+    /// <param name="RoleName"></param>
     public void GrantRole(Guid UserId, Guid CreatedById, String RoleName)
     {
       var role = new AccessRole(UserId, RoleName);

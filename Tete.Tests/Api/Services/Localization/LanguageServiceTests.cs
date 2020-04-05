@@ -16,7 +16,12 @@ namespace Tete.Tests.Api.Services.Localization
     [SetUp]
     public void SetupTests()
     {
-      languageService = new LanguageService(mockContext.Object, new Tete.Models.Authentication.UserVM());
+      languageService = new LanguageService(mockContext.Object, new Tete.Models.Authentication.UserVM()
+      {
+        Roles = new List<string>() {
+          "Admin"
+        }
+      });
     }
 
     [Test]
@@ -31,8 +36,10 @@ namespace Tete.Tests.Api.Services.Localization
       List<Language> languages = this.languageService.GetLanguages();
 
       Assert.AreEqual(1, languages.Count);
-      foreach (Element e in languages[0].Elements) {
-        if(e.Key == testKey) {
+      foreach (Element e in languages[0].Elements)
+      {
+        if (e.Key == testKey)
+        {
           Assert.AreEqual(testText, e.Text);
         }
       }
@@ -52,7 +59,8 @@ namespace Tete.Tests.Api.Services.Localization
     {
       Language l = this.languageService.GetLanguages()[0];
 
-      l.Elements.Add(new Element() {
+      l.Elements.Add(new Element()
+      {
         Key = "net"
       });
 
@@ -64,9 +72,14 @@ namespace Tete.Tests.Api.Services.Localization
     [Test]
     public void CreateAccessFailureTest()
     {
-      try {
+      languageService = new LanguageService(mockContext.Object, new Tete.Models.Authentication.UserVM());
+
+      try
+      {
         this.languageService.CreateLanguage("test");
-      } catch (Exception e) {
+      }
+      catch (Exception e)
+      {
         Assert.AreEqual("Incorrect user permissions.", e.Message);
       }
     }

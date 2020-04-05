@@ -6,24 +6,16 @@ using Tete.Api.Services.Authentication;
 
 namespace Tete.Api.Helpers
 {
-    public static class UserHelper
+  public static class UserHelper
+  {
+
+    public static UserVM CurrentUser(HttpContext current, MainContext mainContext)
     {
-        private static UserVM CurrentUserOverride;
+      var token = current.Request.Cookies["Tete.SessionToken"];
+      var user = new LoginService(mainContext).GetUserVMFromToken(token);
 
-        public static UserVM CurrentUser(HttpContext current, MainContext mainContext) {
-            var token = current.Request.Cookies["Tete.SessionToken"];
-            var user = new LoginService(mainContext).GetUserVMFromToken(token);
-
-            if (CurrentUserOverride != null) {
-                user = CurrentUserOverride;
-            }
-
-            return user;
-        }
-
-        public static void setCurrentUser(UserVM user) {
-            CurrentUserOverride = user;
-        }
-
+      return user;
     }
+
+  }
 }

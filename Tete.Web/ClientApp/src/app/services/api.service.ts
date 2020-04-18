@@ -18,12 +18,9 @@ export class ApiService {
     return this.http
       .post<Response>(this.baseUrl + "api/Request", request)
       .toPromise()
-      .then(
-        result => {
+      .then(result => {
           return result.data;
-        },
-        error => console.error(error)
-      )
+      })
       .catch(this.handleError);
   }
 

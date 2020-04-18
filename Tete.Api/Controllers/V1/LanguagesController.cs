@@ -9,7 +9,7 @@ using Tete.Api.Helpers;
 
 namespace Tete.Api.Controllers
 {
-  [Route("V1/[controller]")]
+  [Route("V1/[controller]/[action]")]
   [ApiController]
   public class LanguagesController : ControllerBase
   {
@@ -32,9 +32,15 @@ namespace Tete.Api.Controllers
       return service.GetLanguages();
     }
 
+    [HttpGet]
+    public Language New()
+    {
+      return new Language();
+    }
+
     // POST api/values
     [HttpPost]
-    public ActionResult<Language> Post([FromBody] string value)
+    public ActionResult<Language> Post([FromBody] Language value)
     {
       var service  = new Services.Localization.LanguageService(this.context, UserHelper.CurrentUser(HttpContext, this.context)); 
 

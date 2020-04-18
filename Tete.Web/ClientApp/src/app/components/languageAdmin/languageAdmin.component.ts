@@ -21,35 +21,40 @@ export class LanguageAdminComponent {
     "logging",
     "logout"
   ];
+  public newLanguage;
 
-  public addLanguage = function (newLanguage: String) {
+  public addLanguage = function (newName: String) {
+    this.newLanguage.name = newName;
+    this.newLanguage.active = true;
     return this.apiService
       .get({
-        url: "/v1/Languages",
+        url: "/v1/Languages/Post",
         method: "Post",
-        body: newLanguage
+        body: JSON.stringify(this.newLanguage)
       })
       .then(() => this.loadLanguages());
   };
 
-  public loadLanguages = function () {
-    return this.apiService
-      .get({
-        url: "/v1/Languages",
+  public loadLanguages = async function () {
+    var result = this.apiService.get({
+      url: "/v1/Languages/Get",
+      method: "Get",
+      body: ""
+    }).then(result => {
+      this.Languages = result;
+      if (this.Languages.length > 0) {
+        this.currentLanguage = this.Languages[0];
+      }
+      
+      this.apiService.get({
+        url: "/v1/Languages/New",
         method: "Get",
         body: ""
-      })
-      .then(result => {
-        this.Languages = result;
-
-        this.Languages = this.Languages.map(l => {
-          return l;
-        });
-
-        if (this.Languages.length > 0) {
-          this.currentLanguage = this.Languages[0];
-        }
+      }).then(lang => {
+        this.newLanguage = lang;
       });
+    });
+
   };
 
   public addElement() {

@@ -21,39 +21,31 @@ export class LanguageAdminComponent {
     "logging",
     "logout"
   ];
-  public newLanguage;
+  public newLanguage = { LanguageId: "", name: "none", active: false, elements: {} };
 
   public addLanguage = function (newName: String) {
     this.newLanguage.name = newName;
     this.newLanguage.active = true;
     return this.apiService
-      .get({
-        url: "/v1/Languages/Post",
-        method: "Post",
-        body: JSON.stringify(this.newLanguage)
-      })
+      .post("V1/Languages/Post",
+        this.newLanguage
+      )
       .then(() => this.loadLanguages());
   };
 
   public loadLanguages = async function () {
-    var result = this.apiService.get({
-      url: "/v1/Languages/Get",
-      method: "Get",
-      body: ""
-    }).then(result => {
-      this.Languages = result;
-      if (this.Languages.length > 0) {
-        this.currentLanguage = this.Languages[0];
-      }
-      
-      this.apiService.get({
-        url: "/v1/Languages/New",
-        method: "Get",
-        body: ""
-      }).then(lang => {
-        this.newLanguage = lang;
+    var result = this.apiService.get("V1/Languages/Get")
+      .then(result => {
+        this.Languages = result;
+        if (this.Languages.length > 0) {
+          this.currentLanguage = this.Languages[0];
+        }
+
+        this.apiService.get("V1/Languages/New")
+          .then(lang => {
+            this.newLanguage = lang;
+          });
       });
-    });
 
   };
 

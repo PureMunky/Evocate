@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tete.Web", "Tete.Web\Tete.W
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tete.Tests", "Tete.Tests\Tete.Tests.csproj", "{9E5EE3D3-5480-4EA1-B54B-A026471B7435}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tete.Api", "Tete.Api\Tete.Api.csproj", "{D4528A45-F2DD-4715-886E-22FDF99A34CC}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

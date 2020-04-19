@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Tete.Models.Localization;
 using Tete.Api.Helpers;
+using Tete.Web.Models;
 
 namespace Tete.Api.Controllers
 {
@@ -25,11 +26,11 @@ namespace Tete.Api.Controllers
     }
     // GET api/values
     [HttpGet]
-    public IEnumerable<Language> Get()
+    public Response<Language> Get()
     {
-      var service  = new Services.Localization.LanguageService(this.context, UserHelper.CurrentUser(HttpContext, this.context));
-      
-      return service.GetLanguages();
+      var service = new Services.Localization.LanguageService(this.context, UserHelper.CurrentUser(HttpContext, this.context));
+
+      return new Response<Language>(service.GetLanguages());
     }
 
     [HttpGet]
@@ -40,19 +41,19 @@ namespace Tete.Api.Controllers
 
     // POST api/values
     [HttpPost]
-    public ActionResult<Language> Post([FromBody] Language value)
+    public Response<Language> Post([FromBody] Language value)
     {
-      var service  = new Services.Localization.LanguageService(this.context, UserHelper.CurrentUser(HttpContext, this.context)); 
+      var service = new Services.Localization.LanguageService(this.context, UserHelper.CurrentUser(HttpContext, this.context));
 
-      return service.CreateLanguage(value);
+      return new Response<Language>(service.CreateLanguage(value));
     }
 
     [HttpPut]
-    public ActionResult<Language> Update([FromBody] Language language)
+    public Response<Language> Update([FromBody] Language language)
     {
-      var service  = new Services.Localization.LanguageService(this.context, UserHelper.CurrentUser(HttpContext, this.context));
-      
-      return service.Update(language);
+      var service = new Services.Localization.LanguageService(this.context, UserHelper.CurrentUser(HttpContext, this.context));
+
+      return new Response<Language>(service.Update(language));
     }
 
   }

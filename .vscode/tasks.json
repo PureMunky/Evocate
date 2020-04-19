@@ -3,22 +3,20 @@
   "tasks": [
     {
       "label": "buildDockerDb",
-      "dependsOn": ["build-api"],
+      "dependsOn": [
+        "build-web"
+      ],
       "type": "shell",
       "command": "./run-db.sh"
-    },
-    {
-      "label": "build-api",
-      "command": "dotnet",
-      "type": "process",
-      "args": ["build", "${workspaceFolder}/Tete.Api/Tete.Api.csproj"],
-      "problemMatcher": "$tsc"
     },
     {
       "label": "build-web",
       "command": "dotnet",
       "type": "process",
-      "args": ["build", "${workspaceFolder}/Tete.Web/Tete.Web.csproj"],
+      "args": [
+        "build",
+        "${workspaceFolder}/Tete.Web/Tete.Web.csproj"
+      ],
       "problemMatcher": "$tsc"
     }
   ]

@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using System.Net;
 
 namespace Tete.Web.Models
 {
 
-  public class Response
+  public class Response<T>
   {
     /// <summary>
     /// The request that was used to get this response.
@@ -11,13 +12,26 @@ namespace Tete.Web.Models
     /// <value></value>
     public Request Request { get; set; }
 
-    public IEnumerable<dynamic> Data { get; set; }
+    public IEnumerable<T> Data { get; set; }
 
     public bool Error { get; set; }
 
     public string Message { get; set; }
 
-    public System.Net.HttpStatusCode Status { get; set; }
+    public HttpStatusCode Status { get; set; }
 
+    public Response(T item)
+    {
+      this.Data = new List<T>() { item };
+      this.Status = HttpStatusCode.OK;
+      this.Error = false;
+    }
+
+    public Response(IEnumerable<T> items)
+    {
+      this.Data = items;
+      this.Status = HttpStatusCode.OK;
+      this.Error = false;
+    }
   }
 }

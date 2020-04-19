@@ -20,7 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Tete.Models\Tete.Models.csproj" />
-    <ProjectReference Include="..\Tete.Api\Tete.Api.csproj" />
+    <ProjectReference Include="..\Tete.Web\Tete.Web.csproj" />
   </ItemGroup>
 
 </Project>

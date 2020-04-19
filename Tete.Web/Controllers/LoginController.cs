@@ -3,8 +3,6 @@ using System;
 using Microsoft.Extensions.Configuration;
 using Tete.Models.Authentication;
 using Tete.Web.Helpers;
-using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace Tete.Web.Controllers
 {
@@ -12,10 +10,12 @@ namespace Tete.Web.Controllers
   {
 
     private IConfiguration Configuration;
+    private Tete.Api.Contexts.MainContext context;
 
-    public LoginController(IConfiguration configuration)
+    public LoginController(IConfiguration configuration, Tete.Api.Contexts.MainContext mainContext)
     {
       Configuration = configuration;
+      this.context = mainContext;
     }
 
     [HttpGet]
@@ -25,18 +25,16 @@ namespace Tete.Web.Controllers
     }
 
     [HttpPost]
-    public async Task<IActionResult> Index(string userName, string userPassword)
+    public IActionResult Index(string userName, string userPassword)
     {
       string direction = "/";
-      SessionVM session = await new Tete.Web.Services.RequestService(Configuration)
-      .Post<LoginAttempt, SessionVM>(
-        "/v1/Login/Login",
+      var service = new Tete.Api.Services.Authentication.LoginService(this.context);
+      var session = service.Login(
         new LoginAttempt()
         {
           UserName = userName,
           Password = userPassword
-        },
-        HttpContext
+        }
       );
 
       if (session != null)
@@ -58,9 +56,21 @@ namespace Tete.Web.Controllers
     }
 
     [HttpGet]
-    public async Task<dynamic> CurrentUser()
+    public UserVM CurrentUser()
     {
-      return await new Tete.Web.Services.RequestService(Configuration).Get("/v1/Login/CurrentUser", HttpContext);
+      HttpContext.Response.StatusCode = 401;
+
+      var service = new Tete.Api.Services.Authentication.LoginService(this.context);
+      var token = HttpContext.Request.Cookies["Tete.SessionToken"];
+
+      var user = service.GetUserVMFromToken(token);
+
+      if (user != null)
+      {
+        HttpContext.Response.StatusCode = 200;
+      }
+
+      return user;
     }
 
     [HttpGet]
@@ -83,21 +93,26 @@ namespace Tete.Web.Controllers
     }
 
     [HttpPost]
-    public async Task<IActionResult> Register(string userName, string userPassword, string userEmail, string userDisplayName)
+    public IActionResult Register(string userName, string userPassword, string userEmail, string userDisplayName)
     {
       string direction = "/";
-      SessionVM session = await new Tete.Web.Services.RequestService(Configuration)
-      .Post<RegistrationAttempt, SessionVM>(
-        "/v1/Login/Register",
+
+      var service = new Tete.Api.Services.Authentication.LoginService(this.context);
+      service.Register(
         new RegistrationAttempt()
         {
           UserName = userName,
           Password = userPassword,
           Email = userEmail,
           DisplayName = userDisplayName
-        },
-        HttpContext
+        }
       );
+
+      var session = service.Login(new LoginAttempt()
+      {
+        UserName = userName,
+        Password = userPassword
+      });
 
       if (session != null)
       {

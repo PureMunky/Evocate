@@ -34,9 +34,9 @@ namespace Tete.Api.Controllers
     }
 
     [HttpGet]
-    public Language New()
+    public Response<Language> New()
     {
-      return new Language();
+      return new Response<Language>(new Language());
     }
 
     // POST api/values

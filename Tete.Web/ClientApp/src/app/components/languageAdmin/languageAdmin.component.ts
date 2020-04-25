@@ -11,7 +11,6 @@ export class LanguageAdminComponent {
     { LanguageId: "", name: "none", active: false, elements: [], elems: {} }
   ];
   public newLanguageInput = "";
-  public currentLanguage = this.Languages[0];
   public fullElements = [];
   public newLanguage = { LanguageId: "", name: "none", active: false, elements: [], elems: {} };
 
@@ -23,23 +22,25 @@ export class LanguageAdminComponent {
       elements: [],
       elems: {}
     });
-    // this.newLanguage.name = newName;
-    // this.newLanguage.active = true;
-    // return this.apiService
-    //   .post("V1/Languages/Post",
-    //     this.newLanguage
-    //   )
-    //   .then(this.loadLanguages);
   };
 
-  public loadLanguages = async function () {
+  public saveLanguage = function (language) {
+    var lang = this.prepareForSave(language);
+    var rtnPromise;
+
+    if(lang.languageId == null) {
+      rtnPromise = this.apiService.post("V1/Languages/Post", lang);
+    } else {
+      rtnPromise = this.apiService.put("V1/Languages/Update", lang);
+    }
+
+    return rtnPromise.then(this.loadLanguages);
+  };
+
+  public loadLanguages () {
     var result = this.apiService.get("V1/Languages/Get")
       .then(result => {
-        this.Languages = result.map(this.processLanguage);
-
-        if (this.Languages.length > 0) {
-          this.currentLanguage = this.Languages[0];
-        }
+        this.Languages = result.map(l => this.processLanguage(l));
 
         this.apiService.get("V1/Languages/New")
           .then(lang => {
@@ -50,20 +51,53 @@ export class LanguageAdminComponent {
   };
 
   public addElement() {
-    if (!this.currentLanguage.elems) {
-      this.currentLanguage.elems = {};
-    }
-
     this.fullElements.push({key: "new"});
-  }
+  };
 
   private processLanguage(language) {
     let rtnLang = language;
 
+    for(let i = 0; i < language.elements.length; i++) {
+      var add = true;
+
+      for (let j = 0; j < this.fullElements.length; j++) {
+        if(this.fullElements[j].key == language.elements[i].key) {
+          add = false;
+        }
+      }
+
+      if(add) {
+        this.fullElements.push({ key: language.elements[i].key});
+      }
+    }
+
     rtnLang.elems = {};
 
     return rtnLang;
-  }
+  };
+
+  private prepareForSave(language) {
+    console.log(language);
+    var lang = {
+      languageId: language.languageId,
+      name: language.name,
+      active: language.active,
+      elements: []
+    };
+
+    Object.keys(language.elems).forEach(k => {
+      for(let i = 0; i < this.fullElements.length; i++) {
+        if(k == this.fullElements[i].key) {
+          lang.elements.push({
+            key: k,
+            text: language.elems[k]
+          });
+        }
+      }
+    });
+
+    return lang;
+  };
 
   constructor(
     private apiService: ApiService,

@@ -10,6 +10,5 @@ namespace Tete.Models.Localization
     public string Text { get; set; }
 
     public Guid LanguageId { get; set; }
-    public virtual Language Language { get; set; }
   }
 }

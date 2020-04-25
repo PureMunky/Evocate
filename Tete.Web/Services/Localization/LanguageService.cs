@@ -20,6 +20,10 @@ namespace Tete.Api.Services.Localization
     public List<Language> GetLanguages()
     {
       var languages = this.mainContext.Languages.Where(l => l.Active == true).OrderBy(l => l.Name).ToList();
+
+      foreach(Language l in languages) {
+        l.Elements = this.mainContext.Elements.Where(e => e.LanguageId == l.LanguageId).OrderBy(e => e.Key).ToList();
+      }
       
       return languages;
     }
@@ -49,6 +53,10 @@ namespace Tete.Api.Services.Localization
     public Language Update(Language language)
     {
       if (!this.Actor.Roles.Contains("Admin")) throw new AccessViolationException("Incorrect user permissions.");
+
+      foreach (Element e in language.Elements) {
+        e.LanguageId = language.LanguageId;
+      }
 
       this.mainContext.Languages.Update(language);
       this.mainContext.SaveChanges();

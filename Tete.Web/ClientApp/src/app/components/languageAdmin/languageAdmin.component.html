@@ -9,6 +9,10 @@
     <td><input type="text" [(ngModel)]="element.key" /></td>
     <td *ngFor="let lang of Languages"><input type="text" [(ngModel)]="lang.elems[element.key]" /></td>
   </tr>
+  <tr>
+    <td></td>
+    <td *ngFor="let lang of Languages"><button type="button" (click)="saveLanguage(lang)">Save</button></td>
+  </tr>
 </table>
 
 <button (click)="addLanguage()">Add Language</button>

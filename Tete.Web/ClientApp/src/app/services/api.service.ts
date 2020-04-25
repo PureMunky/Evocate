@@ -12,10 +12,10 @@ export class ApiService {
     this.http = http;
   }
 
-  get(url) {
+  get(url):Promise<Object> {
     return this.http
       .get<Response>(url)
-      .toPromise()
+      .toPromise<Response>()
       .then(result => {
         return result.data;
       })
@@ -37,6 +37,13 @@ export class ApiService {
   post(url: string, body: object) {
     return this.http
       .post(url, body)
+      .toPromise()
+      .catch(this.handleError);
+  }
+
+  put(url: string, body: object) {
+    return this.http
+      .put(url, body)
       .toPromise()
       .catch(this.handleError);
   }

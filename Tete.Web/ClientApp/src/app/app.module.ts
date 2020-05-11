@@ -7,20 +7,18 @@ import { RouterModule } from "@angular/router";
 import { AppComponent } from "./app.component";
 import { NavMenuComponent } from "./nav-menu/nav-menu.component";
 import { HomeComponent } from "./home/home.component";
-import { CounterComponent } from "./counter/counter.component";
-import { FetchDataComponent } from "./fetch-data/fetch-data.component";
 import { LoggingComponent } from "./components/logging/logging.component";
 import { LanguageAdminComponent } from "./components/languageAdmin/languageAdmin.component";
+import { ProfileComponent } from "./components/profile/profile.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    CounterComponent,
-    FetchDataComponent,
     LoggingComponent,
-    LanguageAdminComponent
+    LanguageAdminComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
@@ -28,10 +26,9 @@ import { LanguageAdminComponent } from "./components/languageAdmin/languageAdmin
     FormsModule,
     RouterModule.forRoot([
       { path: "", component: HomeComponent, pathMatch: "full" },
-      { path: "counter", component: CounterComponent },
-      { path: "fetch-data", component: FetchDataComponent },
       { path: "logging", component: LoggingComponent },
-      { path: "languageAdmin", component: LanguageAdminComponent }
+      { path: "languageAdmin", component: LanguageAdminComponent },
+      { path: "profile", component: ProfileComponent}
     ])
   ],
   providers: [],

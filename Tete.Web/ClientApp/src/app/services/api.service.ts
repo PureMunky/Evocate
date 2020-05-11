@@ -12,10 +12,10 @@ export class ApiService {
     this.http = http;
   }
 
-  get(url):Promise<Object> {
+  get(url):Promise<object[]> {
     return this.http
       .get<Response>(url)
-      .toPromise<Response>()
+      .toPromise()
       .then(result => {
         return result.data;
       })
@@ -53,12 +53,13 @@ export class ApiService {
       // UnAuthorized
       window.location.href = "/Login";
     }
+    return [{}];
   }
 }
 
 interface Response {
   request: Request;
-  data: string;
+  data: object[];
   error: boolean;
   message: string;
   status: number;

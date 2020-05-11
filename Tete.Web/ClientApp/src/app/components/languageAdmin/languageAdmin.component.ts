@@ -12,7 +12,7 @@ export class LanguageAdminComponent {
   ];
   public newLanguageInput = "";
   public fullElements = [];
-  public newLanguage = { LanguageId: "", name: "none", active: false, elements: [], elems: {} };
+  public newLanguage:any = { LanguageId: "", name: "none", active: false, elements: [], elems: {} };
 
   public addLanguage = function () {
     this.Languages.push({
@@ -24,7 +24,7 @@ export class LanguageAdminComponent {
     });
   };
 
-  public saveLanguage = function (language) {
+  public saveLanguage (language) {
     var lang = this.prepareForSave(language);
     var rtnPromise;
 
@@ -34,7 +34,7 @@ export class LanguageAdminComponent {
       rtnPromise = this.apiService.put("V1/Languages/Update", lang);
     }
 
-    return rtnPromise.then(this.loadLanguages);
+    return rtnPromise.then(() => {this.loadLanguages()});
   };
 
   public loadLanguages () {
@@ -42,10 +42,10 @@ export class LanguageAdminComponent {
       .then(result => {
         this.Languages = result.map(l => this.processLanguage(l));
 
+        console.log(this.Languages);
         this.apiService.get("V1/Languages/New")
           .then(lang => {
             this.newLanguage = lang;
-            console.log(this.newLanguage);
           });
       });
   };
@@ -56,9 +56,11 @@ export class LanguageAdminComponent {
 
   private processLanguage(language) {
     let rtnLang = language;
+    rtnLang.elems = {};
 
     for(let i = 0; i < language.elements.length; i++) {
       var add = true;
+      rtnLang.elems[language.elements[i].key] = language.elements[i].text;
 
       for (let j = 0; j < this.fullElements.length; j++) {
         if(this.fullElements[j].key == language.elements[i].key) {
@@ -70,8 +72,6 @@ export class LanguageAdminComponent {
         this.fullElements.push({ key: language.elements[i].key});
       }
     }
-
-    rtnLang.elems = {};
 
     return rtnLang;
   };

@@ -18,14 +18,12 @@ namespace Tete.Api.Controllers
     private LoginController loginController;
     private LanguageService languageService;
     private LoginService loginService;
-    private ProfileService profileService;
 
     public InitController(Contexts.MainContext mainContext)
     {
       this.mainContext = mainContext;
       this.loginController = new LoginController(mainContext);
       this.loginService = new LoginService(mainContext);
-      this.profileService = new ProfileService(mainContext);
     }
     // GET api/values
     [HttpGet]
@@ -47,7 +45,7 @@ namespace Tete.Api.Controllers
       this.loginService.GrantRole(adminuser.Id, adminuser.Id, "Admin");
       output.Add("Granted Admin Role to Admin User.");
 
-      var adminUserVM = this.profileService.GetUser(adminuser);
+      var adminUserVM = new ProfileService(mainContext, adminuser).GetUser(adminuser);
 
       this.languageService = new LanguageService(this.mainContext, adminUserVM);
 

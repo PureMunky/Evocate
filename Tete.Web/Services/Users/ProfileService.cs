@@ -7,16 +7,20 @@ using Tete.Models.Users;
 
 namespace Tete.Api.Services.Users
 {
-  public class ProfileService
+  public class ProfileService : ServiceBase
   {
 
-    private MainContext mainContext;
     private UserLanguageService userLanguageService;
 
-    public ProfileService(MainContext mainContext)
+    public ProfileService(MainContext mainContext, UserVM actor)
     {
-      this.mainContext = mainContext;
-      this.userLanguageService = new UserLanguageService(mainContext);
+      FillData(mainContext, actor);
+    }
+
+    public ProfileService(MainContext mainContext, User actor)
+    {
+      FillData(mainContext, new UserVM());
+      this.Actor = GetUser(actor);
     }
 
     public UserVM GetUser(Guid UserId)
@@ -26,16 +30,28 @@ namespace Tete.Api.Services.Users
 
     public UserVM GetUser(User user)
     {
-      return new UserVM(user,
-        this.userLanguageService.GetUserLanguages(user.Id),
-        this.mainContext.UserProfiles.Where(p => p.UserId == user.Id).FirstOrDefault(),
-        this.mainContext.AccessRoles.Where(r => r.UserId == user.Id).ToList());
+      var languages = this.userLanguageService.GetUserLanguages(user.Id);
+      var profiles = this.mainContext.UserProfiles.Where(p => p.UserId == user.Id).FirstOrDefault();
+      var roles = this.mainContext.AccessRoles.Where(r => r.UserId == user.Id).ToList();
+      return new UserVM(
+        user,
+        languages,
+        profiles,
+        roles
+      );
     }
 
     public void SaveProfile(Profile profile)
     {
       this.mainContext.UserProfiles.Update(profile);
       this.mainContext.SaveChanges();
+    }
+
+    private void FillData(MainContext mainContext, UserVM actor)
+    {
+      this.mainContext = mainContext;
+      this.Actor = actor;
+      this.userLanguageService = new UserLanguageService(mainContext);
     }
   }
 }

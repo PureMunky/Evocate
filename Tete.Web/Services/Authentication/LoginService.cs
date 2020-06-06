@@ -10,12 +10,11 @@ namespace Tete.Api.Services.Authentication
   public class LoginService
   {
     private MainContext mainContext;
-    private ProfileService profileService;
+
 
     public LoginService(MainContext mainContext)
     {
       this.mainContext = mainContext;
-      this.profileService = new ProfileService(mainContext);
     }
 
     /// <summary>
@@ -94,7 +93,7 @@ namespace Tete.Api.Services.Authentication
 
       if (user != null)
       {
-        userVM = this.profileService.GetUser(user);
+        userVM = new ProfileService(mainContext, user).GetUser(user);
       }
 
       return userVM;

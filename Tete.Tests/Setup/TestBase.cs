@@ -16,9 +16,16 @@ namespace Tete.Tests.Setup
 
     protected Guid existingUserId = Guid.NewGuid();
 
+    protected User adminUser = new User()
+    {
+      DisplayName = "Administrator",
+      UserName = "admin"
+    };
+
     [SetUp]
     public void Setup()
     {
+
       User existingUser = new User()
       {
         Id = existingUserId,
@@ -45,24 +52,36 @@ namespace Tete.Tests.Setup
         UserId = existingUserId
       };
 
+      var adminUserLanguage = new UserLanguage()
+      {
+        Language = english,
+        UserId = adminUser.Id
+      };
+
       var userProfile = new Profile(existingUserId);
 
       var accessRoles = new List<AccessRole>() {
         new AccessRole(existingUserId, "Admin") {
           CreatedBy = existingUserId
+        },
+        new AccessRole(adminUser.Id, "Admin") {
+          CreatedBy = adminUser.Id
         }
       };
 
       IQueryable<User> users = new List<User> {
-        existingUser
+        existingUser,
+        adminUser
       }.AsQueryable();
 
       IQueryable<UserLanguage> userLanguages = new List<UserLanguage> {
-        userLanguage
+        userLanguage,
+        adminUserLanguage
       }.AsQueryable();
 
       IQueryable<Profile> userProfiles = new List<Profile>() {
-        userProfile
+        userProfile,
+        new Profile(adminUser.Id)
       }.AsQueryable();
 
       IQueryable<Language> languages = new List<Language>()

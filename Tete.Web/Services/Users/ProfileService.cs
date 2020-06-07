@@ -43,7 +43,7 @@ namespace Tete.Api.Services.Users
 
     public void SaveProfile(Profile profile)
     {
-      this.mainContext.UserProfiles.Update(profile);
+      this.mainContext.UserProfiles.Add(profile);
       this.mainContext.SaveChanges();
     }
 

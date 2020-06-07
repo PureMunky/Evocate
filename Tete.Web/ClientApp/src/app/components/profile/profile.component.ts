@@ -10,7 +10,10 @@ import { LanguageService } from "../../services/language.service";
 })
 export class ProfileComponent {
     public user = {
-        displayName: ''
+        displayName: '',
+        profile: {
+            about: ''
+        }
     };
     public languages = [];
 
@@ -24,5 +27,10 @@ export class ProfileComponent {
             this.user = userService.CurrentUser();
             this.languages = languageService.Languages();
         });
+    }
+
+    public save() {
+        console.log(this.user.profile);
+        this.apiService.post('/V1/Profile/Post', this.user.profile);
     }
 }

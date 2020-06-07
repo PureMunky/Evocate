@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Tete.Api.Services.Users;
 using Tete.Tests.Setup;
 using Tete.Models.Authentication;
+using Tete.Models.Users;
 
 namespace Tete.Tests.Api.Services.Users
 {
@@ -34,23 +35,31 @@ namespace Tete.Tests.Api.Services.Users
 
 
     [Test]
-    public void EditProfileTest()
+    public void EditExistingProfileTest()
     {
       string about = "New about message.";
       UserVM user = this.profileService.GetUser(existingUserId);
 
       user.Profile.About = about;
 
-      // I think I might get rid of the VM idea.
-      // As long as I'm building security around
-      // updates then it shouldn't be a problem
-      // knowing any of he Guids associated with things.
       this.profileService.SaveProfile(user.Profile);
 
       UserVM result = this.profileService.GetUser(existingUserId);
 
       Assert.AreEqual(about, result.Profile.About);
+    }
 
+    [Test]
+    public void EditNewProfileTest()
+    {
+      string about = "hello";
+      var profile = new Profile(newUserId);
+
+      profile.About = about;
+
+      this.profileService.SaveProfile(profile);
+
+      mockContext.Verify(c => c.UserProfiles.Add(It.IsAny<Profile>()), Times.Once);
     }
 
   }

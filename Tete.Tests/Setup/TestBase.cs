@@ -16,6 +16,8 @@ namespace Tete.Tests.Setup
 
     protected Guid existingUserId = Guid.NewGuid();
 
+    protected Guid newUserId = Guid.NewGuid();
+
     protected User adminUser = new User()
     {
       DisplayName = "Administrator",
@@ -31,6 +33,11 @@ namespace Tete.Tests.Setup
         Id = existingUserId,
         DisplayName = "test user",
         UserName = "TestUser"
+      };
+
+      User newUser = new User()
+      {
+        Id = newUserId
       };
 
       Language english = new Language()
@@ -71,7 +78,8 @@ namespace Tete.Tests.Setup
 
       IQueryable<User> users = new List<User> {
         existingUser,
-        adminUser
+        adminUser,
+        newUser
       }.AsQueryable();
 
       IQueryable<UserLanguage> userLanguages = new List<UserLanguage> {

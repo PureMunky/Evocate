@@ -43,7 +43,20 @@ namespace Tete.Api.Services.Users
 
     public void SaveProfile(Profile profile)
     {
-      this.mainContext.UserProfiles.Add(profile);
+      var prof = this.mainContext.UserProfiles.Where(p => p.ProfileId == profile.ProfileId).FirstOrDefault();
+
+      if (prof is null)
+      {
+        this.mainContext.UserProfiles.Add(profile);
+      }
+      else
+      {
+        prof.About = profile.About;
+        prof.PrivateAbout = profile.PrivateAbout;
+        this.mainContext.UserProfiles.Update(prof);
+      }
+
+
       this.mainContext.SaveChanges();
     }
 

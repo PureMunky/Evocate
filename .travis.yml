@@ -1,9 +1,9 @@
 language: csharp
-solution: Evocate.sln
+solution: TeteCore.sln
 sudo: required
 dist: xenial
 mono: none
 dotnet: 2.2
 script:
- - dotnet restore
- - dotnet test
+  - dotnet restore
+  - dotnet test

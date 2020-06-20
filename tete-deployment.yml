@@ -8,21 +8,6 @@ metadata:
 apiVersion: v1
 kind: Service
 metadata:
-  name: tete-api-svc
-  namespace: tete
-spec:
-  selector:
-    app: tete-api
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 80
-  type: NodePort
-
----
-apiVersion: v1
-kind: Service
-metadata:
   name: tete-db-svc
   namespace: tete
 spec:
@@ -53,28 +38,6 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: tete-api
-  namespace: tete
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: tete-api
-  template:
-    metadata:
-      labels:
-        app: tete-api
-    spec:
-      containers:
-      - name: tete-api
-        image: puremunky/tete-api:latest
-        ports:
-        - containerPort: 80
-
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
   name: tete-web
   namespace: tete
 spec:
@@ -88,10 +51,10 @@ spec:
         app: tete-web
     spec:
       containers:
-      - name: tete-web
-        image: puremunky/tete-web:latest
-        ports:
-        - containerPort: 80
+        - name: tete-web
+          image: puremunky/tete-web:latest
+          ports:
+            - containerPort: 80
 
 ---
 apiVersion: apps/v1
@@ -110,7 +73,7 @@ spec:
         app: tete-db
     spec:
       containers:
-      - name: tete-db
-        image: puremunky/tete-db:latest
-        ports:
-        - containerPort: 1433
+        - name: tete-db
+          image: puremunky/tete-db:latest
+          ports:
+            - containerPort: 1433

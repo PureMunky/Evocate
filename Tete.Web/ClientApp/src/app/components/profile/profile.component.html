@@ -1,7 +1,24 @@
 <h1>{{user.displayName}}</h1>
 
-<input type="text" [(ngModel)]="user.profile.about" />
+<div>
+  <span aria-labelledby="txtAbout">About</span><br />
+  <textarea id="txtAbout" [(ngModel)]="user.profile.about"></textarea>
+</div>
 
+<div>
+  <span aria-labelledby="txtPrivateAbout">Private About</span><br />
+  <textarea id="txtPrivateAbout" [(ngModel)]="user.profile.privateAbout"></textarea>
+</div>
+
+<div>
+  Language
+  <select [(ngModel)]="tmpModel.language">
+    <option>Select</option>
+    <option *ngFor="let lang of languages">{{lang.name}}</option>
+  </select>
+  <button (click)="addLanguage()">Add</button>
+</div>
+<div>
+  <div *ngFor="let lang of user.languages">{{lang}}</div>
+</div>
 <button (click)="save()">Save</button>
-
-<div *ngFor="let lang of languages">{{lang.name}}</div>

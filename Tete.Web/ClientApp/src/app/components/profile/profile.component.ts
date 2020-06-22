@@ -5,32 +5,39 @@ import { InitService } from "../../services/init.service";
 import { LanguageService } from "../../services/language.service";
 
 @Component({
-    selector: "profile",
-    templateUrl: "./profile.component.html"
+  selector: "profile",
+  templateUrl: "./profile.component.html"
 })
 export class ProfileComponent {
-    public user = {
-        displayName: '',
-        profile: {
-            about: ''
-        }
-    };
-    public languages = [];
+  public user = {
+    displayName: '',
+    profile: {
+      about: ''
+    },
+    languages: []
+  };
+  public languages = [];
+  public tmpModel = {
+    language: ''
+  };
 
-    constructor(
-        private apiService: ApiService,
-        private userService: UserService,
-        private initService: InitService,
-        private languageService: LanguageService
-    ) {
-        initService.Register(() => {
-            this.user = userService.CurrentUser();
-            this.languages = languageService.Languages();
-        });
-    }
+  constructor(
+    private apiService: ApiService,
+    private userService: UserService,
+    private initService: InitService,
+    private languageService: LanguageService
+  ) {
+    initService.Register(() => {
+      this.user = userService.CurrentUser();
+      this.languages = languageService.Languages();
+    });
+  }
 
-    public save() {
-        console.log(this.user.profile);
-        this.apiService.post('/V1/Profile/Post', this.user.profile);
-    }
+  public save() {
+    console.log(this.user);
+    this.apiService.post('/V1/Profile/Post', this.user.profile);
+  }
+  public addLanguage() {
+    this.user.languages.push(this.tmpModel.language);
+  }
 }

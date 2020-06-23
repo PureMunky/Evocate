@@ -38,6 +38,13 @@ export class ProfileComponent {
     this.apiService.post('/V1/Profile/Post', this.user.profile);
   }
   public addLanguage() {
-    this.user.languages.push(this.tmpModel.language);
+    var selectedLanguage = this.languages.filter(l => l.languageId == this.tmpModel.language)[0];
+
+    var exists = this.user.languages.some(l => l.languageId == selectedLanguage.languageId);
+
+    if (!exists) {
+      this.user.languages.push(selectedLanguage);
+    }
+
   }
 }

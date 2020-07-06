@@ -1,24 +1,26 @@
 <h1>{{user.displayName}}</h1>
 
-<div>
-  <span aria-labelledby="txtAbout">About</span><br />
-  <textarea id="txtAbout" [(ngModel)]="user.profile.about"></textarea>
-</div>
+<div *ngIf="working.editing">
+  <div>
+    <span aria-labelledby="txtAbout">About</span><br />
+    <textarea id="txtAbout" [(ngModel)]="user.profile.about"></textarea>
+  </div>
 
-<div>
-  <span aria-labelledby="txtPrivateAbout">Private About</span><br />
-  <textarea id="txtPrivateAbout" [(ngModel)]="user.profile.privateAbout"></textarea>
-</div>
+  <div>
+    <span aria-labelledby="txtPrivateAbout">Private About</span><br />
+    <textarea id="txtPrivateAbout" [(ngModel)]="user.profile.privateAbout"></textarea>
+  </div>
 
-<div>
-  Language
-  <select [(ngModel)]="tmpModel.language">
-    <option>Select</option>
-    <option *ngFor="let lang of languages" value="{{lang.languageId}}">{{lang.name}}</option>
-  </select>
-  <button (click)="addLanguage()">Add</button>
+  <div>
+    Language
+    <select [(ngModel)]="tmpModel.language">
+      <option>Select</option>
+      <option *ngFor="let lang of languages" value="{{lang.languageId}}">{{lang.name}}</option>
+    </select>
+    <button (click)="addLanguage()">Add</button>
+  </div>
+  <div>
+    <div *ngFor="let lang of user.languages">{{lang.name}}</div>
+  </div>
+  <button (click)="save()">Save</button>
 </div>
-<div>
-  <div *ngFor="let lang of user.languages">{{lang.name}}</div>
-</div>
-<button (click)="save()">Save</button>

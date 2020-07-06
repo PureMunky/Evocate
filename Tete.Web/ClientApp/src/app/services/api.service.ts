@@ -12,7 +12,7 @@ export class ApiService {
     this.http = http;
   }
 
-  get(url):Promise<object[]> {
+  get(url): Promise<any[]> {
     return this.http
       .get<Response>(url)
       .toPromise()

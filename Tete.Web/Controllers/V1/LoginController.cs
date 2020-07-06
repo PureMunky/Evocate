@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Tete.Models.Authentication;
+using Tete.Web.Models;
 
 namespace Tete.Api.Controllers
 {
@@ -34,6 +35,14 @@ namespace Tete.Api.Controllers
         UserName = registration.UserName,
         Password = registration.Password
       });
+    }
+
+    [HttpGet]
+    public Response<UserVM> GetUser(string userName)
+    {
+      var token = HttpContext.Request.Cookies["Tete.SessionToken"];
+      var actor = CurrentUser(token);
+      return new Response<UserVM>(this.service.GetUserVMFromUsername(userName, actor));
     }
 
     [HttpGet]

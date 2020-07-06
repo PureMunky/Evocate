@@ -1,35 +1,52 @@
 import { Component } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
 import { ApiService } from "../../services/api.service";
 import { UserService } from "../../services/user.service";
 import { InitService } from "../../services/init.service";
 import { LanguageService } from "../../services/language.service";
+import { User } from "../../models/user";
+
 
 @Component({
   selector: "profile",
   templateUrl: "./profile.component.html"
 })
 export class ProfileComponent {
-  public user = {
-    displayName: '',
-    profile: {
-      about: ''
-    },
-    languages: []
-  };
+  public user: User = new User();
+  public currentUser: User = new User();
   public languages = [];
   public tmpModel = {
     language: ''
   };
+  public working = {
+    editing: false
+  };
 
   constructor(
+    private route: ActivatedRoute,
     private apiService: ApiService,
     private userService: UserService,
     private initService: InitService,
     private languageService: LanguageService
   ) {
     initService.Register(() => {
-      this.user = userService.CurrentUser();
+      this.currentUser = userService.CurrentUser();
+      route.params.subscribe(params => {
+        if (params["username"] != this.currentUser.userName) {
+          userService.Get(params["username"]).then(u => {
+            this.user = u;
+          });
+          this.working.editing = false;
+        } else {
+          this.user = userService.CurrentUser();
+          this.working.editing = true;
+        }
+
+        console.log(JSON.stringify(this.user));
+      })
+
       this.languages = languageService.Languages();
+
     });
   }
 

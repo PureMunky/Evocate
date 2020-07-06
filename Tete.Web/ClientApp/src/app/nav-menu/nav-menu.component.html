@@ -17,8 +17,8 @@
           <li class="nav-item" [routerLinkActive]="['link-active']">
             <a class="nav-link text-dark" [routerLink]="['/languageAdmin']">Language</a>
           </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/profile']">Profile</a>
+          <li class="nav-item" [routerLinkActive]="['link-active']" *ngIf="profileLink.length > 0">
+            <a class="nav-link text-dark" [routerLink]="profileLink">Profile</a>
           </li>
           <li class="nav-item">
             <a class="nav-link text-dark" href="/Login/Logout">Logout</a>

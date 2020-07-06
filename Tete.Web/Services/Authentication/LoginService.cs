@@ -154,5 +154,18 @@ namespace Tete.Api.Services.Authentication
       this.mainContext.AccessRoles.Add(role);
       this.mainContext.SaveChanges();
     }
+
+    public UserVM GetUserVMFromUsername(string userName, UserVM actor)
+    {
+      var user = this.mainContext.Users.Where(u => u.UserName == userName).FirstOrDefault();
+      UserVM userVM = null;
+
+      if (user != null)
+      {
+        userVM = new ProfileService(mainContext, actor).GetUser(user);
+      }
+
+      return userVM;
+    }
   }
 }

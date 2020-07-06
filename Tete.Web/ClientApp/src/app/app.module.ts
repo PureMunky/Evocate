@@ -28,10 +28,10 @@ import { ProfileComponent } from "./components/profile/profile.component";
       { path: "", component: HomeComponent, pathMatch: "full" },
       { path: "logging", component: LoggingComponent },
       { path: "languageAdmin", component: LanguageAdminComponent },
-      { path: "profile", component: ProfileComponent}
+      { path: "profile/:username", component: ProfileComponent }
     ])
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

@@ -8,12 +8,8 @@ import { ApiService } from "../../services/api.service";
 export class LoggingComponent {
   public Logs;
   constructor(private apiService: ApiService) {
-    apiService
-      .get({
-        url: "/v1/Logs",
-        method: "Get",
-        body: ""
-      })
+    this.apiService
+      .get("/v1/Logs")
       .then(result => {
         this.Logs = result;
       });

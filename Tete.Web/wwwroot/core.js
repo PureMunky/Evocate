@@ -1,15 +1,11 @@
-(function() {
+(function () {
   function init() {
-    console.log("init");
     // document
     //   .getElementById("registrationForm")
     //   .addEventListener("submit", testForm);
   }
 
   function testForm(event) {
-    console.log("testing");
-    console.log(event);
-
     var userResult = testUsername(event.target[0].value);
     var passResult = testPassword(event.target[4].value);
 
@@ -21,7 +17,6 @@
   }
 
   function testUsername(userName) {
-    console.log("name: " + userName);
     return userName.length > 5;
   }
 

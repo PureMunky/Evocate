@@ -4,32 +4,39 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Tete.Models.Logging;
+using Tete.Web.Models;
 
-namespace Tete.Api.Controllers {
+namespace Tete.Api.Controllers
+{
   [Route("V1/[controller]")]
   [ApiController]
-  public class LogsController : ControllerBase {
+  public class LogsController : ControllerBase
+  {
 
     private Api.Services.Logging.LogService service;
 
-    public LogsController(Contexts.MainContext mainContext) {
+    public LogsController(Contexts.MainContext mainContext)
+    {
       this.service = new Services.Logging.LogService(mainContext, "Api");
     }
     // GET api/values
     [HttpGet]
-    public IEnumerable<Log> Get() {
-      return this.service.Get();
+    public Response<Log> Get()
+    {
+      return new Response<Log>(this.service.Get());
     }
 
     // GET api/values/5
     [HttpGet("{id}")]
-    public ActionResult<Log> Get(string id) {
-      return this.service.Get(id);
+    public Response<Log> Get(string id)
+    {
+      return new Response<Log>(this.service.Get(id));
     }
 
     // POST api/values
     [HttpPost]
-    public void Post([FromBody] Log value) {
+    public void Post([FromBody] Log value)
+    {
       this.service.Save(value);
     }
 

@@ -27,7 +27,6 @@ export class ApiService {
       .get("/Login/CurrentUser")
       .toPromise()
       .then(user => {
-        console.log(user);
         this.user = user;
         return user;
       })

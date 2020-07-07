@@ -29,9 +29,9 @@ export class ProfileComponent {
     private initService: InitService,
     private languageService: LanguageService
   ) {
-    initService.Register(() => {
-      this.currentUser = userService.CurrentUser();
-      route.params.subscribe(params => {
+    this.initService.Register(() => {
+      this.currentUser = this.userService.CurrentUser();
+      this.route.params.subscribe(params => {
         if (params["username"] != this.currentUser.userName) {
           userService.Get(params["username"]).then(u => {
             this.user = u;
@@ -41,19 +41,16 @@ export class ProfileComponent {
           this.user = userService.CurrentUser();
           this.working.editing = true;
         }
+      });
 
-        console.log(JSON.stringify(this.user));
-      })
-
-      this.languages = languageService.Languages();
-
+      this.languages = this.languageService.Languages();
     });
   }
 
   public save() {
-    console.log(this.user);
     this.apiService.post('/V1/Profile/Post', this.user.profile);
   }
+
   public addLanguage() {
     var selectedLanguage = this.languages.filter(l => l.languageId == this.tmpModel.language)[0];
 

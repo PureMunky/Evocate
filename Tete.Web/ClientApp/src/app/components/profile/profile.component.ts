@@ -19,7 +19,11 @@ export class ProfileComponent {
     language: ''
   };
   public working = {
-    editing: false
+    editing: false,
+    self: false,
+    error: false,
+    errorMessage: '',
+    userName: ''
   };
 
   constructor(
@@ -32,14 +36,12 @@ export class ProfileComponent {
     this.initService.Register(() => {
       this.currentUser = this.userService.CurrentUser();
       this.route.params.subscribe(params => {
-        if (params["username"] != this.currentUser.userName) {
-          userService.Get(params["username"]).then(u => {
-            this.user = u;
-          });
-          this.working.editing = false;
+        this.working.userName = params["username"]
+        this.loadUser();
+        if (this.working.userName != this.currentUser.userName) {
+          this.working.self = false;
         } else {
-          this.user = userService.CurrentUser();
-          this.working.editing = true;
+          this.working.self = true;
         }
       });
 
@@ -47,8 +49,21 @@ export class ProfileComponent {
     });
   }
 
+  private loadUser() {
+    return this.userService.Get(this.working.userName).then(u => {
+      this.user = u;
+    });
+  }
   public save() {
-    this.apiService.post('/V1/Profile/Post', this.user.profile);
+    this.apiService.post('/V1/Profile/Post', this.user.profile).then(u => {
+      this.working.editing = false;
+    });
+  }
+
+  public cancel() {
+    this.loadUser().then(x => {
+      this.working.editing = false;
+    });
   }
 
   public addLanguage() {

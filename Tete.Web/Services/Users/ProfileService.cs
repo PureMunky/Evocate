@@ -11,6 +11,7 @@ namespace Tete.Api.Services.Users
   {
 
     private UserLanguageService userLanguageService;
+    private Logging.LogService logService;
 
     public ProfileService(MainContext mainContext, UserVM actor)
     {
@@ -51,12 +52,16 @@ namespace Tete.Api.Services.Users
       }
       else
       {
-        prof.About = profile.About;
-        prof.PrivateAbout = profile.PrivateAbout;
-        this.mainContext.UserProfiles.Update(prof);
+        if (
+          prof.UserId == this.Actor.UserId
+          || this.Actor.Roles.Contains("Admin")
+          )
+        {
+          prof.About = profile.About;
+          prof.PrivateAbout = profile.PrivateAbout;
+          this.mainContext.UserProfiles.Update(prof);
+        }
       }
-
-
       this.mainContext.SaveChanges();
     }
 
@@ -65,6 +70,7 @@ namespace Tete.Api.Services.Users
       this.mainContext = mainContext;
       this.Actor = actor;
       this.userLanguageService = new UserLanguageService(mainContext);
+      this.logService = new Logging.LogService(mainContext, Logging.LogService.LoggingLayer.Api);
     }
   }
 }

@@ -5,24 +5,29 @@ using Tete.Api.Services.Logging;
 using Tete.Models.Logging;
 using Tete.Tests.Setup;
 
-namespace Tete.Tests.Api.Services.Logging {
+namespace Tete.Tests.Api.Services.Logging
+{
 
-  public class LogServiceTests : LogsBase {
+  public class LogServiceTests : LogsBase
+  {
 
     LogService logService;
 
     [SetUp]
-    public void SetUp() {
-      logService = new LogService(mockContext.Object, Domain);
+    public void SetUp()
+    {
+      logService = new LogService(mockContext.Object, Tete.Api.Services.Logging.LogService.LoggingLayer.Service);
     }
 
     [Test]
-    public void SetupTest() {
+    public void SetupTest()
+    {
       Assert.IsTrue(true);
     }
 
     [Test]
-    public void NewTest() {
+    public void NewTest()
+    {
       var expected = new Tete.Models.Logging.Log();
       var log = this.logService.New();
 
@@ -31,21 +36,24 @@ namespace Tete.Tests.Api.Services.Logging {
     }
 
     [Test]
-    public void GetTest() {
+    public void GetTest()
+    {
       var result = this.logService.Get();
 
       Assert.AreEqual(1, result.Count());
     }
 
     [Test]
-    public void GetOneTest() {
+    public void GetOneTest()
+    {
       var result = this.logService.Get(logId.ToString());
 
       mockLogs.Verify(m => m.Find(logId), Times.Once);
     }
 
     [Test]
-    public void SaveTest() {
+    public void SaveTest()
+    {
       var log = new Log();
       this.logService.Save(log);
 
@@ -54,7 +62,8 @@ namespace Tete.Tests.Api.Services.Logging {
     }
 
     [Test]
-    public void WriteTest() {
+    public void WriteTest()
+    {
       this.logService.Write("test");
       mockLogs.Verify(m => m.Add(It.IsAny<Log>()), Times.Once);
       mockContext.Verify(m => m.SaveChanges(), Times.Once);

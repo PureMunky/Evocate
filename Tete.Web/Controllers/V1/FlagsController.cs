@@ -15,7 +15,7 @@ namespace Tete.Api.Controllers
     public FlagsController(Contexts.MainContext mainContext)
     {
       this.service = new Services.Config.FlagService(mainContext);
-      this.logService = new Services.Logging.LogService(mainContext, "Api");
+      this.logService = new Services.Logging.LogService(mainContext, Tete.Api.Services.Logging.LogService.LoggingLayer.Api);
     }
 
     // GET api/values

@@ -17,7 +17,7 @@ namespace Tete.Api.Controllers
 
     public LogsController(Contexts.MainContext mainContext)
     {
-      this.service = new Services.Logging.LogService(mainContext, "Api");
+      this.service = new Services.Logging.LogService(mainContext, Tete.Api.Services.Logging.LogService.LoggingLayer.Api);
     }
     // GET api/values
     [HttpGet]

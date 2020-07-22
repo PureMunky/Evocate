@@ -22,7 +22,7 @@ namespace Tete.Api.Controllers
     public LanguagesController(Contexts.MainContext mainContext)
     {
       this.context = mainContext;
-      this.logService = new Services.Logging.LogService(mainContext, "API");
+      this.logService = new Services.Logging.LogService(mainContext, Tete.Api.Services.Logging.LogService.LoggingLayer.Api);
     }
     // GET api/values
     [HttpGet]

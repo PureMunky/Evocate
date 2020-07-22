@@ -15,7 +15,7 @@ namespace Tete.Api.Controllers
     public LoginController(Contexts.MainContext mainContext)
     {
       this.service = new Services.Authentication.LoginService(mainContext);
-      this.logService = new Services.Logging.LogService(mainContext, "Api");
+      this.logService = new Services.Logging.LogService(mainContext, Tete.Api.Services.Logging.LogService.LoggingLayer.Api);
     }
 
     [HttpPost]

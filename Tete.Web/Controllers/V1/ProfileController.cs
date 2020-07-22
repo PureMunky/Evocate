@@ -22,7 +22,7 @@ namespace Tete.Api.Controllers
     public ProfileController(Contexts.MainContext mainContext)
     {
       this.context = mainContext;
-      this.logService = new Services.Logging.LogService(mainContext, "API");
+      this.logService = new Services.Logging.LogService(mainContext, Tete.Api.Services.Logging.LogService.LoggingLayer.Api);
     }
 
     // POST api/values

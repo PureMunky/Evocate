@@ -10,12 +10,21 @@ namespace Tete.Api.Services.Logging
 
   public class LogService : IService<Log>
   {
+
+    public enum LoggingLayer
+    {
+      Api = 0,
+      Service = 1,
+      Database = 2,
+      Web = 3
+    }
+
     private MainContext mainContext;
     private string DefaultDomain;
-    public LogService(MainContext mainContext, string Domain)
+    public LogService(MainContext mainContext, LoggingLayer layer)
     {
       this.mainContext = mainContext;
-      this.DefaultDomain = Domain;
+      this.DefaultDomain = layer.ToString();
     }
 
     public Log New()

@@ -14,6 +14,8 @@ namespace Tete.Models.Authentication
   /// </summary>
   public class UserVM
   {
+    public Guid UserId { get; set; }
+
     public string DisplayName { get; set; }
 
     public string Email { get; set; }
@@ -39,6 +41,7 @@ namespace Tete.Models.Authentication
 
     private void FillData(User user, List<UserLanguage> languages, Profile profile, List<AccessRole> roles)
     {
+      this.UserId = user.Id;
       this.DisplayName = "";
       this.Email = "";
       this.UserName = "";

@@ -69,7 +69,7 @@ namespace Tete.Api.Services.Users
     {
       this.mainContext = mainContext;
       this.Actor = actor;
-      this.userLanguageService = new UserLanguageService(mainContext);
+      this.userLanguageService = new UserLanguageService(mainContext, actor);
       this.logService = new Logging.LogService(mainContext, Logging.LogService.LoggingLayer.Api);
     }
   }

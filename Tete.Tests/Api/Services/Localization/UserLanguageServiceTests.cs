@@ -15,7 +15,10 @@ namespace Tete.Tests.Api.Services.Localization
     [SetUp]
     public void SetupTests()
     {
-      userLanguageService = new UserLanguageService(mockContext.Object);
+      userLanguageService = new UserLanguageService(mockContext.Object, new Tete.Models.Authentication.UserVM()
+      {
+        Roles = { "Admin" }
+      });
     }
 
     [Test]

@@ -55,7 +55,7 @@ export class ProfileComponent {
     });
   }
   public save() {
-    this.apiService.post('/V1/Profile/Post', this.user.profile).then(u => {
+    this.apiService.post('/V1/User/Post', this.user).then(u => {
       this.working.editing = false;
     });
   }

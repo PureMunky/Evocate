@@ -9,14 +9,16 @@ using Tete.Models.Users;
 
 namespace Tete.Tests.Api.Services.Users
 {
-  public class UserServiceTests : UserTestBase
+  public class ProfileServiceTests : UserTestBase
   {
     private ProfileService profileService;
+    private UserService userService;
 
     [SetUp]
     public void SetupTests()
     {
-      this.profileService = new ProfileService(mockContext.Object, adminUser);
+      this.userService = new UserService(mockContext.Object, adminUser);
+      this.profileService = new ProfileService(mockContext.Object, this.userService.GetUser(adminUser.Id));
     }
 
     [Test]
@@ -26,25 +28,16 @@ namespace Tete.Tests.Api.Services.Users
     }
 
     [Test]
-    public void GetProfileTest()
-    {
-      UserVM user = this.profileService.GetUser(existingUserId);
-
-      Assert.AreEqual("TestUser", user.UserName);
-    }
-
-
-    [Test]
     public void EditExistingProfileTest()
     {
       string about = "New about message.";
-      UserVM user = this.profileService.GetUser(existingUserId);
+      UserVM user = this.userService.GetUser(existingUserId);
 
       user.Profile.About = about;
 
       this.profileService.SaveProfile(user.Profile);
 
-      UserVM result = this.profileService.GetUser(existingUserId);
+      UserVM result = this.userService.GetUser(existingUserId);
 
       Assert.AreEqual(about, result.Profile.About);
     }

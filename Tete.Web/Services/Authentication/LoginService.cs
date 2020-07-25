@@ -93,7 +93,7 @@ namespace Tete.Api.Services.Authentication
 
       if (user != null)
       {
-        userVM = new ProfileService(mainContext, user).GetUser(user);
+        userVM = new UserService(mainContext, user).GetUser(user);
       }
 
       return userVM;
@@ -162,7 +162,7 @@ namespace Tete.Api.Services.Authentication
 
       if (user != null)
       {
-        userVM = new ProfileService(mainContext, actor).GetUser(user);
+        userVM = new UserService(mainContext, actor).GetUser(user);
       }
 
       return userVM;

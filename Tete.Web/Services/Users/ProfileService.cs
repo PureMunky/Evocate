@@ -18,30 +18,6 @@ namespace Tete.Api.Services.Users
       FillData(mainContext, actor);
     }
 
-    public ProfileService(MainContext mainContext, User actor)
-    {
-      FillData(mainContext, new UserVM());
-      this.Actor = GetUser(actor);
-    }
-
-    public UserVM GetUser(Guid UserId)
-    {
-      return GetUser(this.mainContext.Users.Where(u => u.Id == UserId).FirstOrDefault());
-    }
-
-    public UserVM GetUser(User user)
-    {
-      var languages = this.userLanguageService.GetUserLanguages(user.Id);
-      var profiles = this.mainContext.UserProfiles.Where(p => p.UserId == user.Id).FirstOrDefault();
-      var roles = this.mainContext.AccessRoles.Where(r => r.UserId == user.Id).ToList();
-      return new UserVM(
-        user,
-        languages,
-        profiles,
-        roles
-      );
-    }
-
     public void SaveProfile(Profile profile)
     {
       var prof = this.mainContext.UserProfiles.Where(p => p.ProfileId == profile.ProfileId).FirstOrDefault();

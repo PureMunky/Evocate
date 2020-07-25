@@ -45,7 +45,7 @@ namespace Tete.Api.Controllers
       this.loginService.GrantRole(adminuser.Id, adminuser.Id, "Admin");
       output.Add("Granted Admin Role to Admin User.");
 
-      var adminUserVM = new ProfileService(mainContext, adminuser).GetUser(adminuser);
+      var adminUserVM = new UserService(mainContext, adminuser).GetUser(adminuser);
 
       this.languageService = new LanguageService(this.mainContext, adminUserVM);
 

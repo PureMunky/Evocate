@@ -31,8 +31,11 @@ namespace Tete.Api.Controllers
     {
       var CurrentUser = UserHelper.CurrentUser(HttpContext, this.context);
 
-      var service = new Services.Users.ProfileService(this.context, CurrentUser);
-      service.SaveProfile(value.Profile);
+      var userService = new Services.Users.UserService(this.context, CurrentUser);
+      userService.SaveUser(value);
+
+      var profService = new Services.Users.ProfileService(this.context, CurrentUser);
+      profService.SaveProfile(value.Profile);
 
       var langService = new Services.Localization.UserLanguageService(this.context, CurrentUser);
       langService.SaveUserLanguages(value.UserId, value.Languages);

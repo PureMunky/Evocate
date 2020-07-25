@@ -74,6 +74,13 @@ export class ProfileComponent {
     if (!exists) {
       this.user.languages.push(selectedLanguage);
     }
+  }
 
+  public getLangName(langId) {
+    return this.languages.filter(l => l.languageId == langId)[0].name;
+  }
+
+  public removeLanguage(langId) {
+    this.user.languages = this.user.languages.filter(l => l.languageId != langId);
   }
 }

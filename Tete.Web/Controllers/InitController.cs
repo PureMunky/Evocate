@@ -29,6 +29,7 @@ namespace Tete.Api.Controllers
     [HttpGet]
     public List<string> Get()
     {
+      // TODO: Allow this to be run multiple times without error.
       var output = new List<string>();
       var session = this.loginController.Register(new RegistrationAttempt()
       {

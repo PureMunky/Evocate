@@ -1,15 +1,16 @@
 <h1>{{user.displayName}}</h1>
-<h2>{{user.userName}}</h2>
+<span>Username: {{user.userName}}</span>
 
 <div *ngIf="working.editing">
 
+  <h2>About</h2>
   <div>
-    <span aria-labelledby="txtDisplayName">Name</span><br />
-    <input type="text" id="txtDisplayName" [(ngModel)]="user.displayName" />
+    <span id="txtDisplaynameLabel">Name</span><br />
+    <input type="text" aria-labelledby="txtDisplaynameLabel" id="txtDisplayName" [(ngModel)]="user.displayName" />
   </div>
   <div>
-    <span aria-labelledby="txtAbout">About</span><br />
-    <textarea id="txtAbout" [(ngModel)]="user.profile.about"></textarea>
+    <span id="txtAboutLabel">About</span><br />
+    <textarea id="txtAbout" aria-labelledby="txtAboutLabel" [(ngModel)]="user.profile.about"></textarea>
   </div>
 
   <div>
@@ -17,6 +18,7 @@
     <textarea id="txtPrivateAbout" [(ngModel)]="user.profile.privateAbout"></textarea>
   </div>
 
+  <h2>Languages</h2>
   <div>
     Language
     <select [(ngModel)]="tmpModel.language">
@@ -26,7 +28,18 @@
     <button (click)="addLanguage()">Add</button>
   </div>
   <div>
-    <div *ngFor="let lang of user.languages">{{lang.name}}</div>
+    <div *ngFor="let lang of user.languages">
+      <h3>{{getLangName(lang.languageId)}}</h3>
+      <button (click)="removeLanguage(lang.languageId)">Remove</button>
+      <div>
+        <input id="chkRead.{{lang.languageId}}" type="checkbox" [(ngModel)]="lang.read" title="Read" />
+        <label for="chkRead.{{lang.languageId}}">Read</label>
+      </div>
+      <div>
+        <input id="chkSpeak.{{lang.languageId}}" type="checkbox" [(ngModel)]="lang.speak" />
+        <label for="chkSpeak.{{lang.languageId}}">Speak</label>
+      </div>
+    </div>
   </div>
   <button (click)="save()">Save</button><button (click)="cancel()">Cancel</button>
 </div>
@@ -35,5 +48,11 @@
   <div>
     <h2>About</h2>
     <div>{{user.profile.about}}</div>
+    <h2>Languages</h2>
+    <div>
+      <div *ngFor="let lang of user.languages">
+        {{getLangName(lang.languageId)}}
+      </div>
+    </div>
   </div>
 </div>

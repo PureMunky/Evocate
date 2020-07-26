@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Tete.Api.Services.Localization;
 using Tete.Api.Services.Authentication;
@@ -29,45 +30,73 @@ namespace Tete.Api.Controllers
     [HttpGet]
     public List<string> Get()
     {
-      // TODO: Allow this to be run multiple times without error.
       var output = new List<string>();
-      var session = this.loginController.Register(new RegistrationAttempt()
+      var adminUserName = "admin";
+      User adminUser;
+
+      var testAdminUser = this.mainContext.Users.Where(u => u.UserName == adminUserName).FirstOrDefault();
+      if (testAdminUser == null)
       {
-        UserName = "admin",
-        Email = "admin@example.com",
-        Password = "admin",
-        DisplayName = "Admin"
-      });
-      output.Add("User 'Admin' created.");
+        var session = this.loginController.Register(new RegistrationAttempt()
+        {
+          UserName = adminUserName,
+          Email = "admin@example.com",
+          Password = "admin",
+          DisplayName = "Admin"
+        });
+        output.Add("User 'Admin' created.");
 
-      var adminuser = this.loginService.GetUserFromToken(session.Token);
+        adminUser = this.loginService.GetUserFromToken(session.Token);
+      }
+      else
+      {
+        output.Add("User 'Admin' already existed.");
+
+        adminUser = testAdminUser;
+      }
 
 
-      this.loginService.GrantRole(adminuser.Id, adminuser.Id, "Admin");
-      output.Add("Granted Admin Role to Admin User.");
+      if (this.loginService.GrantRole(adminUser.Id, adminUser.Id, "Admin"))
+      {
+        output.Add("Granted admin role to admin user.");
+      }
+      else
+      {
+        output.Add("Admin role already granted.");
+      }
 
-      var adminUserVM = new UserService(mainContext, adminuser).GetUser(adminuser);
+      var adminUserVM = new UserService(mainContext, adminUser).GetUser(adminUser);
 
       this.languageService = new LanguageService(this.mainContext, adminUserVM);
 
-      var english = new Language()
-      {
-        LanguageId = Guid.NewGuid(),
-        Name = "English",
-        Active = true,
-        Elements = new List<Element>()
-      };
+      var testLang = this.mainContext.Languages.Where(l => l.Name == "English").FirstOrDefault();
 
-      english.Elements.Add(new Element()
+      if (testLang == null)
       {
-        ElementId = Guid.NewGuid(),
-        Key = "welcome",
-        Text = "Welcome!",
-        LanguageId = english.LanguageId
-      });
+        var english = new Language()
+        {
+          LanguageId = Guid.NewGuid(),
+          Name = "English",
+          Active = true,
+          Elements = new List<Element>()
+        };
 
-      this.languageService.CreateLanguage(english);
-      output.Add("Created English Language");
+        english.Elements.Add(new Element()
+        {
+          ElementId = Guid.NewGuid(),
+          Key = "welcome",
+          Text = "Welcome!",
+          LanguageId = english.LanguageId
+        });
+
+        this.languageService.CreateLanguage(english);
+        output.Add("Created English language");
+      }
+      else
+      {
+        output.Add("English language already existed.");
+      }
+
 
       return output;
     }

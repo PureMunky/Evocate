@@ -147,12 +147,21 @@ namespace Tete.Api.Services.Authentication
     /// <param name="UserId"></param>
     /// <param name="CreatedById"></param>
     /// <param name="RoleName"></param>
-    public void GrantRole(Guid UserId, Guid CreatedById, String RoleName)
+    public bool GrantRole(Guid UserId, Guid CreatedById, String RoleName)
     {
-      var role = new AccessRole(UserId, RoleName);
-      role.CreatedBy = CreatedById;
-      this.mainContext.AccessRoles.Add(role);
-      this.mainContext.SaveChanges();
+      bool created = false;
+      var testRole = this.mainContext.AccessRoles.Where(r => r.UserId == UserId && r.Name == RoleName).FirstOrDefault();
+
+      if (testRole == null)
+      {
+        created = true;
+        var role = new AccessRole(UserId, RoleName);
+        role.CreatedBy = CreatedById;
+        this.mainContext.AccessRoles.Add(role);
+        this.mainContext.SaveChanges();
+      }
+
+      return created;
     }
 
     public UserVM GetUserVMFromUsername(string userName, UserVM actor)

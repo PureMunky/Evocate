@@ -10,6 +10,10 @@ import { Topic } from "../models/topic";
 })
 export class HomeComponent {
   public userName = 'world';
+  public search = {
+    done: false,
+    text: ''
+  };
   public tmp = {
     searchText: ''
   };
@@ -25,8 +29,11 @@ export class HomeComponent {
   }
 
   public Search() {
+    this.search.done = false;
     this.topicService.Search(this.tmp.searchText).then(d => {
       this.topics = d;
+      this.search.done = true;
+      this.search.text = this.tmp.searchText;
     });
   }
 }

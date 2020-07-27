@@ -21,39 +21,38 @@ namespace Tete.Api.Services.Content
 
     public void SaveTopic(TopicVM topic)
     {
-      // var prof = this.mainContext.UserProfiles.Where(p => p.ProfileId == profile.ProfileId).FirstOrDefault();
+      var dbTopic = this.mainContext.Topics.Where(t => t.TopicId == topic.TopicId).FirstOrDefault();
 
-      // if (prof is null)
-      // {
-      //   this.mainContext.Topic.Add(profile);
-      // }
-      // else
-      // {
-      //   if (
-      //     prof.UserId == this.Actor.UserId
-      //     || this.Actor.Roles.Contains("Admin")
-      //     )
-      //   {
-      //     prof.About = profile.About;
-      //     prof.PrivateAbout = profile.PrivateAbout;
-      //     this.mainContext.UserProfiles.Update(prof);
-      //   }
-      // }
-      // this.mainContext.SaveChanges();
+      if (dbTopic is null)
+      {
+        var newTopic = new Topic();
+
+        newTopic.Name = topic.Name;
+        newTopic.Description = topic.Description;
+        newTopic.Created = DateTime.UtcNow;
+        newTopic.CreatedBy = this.Actor.UserId;
+        newTopic.Elligible = false;
+        newTopic.TopicId = Guid.NewGuid();
+
+        this.mainContext.Topics.Add(newTopic);
+      }
+      else
+      {
+        if (this.Actor.Roles.Contains("Admin"))
+        {
+          dbTopic.Name = topic.Name;
+          dbTopic.Description = topic.Description;
+          this.mainContext.Topics.Update(dbTopic);
+        }
+      }
+      this.mainContext.SaveChanges();
     }
 
     public IEnumerable<TopicVM> Search(string searchText)
     {
-      return new List<Topic>() {
-        new Topic() {
-          Name = "Test",
-          Description = "Hello I'm testing this out."
-        },
-        new Topic() {
-          Name = "Being Amazing",
-          Description = "So you want to learn to be amazing?!?"
-        }
-      }.Select(t => new TopicVM(t));
+      searchText = searchText.ToLower();
+
+      return this.mainContext.Topics.Where(t => t.Name.ToLower().Contains(searchText) || t.Description.ToLower().Contains(searchText)).Select(t => new TopicVM(t));
     }
 
     private void FillData(MainContext mainContext, UserVM actor)

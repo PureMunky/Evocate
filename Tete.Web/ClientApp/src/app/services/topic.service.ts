@@ -16,4 +16,10 @@ export class TopicService {
     });
   }
 
+  public Save(topic: Topic) {
+    return this.apiService.post("/V1/Topic/Post", topic).then(t => {
+      return t;
+    });
+  }
+
 }

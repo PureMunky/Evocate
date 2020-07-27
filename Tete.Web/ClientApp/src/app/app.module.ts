@@ -10,6 +10,7 @@ import { HomeComponent } from "./home/home.component";
 import { LoggingComponent } from "./components/logging/logging.component";
 import { LanguageAdminComponent } from "./components/languageAdmin/languageAdmin.component";
 import { ProfileComponent } from "./components/profile/profile.component";
+import { TopicComponent } from "./components/topic/topic.component";
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { ProfileComponent } from "./components/profile/profile.component";
     HomeComponent,
     LoggingComponent,
     LanguageAdminComponent,
-    ProfileComponent
+    ProfileComponent,
+    TopicComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
@@ -28,7 +30,8 @@ import { ProfileComponent } from "./components/profile/profile.component";
       { path: "", component: HomeComponent, pathMatch: "full" },
       { path: "logging", component: LoggingComponent },
       { path: "languageAdmin", component: LanguageAdminComponent },
-      { path: "profile/:username", component: ProfileComponent }
+      { path: "profile/:username", component: ProfileComponent },
+      { path: "topic/create/:name", component: TopicComponent }
     ])
   ],
   providers: [],

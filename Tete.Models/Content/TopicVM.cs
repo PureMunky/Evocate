@@ -18,18 +18,24 @@ namespace Tete.Models.Content
 
     public Guid CreatedBy { get; set; }
 
-    public TopicVM(Topic topic)
+    public TopicVM()
     {
-      FillData(topic.TopicId, topic.Name, topic.Description, topic.Elligible, topic.Created);
+      FillData("", "", false, DateTime.UtcNow, Guid.Empty);
     }
 
-    private void FillData(Guid TopicId, string Name, string Description, bool Elligible, DateTime Created)
+    public TopicVM(Topic topic)
     {
-      this.TopicId = TopicId;
+      FillData(topic.Name, topic.Description, topic.Elligible, topic.Created, topic.CreatedBy);
+    }
+
+    private void FillData(string Name, string Description, bool Elligible, DateTime Created, Guid CreatedBy)
+    {
+      this.TopicId = Guid.NewGuid();
       this.Name = Name;
       this.Description = Description;
       this.Elligible = false;
       this.Created = Created;
+      this.CreatedBy = CreatedBy;
     }
   }
 

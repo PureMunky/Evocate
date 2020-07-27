@@ -12,7 +12,7 @@ namespace Tete.Tests.Models.Content
     {
       var topic = new Topic();
 
-      Assert.IsNull(topic.Name);
+      Assert.AreEqual("", topic.Name);
     }
 
     [Test]
@@ -20,7 +20,7 @@ namespace Tete.Tests.Models.Content
     {
       var topic = new Topic();
 
-      Assert.IsNull(topic.Description);
+      Assert.AreEqual("", topic.Description);
     }
 
     [Test]
@@ -36,7 +36,7 @@ namespace Tete.Tests.Models.Content
     {
       var topic = new Topic();
 
-      Assert.AreEqual(new DateTime(), topic.Created);
+      Assert.AreEqual(DateTime.UtcNow.ToShortDateString(), topic.Created.ToShortDateString());
     }
   }
 }

@@ -1,3 +1,13 @@
 <h1>Hello, {{userName}}!</h1>
 <a [routerLink]="['/profile/test']">Test Profile</a><br />
 <a [routerLink]="['/profile/admin']">Admin Profile</a>
+<h2>What do you want to do today?</h2>
+<input type="text" [(ngModel)]="tmp.searchText" />
+<button (click)="Search()">Go</button>
+<div *ngIf="topics.length > 0">
+  <h3>Results</h3>
+  <div *ngFor="let topic of topics">
+    <a href="/topic/{{topic.topicId}}">{{topic.name}}</a>
+    <div>{{topic.description}}</div>
+  </div>
+</div>

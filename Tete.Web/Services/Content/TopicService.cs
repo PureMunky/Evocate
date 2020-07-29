@@ -27,12 +27,19 @@ namespace Tete.Api.Services.Content
       {
         var newTopic = new Topic();
 
+        if (topic.TopicId == Guid.Empty)
+        {
+          newTopic.TopicId = Guid.NewGuid();
+        }
+        else
+        {
+          newTopic.TopicId = topic.TopicId;
+        }
         newTopic.Name = topic.Name;
         newTopic.Description = topic.Description;
         newTopic.Created = DateTime.UtcNow;
         newTopic.CreatedBy = this.Actor.UserId;
         newTopic.Elligible = false;
-        newTopic.TopicId = Guid.NewGuid();
 
         this.mainContext.Topics.Add(newTopic);
       }
@@ -53,6 +60,19 @@ namespace Tete.Api.Services.Content
       searchText = searchText.ToLower();
 
       return this.mainContext.Topics.Where(t => t.Name.ToLower().Contains(searchText) || t.Description.ToLower().Contains(searchText)).Select(t => new TopicVM(t));
+    }
+
+    public TopicVM GetTopic(Guid topicId)
+    {
+      var dbTopic = this.mainContext.Topics.Where(t => t.TopicId == topicId).FirstOrDefault();
+      TopicVM rtnTopic = new TopicVM();
+
+      if (dbTopic != null)
+      {
+        rtnTopic = new TopicVM(dbTopic);
+      }
+
+      return rtnTopic;
     }
 
     private void FillData(MainContext mainContext, UserVM actor)

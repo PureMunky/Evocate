@@ -16,9 +16,16 @@ export class TopicService {
     });
   }
 
-  public Save(topic: Topic) {
+  public Save(topic: Topic): Promise<any> {
     return this.apiService.post("/V1/Topic/Post", topic).then(t => {
-      return t;
+      console.log(t);
+      return t[0];
+    });
+  }
+
+  public GetTopic(topicId: string) {
+    return this.apiService.get("/V1/Topic/GetTopic?topicId=" + topicId).then(t => {
+      return t[0];
     });
   }
 

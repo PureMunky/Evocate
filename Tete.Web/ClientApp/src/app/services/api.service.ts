@@ -35,8 +35,11 @@ export class ApiService {
 
   post(url: string, body: object) {
     return this.http
-      .post(url, body)
+      .post<Response>(url, body)
       .toPromise()
+      .then(res => {
+        return res.data;
+      })
       .catch(this.handleError);
   }
 

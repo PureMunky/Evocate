@@ -31,7 +31,8 @@ import { TopicComponent } from "./components/topic/topic.component";
       { path: "logging", component: LoggingComponent },
       { path: "languageAdmin", component: LanguageAdminComponent },
       { path: "profile/:username", component: ProfileComponent },
-      { path: "topic/create/:name", component: TopicComponent }
+      { path: "topic/create/:name", component: TopicComponent },
+      { path: "topic/:topicId", component: TopicComponent }
     ])
   ],
   providers: [],

@@ -43,5 +43,13 @@ namespace Tete.Api.Controllers
       return new Response<TopicVM>(service.Search(searchText));
     }
 
+    [HttpGet]
+    public Response<TopicVM> GetTopic(Guid topicId)
+    {
+      var service = new Services.Content.TopicService(this.context, UserHelper.CurrentUser(HttpContext, this.context));
+
+      return new Response<TopicVM>(service.GetTopic(topicId));
+    }
+
   }
 }

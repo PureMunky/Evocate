@@ -7,7 +7,7 @@
 <div *ngIf="search.done">
   <h3>Results</h3>
   <div *ngFor="let topic of topics">
-    <a href="/topic/{{topic.topicId}}">{{topic.name}}</a>
+    <a [routerLink]="['/topic/', topic.topicId]">{{topic.name}}</a>
     <div>{{topic.description}}</div>
   </div>
   <div>

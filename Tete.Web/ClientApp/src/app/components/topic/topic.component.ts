@@ -22,13 +22,23 @@ export class TopicComponent {
     initService.Register(() => {
       this.currentUser = this.userService.CurrentUser();
       this.route.params.subscribe(params => {
-        this.currentTopic.name = params["name"];
+        if (params["name"]) {
+          this.currentTopic.name = params["name"];
+        } else if (params["topicId"]) {
+          this.loadTopic(params["topicId"]);
+        }
       })
     });
   }
 
+  public loadTopic(topicId: string) {
+    return this.topicService.GetTopic(topicId).then(t => {
+      this.currentTopic = t;
+    });
+  }
+
   public save() {
-    this.topicService.Save(this.currentTopic).then(console.log);
+    this.topicService.Save(this.currentTopic).then(t => this.loadTopic(t.topicId));
   }
 
 }

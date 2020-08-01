@@ -9,6 +9,19 @@ namespace Tete.Web.Controllers
   public class LoginController : Controller
   {
 
+    /* TODO: Password reset flows
+       1. user guided
+       - magic link that a user should bookmark
+       - enter their username to be allowed to reset
+       - prompted for a new password then logged in.
+       2. admin one-click password reset
+       - admin enters username
+       - provided with magic link and email address
+       - send link to email address
+       3. reset password email (ideal, requires smtp)
+       - user click "reset" on login screen
+       - sent an email with magic link
+    */
     private IConfiguration Configuration;
     private Tete.Api.Contexts.MainContext context;
 

@@ -15,6 +15,10 @@ export class TopicComponent {
   public currentTopic: Topic = new Topic();
   public topics: Array<Topic> = [];
 
+  public working = {
+    displayMentorButtons: false
+  };
+
   constructor(private userService: UserService,
     private route: ActivatedRoute,
     private initService: InitService,
@@ -39,6 +43,14 @@ export class TopicComponent {
 
   public save() {
     this.topicService.Save(this.currentTopic).then(t => this.loadTopic(t.topicId));
+  }
+
+  public request() {
+    console.log('requst a mentor');
+  }
+
+  public register() {
+    console.log('register as a mentor');
   }
 
 }

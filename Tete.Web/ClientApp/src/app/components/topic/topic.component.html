@@ -9,4 +9,13 @@
   <div>
     <button (click)="save()">Save</button>
   </div>
+
+  <p>
+    Thank you for requesting a mentor, we'll notify you once
+    you're assigned.
+  </p>
+  <div *ngShow="working.displayMentorButtons">
+    <button (click)="request()">Request a mentor</button>
+    <button (clikc)="register()">Register as a mentor</button>
+  </div>
 </div>

@@ -34,6 +34,11 @@ namespace Tete.Models.Authentication
       FillData(user, new List<UserLanguage>(), new Profile(user.Id), new List<AccessRole>());
     }
 
+    public UserVM(User user)
+    {
+      FillData(user, new List<UserLanguage>(), new Profile(user.Id), new List<AccessRole>());
+    }
+
     public UserVM(User user, List<UserLanguage> languages, Profile profile, List<AccessRole> roles)
     {
       FillData(user, languages, profile, roles);

@@ -5,6 +5,7 @@ using Tete.Api.Contexts;
 using Tete.Api.Services.Localization;
 using Tete.Models.Relationships;
 using Tete.Models.Authentication;
+using Tete.Models.Content;
 
 namespace Tete.Api.Services.Relationships
 {
@@ -43,6 +44,41 @@ namespace Tete.Api.Services.Relationships
       }
     }
 
+    public List<MentorshipVM> GetUserMentorships(Guid UserId)
+    {
+      var rtnList = new List<MentorshipVM>();
+
+      if (UserId == this.Actor.UserId || this.Actor.Roles.Contains("Admin"))
+      {
+        var dbMentorships = this.mainContext.Mentorships.Where(m => m.LearnerUserId == UserId);
+
+        foreach (Mentorship m in dbMentorships)
+        {
+          var dbTopic = this.mainContext.Topics.Where(t => t.TopicId == m.TopicId).FirstOrDefault();
+
+          var mentorship = new MentorshipVM(m, new TopicVM(dbTopic));
+          if (mentorship.HasMentor)
+          {
+            var dbMentor = this.mainContext.Users.Where(u => u.Id == m.MentorUserId).FirstOrDefault();
+
+            if (dbMentor != null)
+            {
+              mentorship.Mentor = new UserVM(dbMentor);
+            }
+            else
+            {
+              mentorship.MentorshipId = Guid.Empty;
+              mentorship.HasMentor = false;
+            }
+          }
+
+          rtnList.Add(mentorship);
+        }
+
+      }
+
+      return rtnList;
+    }
     // public Mentorship GetMentorship(Guid MentorshipId)
     // {
     //   // var dbTopic = this.mainContext.Topics.Where(t => t.TopicId == topicId).FirstOrDefault();

@@ -1,6 +1,13 @@
 <h1>Hello, {{userName}}!</h1>
 <a [routerLink]="['/profile/test']">Test Profile</a><br />
 <a [routerLink]="['/profile/admin']">Admin Profile</a>
+<div *ngIf="mentorships.length > 0">
+  <h2>Currently Requested Topics</h2>
+  <div *ngFor="let mentorship of mentorships">
+    <a [routerLink]="['/topic/', mentorship.topic.topicId]">{{mentorship.topic.name}}</a><br />
+    <span>Mentor: {{(mentorship.hasMentor ? mentorship.mentor.userName : 'Not Assigned')}}</span>
+  </div>
+</div>
 <h2>What do you want to do today?</h2>
 <input type="text" [(ngModel)]="tmp.searchText" />
 <button (click)="Search()">Go</button>

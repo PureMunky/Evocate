@@ -16,9 +16,9 @@ export class MentorshipService {
     });
   }
 
-  public GetTopic(topicId: string) {
-    return this.apiService.get("/V1/Topic/GetTopic?topicId=" + topicId).then(t => {
-      return t[0];
+  public GetUserMentorships(userId: string) {
+    return this.apiService.get("/V1/Mentorship/GetUserMentorships?UserId=" + userId).then(t => {
+      return t;
     });
   }
 

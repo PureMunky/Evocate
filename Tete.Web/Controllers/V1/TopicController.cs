@@ -35,6 +35,17 @@ namespace Tete.Api.Controllers
       return new Response<TopicVM>(value);
     }
 
+
+    // TODO: register as a learner and a mentor flow.
+    [HttpPost]
+    public Response<bool> RegisterLearner(Guid UserId, Guid TopicId)
+    {
+      var service = new Services.Relationships.MentorshipService(this.context, UserHelper.CurrentUser(HttpContext, this.context));
+      service.RegisterLearner(UserId, TopicId);
+
+      return new Response<bool>(true);
+    }
+
     [HttpGet]
     public Response<TopicVM> Search(string searchText)
     {

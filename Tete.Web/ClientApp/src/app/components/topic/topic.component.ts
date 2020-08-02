@@ -3,8 +3,10 @@ import { ActivatedRoute } from "@angular/router";
 import { InitService } from "../../services/init.service";
 import { UserService } from "../../services/user.service";
 import { TopicService } from "../../services/topic.service";
+import { MentorshipService } from "../../services/mentorship.service";
 import { User } from "../../models/user";
 import { Topic } from "../../models/topic";
+import { Mentorship } from "../../models/mentorship";
 
 @Component({
   selector: "topic",
@@ -16,13 +18,14 @@ export class TopicComponent {
   public topics: Array<Topic> = [];
 
   public working = {
-    displayMentorButtons: false
+    displayMentorButtons: true
   };
 
   constructor(private userService: UserService,
     private route: ActivatedRoute,
     private initService: InitService,
-    private topicService: TopicService) {
+    private topicService: TopicService,
+    private mentorshipService: MentorshipService) {
     initService.Register(() => {
       this.currentUser = this.userService.CurrentUser();
       this.route.params.subscribe(params => {
@@ -45,11 +48,11 @@ export class TopicComponent {
     this.topicService.Save(this.currentTopic).then(t => this.loadTopic(t.topicId));
   }
 
-  public request() {
-    console.log('requst a mentor');
+  public learn() {
+    this.topicService.RegisterLearner(this.currentUser.userId, this.currentTopic.topicId);
   }
 
-  public register() {
+  public teach() {
     console.log('register as a mentor');
   }
 

@@ -18,9 +18,17 @@ export class TopicService {
 
   public Save(topic: Topic): Promise<any> {
     return this.apiService.post("/V1/Topic/Post", topic).then(t => {
-      console.log(t);
       return t[0];
     });
+  }
+
+  public RegisterLearner(UserId: string, TopicId: string): Promise<any> {
+    console.log(TopicId);
+    return this.apiService.post("/V1/Topic/RegisterLearner?UserId=" + UserId + "&TopicId=" + TopicId, {})
+  }
+
+  public RegisterMentor(topic: Topic): Promise<any> {
+    return this.apiService.post("/V1/Topic/RegisterMentor", topic);
   }
 
   public GetTopic(topicId: string) {

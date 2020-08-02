@@ -1,4 +1,5 @@
 export class Topic {
+  public topicId: string;
   public name: string;
   public description: string;
   public elligible: boolean;

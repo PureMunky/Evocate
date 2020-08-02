@@ -25,6 +25,8 @@ namespace Tete.Api.Contexts
 
     // Topics
     public virtual DbSet<Tete.Models.Content.Topic> Topics { get; set; }
+    public virtual DbSet<Tete.Models.Relationships.Mentorship> Mentorships { get; set; }
+    public virtual DbSet<Tete.Models.Relationships.UserTopic> UserTopics { get; set; }
 
     public MainContext(DbContextOptions options) : base(options)
     {

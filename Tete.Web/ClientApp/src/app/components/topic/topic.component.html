@@ -14,8 +14,9 @@
     Thank you for requesting a mentor, we'll notify you once
     you're assigned.
   </p>
-  <div *ngShow="working.displayMentorButtons">
-    <button (click)="request()">Request a mentor</button>
-    <button (clikc)="register()">Register as a mentor</button>
+  <div *ngIf="working.displayMentorButtons">
+    Are you looking to learn or teach {{currentTopic.name}}?
+    <button (click)="learn()">Learn</button>
+    <button (clikc)="teach()">Teach</button>
   </div>
 </div>

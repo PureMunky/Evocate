@@ -32,11 +32,26 @@ namespace Tete.Api.Services.Relationships
           this.mainContext.Mentorships.Add(newMentorship);
         }
 
+        SetUserTopic(UserId, TopicId, TopicStatus.Novice);
+
+        this.mainContext.SaveChanges();
+      }
+    }
+
+    public void RegisterMentor(Guid UserId, Guid TopicId)
+    {
+      SetUserTopic(UserId, TopicId, TopicStatus.Mentor);
+    }
+
+    private void SetUserTopic(Guid UserId, Guid TopicId, TopicStatus topicStatus)
+    {
+      if (UserId == this.Actor.UserId || this.Actor.Roles.Contains("Admin"))
+      {
         var dbUserTopic = this.mainContext.UserTopics.Where(t => t.UserId == UserId && t.TopicId == t.TopicId).FirstOrDefault();
 
         if (dbUserTopic == null)
         {
-          var newUserTopic = new UserTopic(UserId, TopicId, TopicStatus.Novice);
+          var newUserTopic = new UserTopic(UserId, TopicId, topicStatus);
           this.mainContext.UserTopics.Add(newUserTopic);
         }
 

@@ -53,7 +53,8 @@ export class TopicComponent {
   }
 
   public teach() {
-    console.log('register as a mentor');
+    console.log('teach');
+    this.topicService.RegisterMentor(this.currentUser.userId, this.currentTopic.topicId);
   }
 
 }

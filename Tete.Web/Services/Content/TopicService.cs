@@ -5,6 +5,7 @@ using Tete.Api.Contexts;
 using Tete.Api.Services.Localization;
 using Tete.Models.Content;
 using Tete.Models.Authentication;
+using Tete.Models.Relationships;
 
 namespace Tete.Api.Services.Content
 {
@@ -69,7 +70,14 @@ namespace Tete.Api.Services.Content
 
       if (dbTopic != null)
       {
+        var dbUserTopic = this.mainContext.UserTopics.Where(ts => ts.UserId == this.Actor.UserId).FirstOrDefault();
         rtnTopic = new TopicVM(dbTopic);
+        rtnTopic.UserTopic = dbUserTopic;
+
+        if (dbUserTopic != null && rtnTopic.UserTopic.Status == TopicStatus.Mentor)
+        {
+          rtnTopic.Mentorships = this.mainContext.Mentorships.Where(m => m.Active == true && m.TopicId == topicId && (m.MentorUserId == this.Actor.UserId || m.MentorUserId == Guid.Empty)).Select(m => new MentorshipVM(m, null)).ToList();
+        }
       }
 
       return rtnTopic;

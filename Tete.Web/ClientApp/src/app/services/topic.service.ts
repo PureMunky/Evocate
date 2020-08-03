@@ -23,12 +23,11 @@ export class TopicService {
   }
 
   public RegisterLearner(UserId: string, TopicId: string): Promise<any> {
-    console.log(TopicId);
     return this.apiService.post("/V1/Topic/RegisterLearner?UserId=" + UserId + "&TopicId=" + TopicId, {})
   }
 
-  public RegisterMentor(topic: Topic): Promise<any> {
-    return this.apiService.post("/V1/Topic/RegisterMentor", topic);
+  public RegisterMentor(UserId: string, TopicId: string): Promise<any> {
+    return this.apiService.post("/V1/Topic/RegisterMentor?UserId=" + UserId + "&TopicId=" + TopicId, {})
   }
 
   public GetTopic(topicId: string) {

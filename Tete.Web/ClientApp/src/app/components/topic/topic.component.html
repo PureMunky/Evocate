@@ -14,9 +14,9 @@
     Thank you for requesting a mentor, we'll notify you once
     you're assigned.
   </p>
-  <div *ngIf="working.displayMentorButtons">
+  <div *ngIf="(!currentTopic.userTopic) && currentTopic.topicId">
     Are you looking to learn or teach {{currentTopic.name}}?
     <button (click)="learn()">Learn</button>
-    <button (clikc)="teach()">Teach</button>
+    <button (click)="teach()">Teach</button>
   </div>
 </div>

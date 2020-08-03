@@ -25,7 +25,6 @@ namespace Tete.Api.Controllers
       this.logService = new Services.Logging.LogService(mainContext, Tete.Api.Services.Logging.LogService.LoggingLayer.Api);
     }
 
-    // POST api/values
     [HttpPost]
     public Response<TopicVM> Post([FromBody] TopicVM value)
     {
@@ -35,13 +34,20 @@ namespace Tete.Api.Controllers
       return new Response<TopicVM>(value);
     }
 
-
-    // TODO: register as a learner and a mentor flow.
     [HttpPost]
     public Response<bool> RegisterLearner(Guid UserId, Guid TopicId)
     {
       var service = new Services.Relationships.MentorshipService(this.context, UserHelper.CurrentUser(HttpContext, this.context));
       service.RegisterLearner(UserId, TopicId);
+
+      return new Response<bool>(true);
+    }
+
+    [HttpPost]
+    public Response<bool> RegisterMentor(Guid UserId, Guid TopicId)
+    {
+      var service = new Services.Relationships.MentorshipService(this.context, UserHelper.CurrentUser(HttpContext, this.context));
+      service.RegisterMentor(UserId, TopicId);
 
       return new Response<bool>(true);
     }

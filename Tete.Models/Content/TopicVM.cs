@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Tete.Models.Relationships;
 
 namespace Tete.Models.Content
 {
@@ -17,6 +19,9 @@ namespace Tete.Models.Content
     public DateTime Created { get; set; }
 
     public Guid CreatedBy { get; set; }
+
+    public UserTopic UserTopic { get; set; }
+    public List<MentorshipVM> Mentorships { get; set; }
 
     public TopicVM()
     {
@@ -37,6 +42,7 @@ namespace Tete.Models.Content
       this.Elligible = false;
       this.Created = Created;
       this.CreatedBy = CreatedBy;
+      this.UserTopic = null;
     }
   }
 

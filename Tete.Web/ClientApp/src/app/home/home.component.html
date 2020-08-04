@@ -4,7 +4,7 @@
 <div *ngIf="mentorships.length > 0">
   <h2>Currently Requested Topics</h2>
   <div *ngFor="let mentorship of mentorships">
-    <a [routerLink]="['/topic/', mentorship.topic.topicId]">{{mentorship.topic.name}}</a><br />
+    <a [routerLink]="['/mentorship/', mentorship.mentorshipId]">{{mentorship.topic.name}}</a><br />
     <span>Mentor: {{(mentorship.hasMentor ? mentorship.mentor.displayName : 'Not Assigned')}}</span>
   </div>
 </div>

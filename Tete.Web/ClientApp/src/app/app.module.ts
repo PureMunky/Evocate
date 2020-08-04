@@ -11,6 +11,7 @@ import { LoggingComponent } from "./components/logging/logging.component";
 import { LanguageAdminComponent } from "./components/languageAdmin/languageAdmin.component";
 import { ProfileComponent } from "./components/profile/profile.component";
 import { TopicComponent } from "./components/topic/topic.component";
+import { MentorshipComponent } from "./components/mentorship/mentorship.component";
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { TopicComponent } from "./components/topic/topic.component";
     LoggingComponent,
     LanguageAdminComponent,
     ProfileComponent,
-    TopicComponent
+    TopicComponent,
+    MentorshipComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
@@ -32,7 +34,8 @@ import { TopicComponent } from "./components/topic/topic.component";
       { path: "languageAdmin", component: LanguageAdminComponent },
       { path: "profile/:username", component: ProfileComponent },
       { path: "topic/create/:name", component: TopicComponent },
-      { path: "topic/:topicId", component: TopicComponent }
+      { path: "topic/:topicId", component: TopicComponent },
+      { path: "mentorship/:mentorshipId", component: MentorshipComponent }
     ])
   ],
   providers: [],

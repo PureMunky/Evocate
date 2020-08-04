@@ -43,5 +43,13 @@ namespace Tete.Api.Controllers
       return new Response<MentorshipVM>(service.GetUserMentorships(UserId));
     }
 
+    [HttpGet]
+    public Response<MentorshipVM> GetMentorship(Guid MentorshipId)
+    {
+      var service = new Services.Relationships.MentorshipService(this.context, UserHelper.CurrentUser(HttpContext, this.context));
+
+      return new Response<MentorshipVM>(service.GetMentorship(MentorshipId));
+    }
+
   }
 }

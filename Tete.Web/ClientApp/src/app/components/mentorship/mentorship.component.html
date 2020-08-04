@@ -1,0 +1,12 @@
+<div *ngIf="working.editing">
+
+</div>
+
+<div *ngIf="!working.editing">
+  <h2>{{currentMentorship.topic.name}}</h2>
+  <p>{{currentMentorship.topic.description}}</p>
+  <div>
+    Mentor: {{currentMentorship.mentor.displayName}}<br />
+    Learner: {{currentMentorship.learner. displayName}}
+  </div>
+</div>

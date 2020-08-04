@@ -22,4 +22,10 @@ export class MentorshipService {
     });
   }
 
+  public GetMentorship(mentorshipId: string) {
+    return this.apiService.get("/V1/Mentorship/GetMentorship?MentorshipId=" + mentorshipId).then(m => {
+      return m[0];
+    });
+  }
+
 }

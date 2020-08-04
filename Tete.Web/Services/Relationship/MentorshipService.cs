@@ -87,44 +87,57 @@ namespace Tete.Api.Services.Relationships
 
         foreach (Mentorship m in dbMentorships)
         {
-          var dbTopic = this.mainContext.Topics.Where(t => t.TopicId == m.TopicId).FirstOrDefault();
-
-          var mentorship = new MentorshipVM(m, new TopicVM(dbTopic));
-          if (mentorship.HasMentor)
-          {
-            var dbMentor = this.mainContext.Users.Where(u => u.Id == m.MentorUserId).FirstOrDefault();
-
-            if (dbMentor != null)
-            {
-              mentorship.Mentor = new UserVM(dbMentor);
-            }
-            else
-            {
-              mentorship.MentorshipId = Guid.Empty;
-              mentorship.HasMentor = false;
-            }
-          }
-
-          rtnList.Add(mentorship);
+          rtnList.Add(GetMentorshipVM(m));
         }
 
       }
 
       return rtnList;
     }
-    // public Mentorship GetMentorship(Guid MentorshipId)
-    // {
-    //   // var dbTopic = this.mainContext.Topics.Where(t => t.TopicId == topicId).FirstOrDefault();
-    //   Mentorship rtnMentorship = new Mentorship();
+    public MentorshipVM GetMentorship(Guid MentorshipId)
+    {
+      var dbMentorship = this.mainContext.Mentorships.Where(m => m.MentorshipId == MentorshipId).FirstOrDefault();
+      MentorshipVM rtnMentorship = null;
 
-    //   if (dbTopic != null)
-    //   {
-    //     rtnTopic = new TopicVM(dbTopic);
-    //   }
+      if (dbMentorship != null)
+      {
+        if (this.Actor.Roles.Contains("Admin") || dbMentorship.MentorUserId == this.Actor.UserId || dbMentorship.LearnerUserId == this.Actor.UserId)
+        {
+          rtnMentorship = GetMentorshipVM(dbMentorship);
+        }
+      }
 
-    //   return rtnTopic;
-    // }
+      return rtnMentorship;
+    }
 
+    private MentorshipVM GetMentorshipVM(Mentorship mentorship)
+    {
+      var dbTopic = this.mainContext.Topics.Where(t => t.TopicId == mentorship.TopicId).FirstOrDefault();
+
+      var rtnMentorship = new MentorshipVM(mentorship, new TopicVM(dbTopic));
+      if (rtnMentorship.HasMentor)
+      {
+        var dbMentor = this.mainContext.Users.Where(u => u.Id == mentorship.MentorUserId).FirstOrDefault();
+        var dbLearner = this.mainContext.Users.Where(u => u.Id == mentorship.LearnerUserId).FirstOrDefault();
+
+        if (dbMentor != null)
+        {
+          rtnMentorship.Mentor = new UserVM(dbMentor);
+        }
+        else
+        {
+          rtnMentorship.MentorshipId = Guid.Empty;
+          rtnMentorship.HasMentor = false;
+        }
+
+        if (dbLearner != null)
+        {
+          rtnMentorship.Learner = new UserVM(dbLearner);
+        }
+      }
+
+      return rtnMentorship;
+    }
     private void FillData(MainContext mainContext, UserVM actor)
     {
       this.mainContext = mainContext;

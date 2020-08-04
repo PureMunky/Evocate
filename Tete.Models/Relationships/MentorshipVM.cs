@@ -10,6 +10,7 @@ namespace Tete.Models.Relationships
 
     public TopicVM Topic { get; set; }
     public UserVM Mentor { get; set; }
+    public UserVM Learner { get; set; }
     public bool HasMentor { get; set; }
 
     public MentorshipVM(Guid LearnerUserId, Guid TopicId, TopicVM Topic) : base(LearnerUserId, TopicId)

@@ -36,7 +36,7 @@ export class ProfileComponent {
     this.initService.Register(() => {
       this.currentUser = this.userService.CurrentUser();
       this.route.params.subscribe(params => {
-        this.working.userName = params["username"]
+        this.working.userName = params["username"];
         this.loadUser();
         if (this.working.userName != this.currentUser.userName) {
           this.working.self = false;

@@ -21,6 +21,9 @@ namespace Tete.Models.Content
     public Guid CreatedBy { get; set; }
 
     public UserTopic UserTopic { get; set; }
+
+    public int OpenMentorships { get; set; }
+
     public List<MentorshipVM> Mentorships { get; set; }
 
     public TopicVM()
@@ -43,6 +46,7 @@ namespace Tete.Models.Content
       this.Created = Created;
       this.CreatedBy = CreatedBy;
       this.UserTopic = null;
+      this.OpenMentorships = 0;
     }
   }
 

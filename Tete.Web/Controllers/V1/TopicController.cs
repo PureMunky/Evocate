@@ -52,6 +52,15 @@ namespace Tete.Api.Controllers
       return new Response<bool>(true);
     }
 
+    [HttpPost]
+    public Response<bool> ClaimNextMentorship(Guid UserId, Guid TopicId)
+    {
+      var service = new Services.Relationships.MentorshipService(this.context, UserHelper.CurrentUser(HttpContext, this.context));
+      service.ClaimNextMentorship(UserId, TopicId);
+
+      return new Response<bool>(true);
+    }
+
     [HttpGet]
     public Response<TopicVM> Search(string searchText)
     {

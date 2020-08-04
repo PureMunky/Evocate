@@ -43,6 +43,7 @@
   </div>
   <button (click)="save()">Save</button><button (click)="cancel()">Cancel</button>
 </div>
+
 <div *ngIf="!working.editing">
   <button *ngIf="working.self" (click)="working.editing = true;">Edit</button>
   <div>

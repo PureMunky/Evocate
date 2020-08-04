@@ -1,22 +1,28 @@
-<h1>Topic</h1>
-<div>
+<div *ngIf="working.editing">
+  <h2>Editing</h2>
   <div>
     Name: <input type="text" [(ngModel)]="currentTopic.name" />
   </div>
   <div>
-    Description: <input type="text" [(ngModel)]="currentTopic.description" />
+    Description: <textarea [(ngModel)]="currentTopic.description"></textarea>
   </div>
   <div>
     <button (click)="save()">Save</button>
   </div>
+</div>
 
-  <p>
-    Thank you for requesting a mentor, we'll notify you once
-    you're assigned.
-  </p>
+<div *ngIf="!working.editing">
+  <h2>{{currentTopic.name}}</h2>
+  <p>{{currentTopic.description}}</p>
+
   <div *ngIf="(!currentTopic.userTopic) && currentTopic.topicId">
     Are you looking to learn or teach {{currentTopic.name}}?
     <button (click)="learn()">Learn</button>
     <button (click)="teach()">Teach</button>
+  </div>
+
+  <div *ngIf="currentTopic.userTopic &&  currentTopic.userTopic.status == 4">
+    <!-- Mentor Controls -->
+    <button (click)="claimNextMentorship()">I'm ready for a new learner.</button>
   </div>
 </div>

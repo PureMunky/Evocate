@@ -30,6 +30,10 @@ export class TopicService {
     return this.apiService.post("/V1/Topic/RegisterMentor?UserId=" + UserId + "&TopicId=" + TopicId, {})
   }
 
+  public ClaimNextMentorship(UserId: string, TopicId: string): Promise<any> {
+    return this.apiService.post("/V1/Topic/ClaimNextMentorship?UserId=" + UserId + "&TopicId=" + TopicId, {})
+  }
+
   public GetTopic(topicId: string) {
     return this.apiService.get("/V1/Topic/GetTopic?topicId=" + topicId).then(t => {
       return t[0];

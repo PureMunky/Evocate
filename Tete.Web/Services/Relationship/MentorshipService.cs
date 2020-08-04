@@ -43,6 +43,24 @@ namespace Tete.Api.Services.Relationships
       SetUserTopic(UserId, TopicId, TopicStatus.Mentor);
     }
 
+    public void ClaimNextMentorship(Guid UserId, Guid TopicId)
+    {
+      if (UserId == this.Actor.UserId || this.Actor.Roles.Contains("Admin"))
+      {
+        var dbMentorship = this.mainContext.Mentorships.Where(m => m.Active == true && m.MentorUserId == Guid.Empty).OrderBy(m => m.CreatedDate).FirstOrDefault();
+        var dbUserTopic = this.mainContext.UserTopics.Where(ut => ut.UserId == UserId).FirstOrDefault();
+
+        if (dbMentorship != null && dbUserTopic != null && dbUserTopic.Status == TopicStatus.Mentor)
+        {
+          dbMentorship.MentorUserId = UserId;
+          dbMentorship.StartDate = DateTime.UtcNow;
+          this.mainContext.Update(dbMentorship);
+          this.mainContext.SaveChanges();
+        }
+
+      }
+    }
+
     private void SetUserTopic(Guid UserId, Guid TopicId, TopicStatus topicStatus)
     {
       if (UserId == this.Actor.UserId || this.Actor.Roles.Contains("Admin"))
@@ -65,7 +83,7 @@ namespace Tete.Api.Services.Relationships
 
       if (UserId == this.Actor.UserId || this.Actor.Roles.Contains("Admin"))
       {
-        var dbMentorships = this.mainContext.Mentorships.Where(m => m.LearnerUserId == UserId);
+        var dbMentorships = this.mainContext.Mentorships.Where(m => m.LearnerUserId == UserId || m.MentorUserId == UserId);
 
         foreach (Mentorship m in dbMentorships)
         {

@@ -18,7 +18,7 @@ export class TopicComponent {
   public topics: Array<Topic> = [];
 
   public working = {
-    displayMentorButtons: true
+    editing: true
   };
 
   constructor(private userService: UserService,
@@ -31,8 +31,10 @@ export class TopicComponent {
       this.route.params.subscribe(params => {
         if (params["name"]) {
           this.currentTopic.name = params["name"];
+          this.working.editing = true;
         } else if (params["topicId"]) {
           this.loadTopic(params["topicId"]);
+          this.working.editing = false;
         }
       })
     });
@@ -41,6 +43,7 @@ export class TopicComponent {
   public loadTopic(topicId: string) {
     return this.topicService.GetTopic(topicId).then(t => {
       this.currentTopic = t;
+      this.working.editing = false;
     });
   }
 
@@ -53,8 +56,11 @@ export class TopicComponent {
   }
 
   public teach() {
-    console.log('teach');
     this.topicService.RegisterMentor(this.currentUser.userId, this.currentTopic.topicId);
+  }
+
+  public claimNextMentorship() {
+    this.topicService.ClaimNextMentorship(this.currentUser.userId, this.currentTopic.topicId);
   }
 
 }

@@ -23,15 +23,17 @@ export class TopicService {
   }
 
   public RegisterLearner(UserId: string, TopicId: string): Promise<any> {
-    return this.apiService.post("/V1/Topic/RegisterLearner?UserId=" + UserId + "&TopicId=" + TopicId, {})
+    return this.apiService.post("/V1/Topic/RegisterLearner?UserId=" + UserId + "&TopicId=" + TopicId, {});
   }
 
   public RegisterMentor(UserId: string, TopicId: string): Promise<any> {
-    return this.apiService.post("/V1/Topic/RegisterMentor?UserId=" + UserId + "&TopicId=" + TopicId, {})
+    return this.apiService.post("/V1/Topic/RegisterMentor?UserId=" + UserId + "&TopicId=" + TopicId, {});
   }
 
   public ClaimNextMentorship(UserId: string, TopicId: string): Promise<any> {
-    return this.apiService.post("/V1/Topic/ClaimNextMentorship?UserId=" + UserId + "&TopicId=" + TopicId, {})
+    return this.apiService.post("/V1/Topic/ClaimNextMentorship?UserId=" + UserId + "&TopicId=" + TopicId, {}).then(m => {
+      return m[0];
+    });
   }
 
   public GetTopic(topicId: string) {

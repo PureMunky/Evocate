@@ -43,8 +43,10 @@ namespace Tete.Api.Services.Relationships
       SetUserTopic(UserId, TopicId, TopicStatus.Mentor);
     }
 
-    public void ClaimNextMentorship(Guid UserId, Guid TopicId)
+    public MentorshipVM ClaimNextMentorship(Guid UserId, Guid TopicId)
     {
+      MentorshipVM rtnMentorship = null;
+
       if (UserId == this.Actor.UserId || this.Actor.Roles.Contains("Admin"))
       {
         var dbMentorship = this.mainContext.Mentorships.Where(m => m.Active == true && m.MentorUserId == Guid.Empty).OrderBy(m => m.CreatedDate).FirstOrDefault();
@@ -56,16 +58,20 @@ namespace Tete.Api.Services.Relationships
           dbMentorship.StartDate = DateTime.UtcNow;
           this.mainContext.Update(dbMentorship);
           this.mainContext.SaveChanges();
+
+          rtnMentorship = GetMentorship(dbMentorship.MentorshipId);
         }
 
       }
+
+      return rtnMentorship;
     }
 
     private void SetUserTopic(Guid UserId, Guid TopicId, TopicStatus topicStatus)
     {
       if (UserId == this.Actor.UserId || this.Actor.Roles.Contains("Admin"))
       {
-        var dbUserTopic = this.mainContext.UserTopics.Where(t => t.UserId == UserId && t.TopicId == t.TopicId).FirstOrDefault();
+        var dbUserTopic = this.mainContext.UserTopics.Where(t => t.UserId == UserId && t.TopicId == TopicId).FirstOrDefault();
 
         if (dbUserTopic == null)
         {

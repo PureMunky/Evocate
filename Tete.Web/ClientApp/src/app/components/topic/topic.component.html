@@ -23,6 +23,7 @@
 
   <div *ngIf="currentTopic.userTopic &&  currentTopic.userTopic.status == 4">
     <!-- Mentor Controls -->
+    <!-- TODO: Display read for new learner only if there are available learners. -->
     <button (click)="claimNextMentorship()">I'm ready for a new learner.</button>
   </div>
 </div>

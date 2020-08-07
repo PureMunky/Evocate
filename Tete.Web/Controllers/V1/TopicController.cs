@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Tete.Models.Content;
+using Tete.Models.Relationships;
 using Tete.Api.Helpers;
 using Tete.Web.Models;
 
@@ -53,12 +54,11 @@ namespace Tete.Api.Controllers
     }
 
     [HttpPost]
-    public Response<bool> ClaimNextMentorship(Guid UserId, Guid TopicId)
+    public Response<MentorshipVM> ClaimNextMentorship(Guid UserId, Guid TopicId)
     {
       var service = new Services.Relationships.MentorshipService(this.context, UserHelper.CurrentUser(HttpContext, this.context));
-      service.ClaimNextMentorship(UserId, TopicId);
 
-      return new Response<bool>(true);
+      return new Response<MentorshipVM>(service.ClaimNextMentorship(UserId, TopicId));
     }
 
     [HttpGet]

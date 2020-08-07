@@ -70,7 +70,7 @@ namespace Tete.Api.Services.Content
 
       if (dbTopic != null)
       {
-        var dbUserTopic = this.mainContext.UserTopics.Where(ts => ts.UserId == this.Actor.UserId).FirstOrDefault();
+        var dbUserTopic = this.mainContext.UserTopics.Where(ts => ts.UserId == this.Actor.UserId && ts.TopicId == topicId).FirstOrDefault();
         rtnTopic = new TopicVM(dbTopic);
         rtnTopic.UserTopic = dbUserTopic;
 

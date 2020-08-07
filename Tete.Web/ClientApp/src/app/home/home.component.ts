@@ -3,6 +3,7 @@ import { InitService } from "../services/init.service";
 import { UserService } from "../services/user.service";
 import { TopicService } from "../services/topic.service";
 import { MentorshipService } from "../services/mentorship.service";
+import { User } from "../models/user";
 import { Topic } from "../models/topic";
 import { Mentorship } from "../models/mentorship";
 
@@ -11,7 +12,7 @@ import { Mentorship } from "../models/mentorship";
   templateUrl: "./home.component.html"
 })
 export class HomeComponent {
-  public userName = 'world';
+  public currentUser: User = null;
   public search = {
     done: false,
     text: ''
@@ -28,7 +29,7 @@ export class HomeComponent {
     private topicService: TopicService,
     private mentorshipService: MentorshipService) {
     initService.Register(() => {
-      this.userName = userService.CurrentUser().displayName;
+      this.currentUser = userService.CurrentUser();
       mentorshipService.GetUserMentorships(userService.CurrentUser().userId).then(m => {
         this.mentorships = m;
       })

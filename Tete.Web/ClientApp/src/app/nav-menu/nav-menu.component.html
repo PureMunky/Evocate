@@ -11,10 +11,10 @@
           <li class="nav-item" [routerLinkActive]="['link-active']" [routerLinkActiveOptions]="{ exact: true }">
             <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
           </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
+          <li *ngIf="adminRole" class="nav-item" [routerLinkActive]="['link-active']">
             <a class="nav-link text-dark" [routerLink]="['/logging']">Logging</a>
           </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
+          <li *ngIf="adminRole" class="nav-item" [routerLinkActive]="['link-active']">
             <a class="nav-link text-dark" [routerLink]="['/languageAdmin']">Language</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']" *ngIf="profileLink.length > 0">

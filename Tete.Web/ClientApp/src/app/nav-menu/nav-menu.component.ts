@@ -10,6 +10,7 @@ import { UserService } from '../services/user.service';
 })
 export class NavMenuComponent {
   public currentUser: User = new User();
+  public adminRole: boolean = false;
   isExpanded = false;
 
   collapse() {
@@ -30,6 +31,8 @@ export class NavMenuComponent {
     initService.Register(() => {
       this.currentUser = userServeice.CurrentUser();
       this.profileLink = this.profileLinkPrefix + this.currentUser.userName;
+      this.adminRole = this.currentUser.roles.some(r => r == 'Admin');
     });
   }
+
 }

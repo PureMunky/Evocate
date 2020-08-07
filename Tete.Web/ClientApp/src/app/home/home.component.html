@@ -1,15 +1,18 @@
-<h1>Hello, {{userName}}!</h1>
-<a [routerLink]="['/profile/test']">Test Profile</a><br />
-<a [routerLink]="['/profile/admin']">Admin Profile</a>
+<h1 *ngIf="currentUser">Hello, {{currentUser.displayName}}!</h1>
 <div *ngIf="mentorships.length > 0">
-  <h2>Currently Requested Topics</h2>
-  <div *ngFor="let mentorship of mentorships">
-    <a [routerLink]="['/mentorship/', mentorship.mentorshipId]">{{mentorship.topic.name}}</a><br />
-    <span>Mentor: {{(mentorship.hasMentor ? mentorship.mentor.displayName : 'Not Assigned')}}</span>
+  <h2>Current Mentorships</h2>
+  <div *ngFor="let mentorship of mentorships"
+    style="border: 1px solid #000; display: inline-block; margin: 5px; padding: 10px;">
+    Topic: <a [routerLink]="['/mentorship/', mentorship.mentorshipId]">{{mentorship.topic.name}}</a><br />
+    <span *ngIf="mentorship.hasMentor && mentorship.mentorUserId != currentUser.userId">Mentor: <a
+        [routerLink]="['/profile/', mentorship.mentor.userName]">{{mentorship.mentor.displayName}}</a></span>
+    <span *ngIf="mentorship.hasMentor && mentorship.mentorUserId == currentUser.userId">Learner: <a
+        [routerLink]="['/profile/', mentorship.learner.userName]">{{mentorship.learner.displayName}}</a></span>
+    <span *ngIf="!mentorship.hasMentor">Mentor: Not Assigned</span>
   </div>
 </div>
 <h2>What do you want to do today?</h2>
-<input type="text" [(ngModel)]="tmp.searchText" />
+<input type="text" [(ngModel)]="tmp.searchText" (keyup.enter)="Search()" />
 <button (click)="Search()">Go</button>
 <div *ngIf="search.done">
   <h3>Results</h3>

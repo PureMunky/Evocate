@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Tete.Api.Services.Localization;
 using Tete.Api.Services.Authentication;
+using Tete.Api.Services.Content;
 using Tete.Models.Authentication;
 using Tete.Models.Localization;
 using Tete.Api.Services.Users;
@@ -19,6 +20,7 @@ namespace Tete.Api.Controllers
     private LoginController loginController;
     private LanguageService languageService;
     private LoginService loginService;
+    private TopicService topicService;
 
     public InitController(Contexts.MainContext mainContext)
     {
@@ -68,6 +70,7 @@ namespace Tete.Api.Controllers
       var adminUserVM = new UserService(mainContext, adminUser).GetUser(adminUser);
 
       this.languageService = new LanguageService(this.mainContext, adminUserVM);
+      this.topicService = new TopicService(this.mainContext, adminUserVM);
 
       var testLang = this.mainContext.Languages.Where(l => l.Name == "English").FirstOrDefault();
 
@@ -97,6 +100,22 @@ namespace Tete.Api.Controllers
         output.Add("English language already existed.");
       }
 
+      // var topicNames = new List<string>();
+      // var topicDescriptions = new List<string>();
+
+      // topicNames.Add("Software Development");
+      // topicDescriptions.Add("All things related to software development.");
+
+      // for (int i = 0; i < topicNames.Count; i++)
+      // {
+      //   this.topicService.SaveTopic(new Models.Content.TopicVM(new Models.Content.Topic()
+      //   {
+      //     Name = topicNames[i],
+      //     Description = topicDescriptions[i]
+      //   }));
+
+      //   output.Add(String.Format("Created {0} Topic", topicNames[i]));
+      // }
 
       return output;
     }

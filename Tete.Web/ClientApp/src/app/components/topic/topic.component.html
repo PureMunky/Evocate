@@ -13,7 +13,7 @@
 
 <div *ngIf="!working.editing">
   <h2>{{currentTopic.name}}</h2>
-  <h3>Your role: {{currentTopic.userTopic.status}}</h3>
+  <h3 *ngIf="currentTopic.userTopic">Your role: {{currentTopic.userTopic.statusText}}</h3>
   <p>{{currentTopic.description}}</p>
 
   <div *ngIf="(!currentTopic.userTopic) && currentTopic.topicId">

@@ -13,12 +13,19 @@ namespace Tete.Models.Relationships
     [Required]
     public Guid UserId { get; set; }
 
-
     [Required]
     public Guid TopicId { get; set; }
 
     [Required]
     public TopicStatus Status { get; set; }
+
+    public string StatusText
+    {
+      get
+      {
+        return this.Status.ToString();
+      }
+    }
 
     public DateTime CreatedDate { get; set; }
 

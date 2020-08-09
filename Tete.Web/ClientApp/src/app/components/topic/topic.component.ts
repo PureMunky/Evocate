@@ -18,7 +18,7 @@ export class TopicComponent {
   public topics: Array<Topic> = [];
 
   public working = {
-    editing: true
+    editing: false
   };
 
   constructor(private userService: UserService,

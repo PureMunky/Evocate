@@ -23,6 +23,19 @@ export class UserService {
     });
   }
 
+  public TranslateUserTopicStatus(status: number): string {
+    let statuses = [
+      'None',
+      'Novice',
+      'Graduate',
+      'Master',
+      'Mentor',
+      'Decon'
+    ];
+
+    return statuses[status];
+  }
+
   public CurrentUser() {
     return this.currentUser;
   }

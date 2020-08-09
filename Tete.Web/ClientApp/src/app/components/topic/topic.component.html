@@ -13,6 +13,7 @@
 
 <div *ngIf="!working.editing">
   <h2>{{currentTopic.name}}</h2>
+  <h3>Your role: {{currentTopic.userTopic.status}}</h3>
   <p>{{currentTopic.description}}</p>
 
   <div *ngIf="(!currentTopic.userTopic) && currentTopic.topicId">
@@ -25,5 +26,6 @@
     <!-- Mentor Controls -->
     <button *ngIf="currentTopic.mentorships.length > 0" (click)="claimNextMentorship()">I'm ready for a new
       learner.</button>
+    <span *ngIf="currentTopic.mentorships.length == 0">There are no waiting learners at the moment.</span>
   </div>
 </div>

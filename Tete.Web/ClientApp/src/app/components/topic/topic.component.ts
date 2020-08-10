@@ -53,7 +53,9 @@ export class TopicComponent {
   }
 
   public save() {
-    this.topicService.Save(this.currentTopic).then(t => this.loadTopic(t.topicId));
+    this.topicService.Save(this.currentTopic).then(t => {
+      this.router.navigate(['/topic/', t.topicId])
+    });
   }
 
   public learn() {

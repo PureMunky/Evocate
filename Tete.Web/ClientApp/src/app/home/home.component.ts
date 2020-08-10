@@ -15,7 +15,8 @@ export class HomeComponent {
   public currentUser: User = null;
   public search = {
     done: false,
-    text: ''
+    text: '',
+    newTopic: false
   };
   public tmp = {
     searchText: ''
@@ -42,6 +43,7 @@ export class HomeComponent {
       this.topics = d;
       this.search.done = true;
       this.search.text = this.tmp.searchText;
+      this.search.newTopic = !this.topics.some(t => t.name == this.search.text);
     });
   }
 }

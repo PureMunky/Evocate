@@ -42,4 +42,8 @@ export class TopicService {
     });
   }
 
+  public GetUserTopics(userId: string) {
+    return this.apiService.get("/V1/Topic/GetUserTopics?userId=" + userId);
+  }
+
 }

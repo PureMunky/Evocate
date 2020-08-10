@@ -1,2 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 
+.tile {
+  border: 1px solid #000;
+  display: inline-block;
+  margin: 5px;
+  padding: 10px;
+}

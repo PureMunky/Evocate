@@ -3,8 +3,7 @@
 <div>
   <h2>Active Mentorships</h2>
   <div *ngIf="mentorships.length > 0">
-    <div *ngFor="let mentorship of mentorships"
-      style="border: 1px solid #000; display: inline-block; margin: 5px; padding: 10px;">
+    <div *ngFor="let mentorship of mentorships" class="tile">
       <div>{{ mentorship.hasMentor && mentorship.mentorUserId == currentUser.userId ? 'Teaching' : 'Learning' }}</div>
       <a [routerLink]="['/mentorship/', mentorship.mentorshipId]">{{mentorship.topic.name}}</a><br />
       <span *ngIf="mentorship.hasMentor && mentorship.mentorUserId != currentUser.userId">Mentor: <a
@@ -34,5 +33,13 @@
         Create the topic now to request or become a mentor for whatever you want to do.
       </div>
     </div>
+  </div>
+</div>
+
+<div *ngIf="currentUserTopics.length > 0">
+  <h2>Your Topics</h2>
+  <div *ngFor="let topic of currentUserTopics" class="tile">
+    <a [routerLink]="['/topic/', topic.topicId]">{{topic.name}}</a><br />
+    {{topic.userTopic.statusText}}
   </div>
 </div>

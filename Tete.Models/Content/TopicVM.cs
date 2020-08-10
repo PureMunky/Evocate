@@ -36,6 +36,12 @@ namespace Tete.Models.Content
       FillData(topic.Name, topic.Description, topic.Elligible, topic.Created, topic.CreatedBy);
       this.TopicId = topic.TopicId;
     }
+    public TopicVM(Topic topic, UserTopic userTopic)
+    {
+      FillData(topic.Name, topic.Description, topic.Elligible, topic.Created, topic.CreatedBy);
+      this.TopicId = topic.TopicId;
+      this.UserTopic = userTopic;
+    }
 
     private void FillData(string Name, string Description, bool Elligible, DateTime Created, Guid CreatedBy)
     {

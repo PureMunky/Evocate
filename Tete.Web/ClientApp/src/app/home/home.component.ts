@@ -24,6 +24,7 @@ export class HomeComponent {
 
   public topics: Array<Topic> = [];
   public mentorships: Array<Mentorship> = [];
+  public currentUserTopics: Array<Topic>[] = [];
 
   constructor(private userService: UserService,
     private initService: InitService,
@@ -33,7 +34,10 @@ export class HomeComponent {
       this.currentUser = userService.CurrentUser();
       mentorshipService.GetUserMentorships(userService.CurrentUser().userId).then(m => {
         this.mentorships = m;
-      })
+      });
+      topicService.GetUserTopics(this.currentUser.userId).then(topics => {
+        this.currentUserTopics = topics;
+      });
     });
   }
 

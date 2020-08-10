@@ -71,8 +71,7 @@ namespace Tete.Api.Services.Content
       if (dbTopic != null)
       {
         var dbUserTopic = this.mainContext.UserTopics.Where(ts => ts.UserId == this.Actor.UserId && ts.TopicId == topicId).FirstOrDefault();
-        rtnTopic = new TopicVM(dbTopic);
-        rtnTopic.UserTopic = dbUserTopic;
+        rtnTopic = new TopicVM(dbTopic, dbUserTopic);
 
         if (dbUserTopic != null && rtnTopic.UserTopic.Status == TopicStatus.Mentor)
         {
@@ -81,6 +80,15 @@ namespace Tete.Api.Services.Content
       }
 
       return rtnTopic;
+    }
+
+    public IEnumerable<TopicVM> GetUserTopics(Guid UserId)
+    {
+      return this.mainContext.UserTopics
+        .Where(ut => ut.UserId == UserId)
+        .Join(this.mainContext.Topics, ut => ut.TopicId, t => t.TopicId, (ut, t) => new TopicVM(t, ut))
+        .OrderByDescending(tv => tv.UserTopic.Status)
+        .ThenBy(tv => tv.Name);
     }
 
     private void FillData(MainContext mainContext, UserVM actor)

@@ -29,6 +29,10 @@ namespace Tete.Models.Relationships
 
     public DateTime EndDate { get; set; }
 
+    public string LearnerContact { get; set; }
+
+    public string MentorContact { get; set; }
+
     public Mentorship(Guid LearnerUserId, Guid TopicId)
     {
       this.MentorshipId = Guid.NewGuid();
@@ -37,7 +41,6 @@ namespace Tete.Models.Relationships
       this.TopicId = TopicId;
       this.Active = true;
       this.CreatedDate = DateTime.UtcNow;
-
     }
   }
 }

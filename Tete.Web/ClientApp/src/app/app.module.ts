@@ -12,6 +12,8 @@ import { LanguageAdminComponent } from "./components/languageAdmin/languageAdmin
 import { ProfileComponent } from "./components/profile/profile.component";
 import { TopicComponent } from "./components/topic/topic.component";
 import { MentorshipComponent } from "./components/mentorship/mentorship.component";
+import { ProfileLink } from "./components/profile/profileLink.component";
+import { TopicLink } from "./components/topic/topicLink.component";
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import { MentorshipComponent } from "./components/mentorship/mentorship.componen
     LanguageAdminComponent,
     ProfileComponent,
     TopicComponent,
-    MentorshipComponent
+    MentorshipComponent,
+    ProfileLink,
+    TopicLink
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),

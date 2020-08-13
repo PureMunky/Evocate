@@ -1,12 +1,21 @@
-<div *ngIf="working.editing">
-
-</div>
-
-<div *ngIf="!working.editing">
+<div>
   <h2>{{currentMentorship.topic.name}}</h2>
   <p>{{currentMentorship.topic.description}}</p>
+</div>
+<div *ngIf="working.editing">
+  <div>Update your contact info for this mentorship.</div>
+  <div *ngIf="working.unsavedContact">This has not been saved or made visible until you save it.</div>
+  <input type="text" [(ngModel)]="working.contactDetails" />
+  <button (click)="save()">Save</button>
+</div>
+<button (click)="toggleEdit()">Toggle</button>
+<div>
   <div>
-    Mentor: {{currentMentorship.mentor.displayName}}<br />
-    Learner: {{currentMentorship.learner. displayName}}
+    <teteProfileLink [user]="currentMentorship.mentor" style="font-weight: bold;"></teteProfileLink> - Mentor<br />
+    <span>{{currentMentorship.mentorContact}}</span>
+  </div>
+  <div>
+    <teteProfileLink [user]="currentMentorship.learner" style="font-weight: bold;"></teteProfileLink> - Learner<br />
+    <span>{{currentMentorship.learnerContact}}</span>
   </div>
 </div>

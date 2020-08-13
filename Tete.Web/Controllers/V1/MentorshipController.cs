@@ -51,5 +51,13 @@ namespace Tete.Api.Controllers
       return new Response<MentorshipVM>(service.GetMentorship(MentorshipId));
     }
 
+    [HttpPost]
+    public Response<MentorshipVM> SetContactDetails([FromBody] ContactUpdate ContactUpdate)
+    {
+      var service = new Services.Relationships.MentorshipService(this.context, UserHelper.CurrentUser(HttpContext, this.context));
+
+      return new Response<MentorshipVM>(service.SetContactDetails(ContactUpdate));
+    }
+
   }
 }

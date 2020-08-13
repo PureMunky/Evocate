@@ -28,4 +28,14 @@ export class MentorshipService {
     });
   }
 
+  public SetContactDetails(mentorshipId: string, userId: string, contactDetails: string) {
+    return this.apiService.post("/V1/Mentorship/SetContactDetails", {
+      mentorshipId: mentorshipId,
+      userId: userId,
+      ContactDetails: contactDetails
+    }).then(m => {
+      return m[0];
+    });
+  }
+
 }

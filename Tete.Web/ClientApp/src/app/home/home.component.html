@@ -6,10 +6,10 @@
     <div *ngFor="let mentorship of mentorships" class="tile">
       <div>{{ mentorship.hasMentor && mentorship.mentorUserId == currentUser.userId ? 'Teaching' : 'Learning' }}</div>
       <a [routerLink]="['/mentorship/', mentorship.mentorshipId]">{{mentorship.topic.name}}</a><br />
-      <span *ngIf="mentorship.hasMentor && mentorship.mentorUserId != currentUser.userId">Mentor: <a
-          [routerLink]="['/profile/', mentorship.mentor.userName]">{{mentorship.mentor.displayName}}</a></span>
-      <span *ngIf="mentorship.hasMentor && mentorship.mentorUserId == currentUser.userId">Learner: <a
-          [routerLink]="['/profile/', mentorship.learner.userName]">{{mentorship.learner.displayName}}</a></span>
+      <span *ngIf="mentorship.hasMentor && mentorship.mentorUserId != currentUser.userId">Mentor: <teteProfileLink
+          [user]="mentorship.mentor"></teteProfileLink></span>
+      <span *ngIf="mentorship.hasMentor && mentorship.mentorUserId == currentUser.userId">Learner: <teteProfileLink
+          [user]="mentorship.learner"></teteProfileLink></span>
       <span *ngIf="!mentorship.hasMentor">Mentor: Not Assigned</span>
     </div>
   </div>
@@ -39,7 +39,7 @@
 <div *ngIf="currentUserTopics.length > 0">
   <h2>Your Topics</h2>
   <div *ngFor="let topic of currentUserTopics" class="tile">
-    <a [routerLink]="['/topic/', topic.topicId]">{{topic.name}}</a><br />
+    <teteTopicLink [topic]="topic"></teteTopicLink><br />
     {{topic.userTopic.statusText}}
   </div>
 </div>

@@ -12,8 +12,14 @@ namespace Tete.Api.Services.Relationships
   public class MentorshipService : ServiceBase
   {
 
+    #region Private Variables
+
     private UserLanguageService userLanguageService;
     private Logging.LogService logService;
+
+    #endregion
+
+    #region Public Functions
 
     public MentorshipService(MainContext mainContext, UserVM actor)
     {
@@ -67,22 +73,6 @@ namespace Tete.Api.Services.Relationships
       return rtnMentorship;
     }
 
-    private void SetUserTopic(Guid UserId, Guid TopicId, TopicStatus topicStatus)
-    {
-      if (UserId == this.Actor.UserId || this.Actor.Roles.Contains("Admin"))
-      {
-        var dbUserTopic = this.mainContext.UserTopics.Where(t => t.UserId == UserId && t.TopicId == TopicId).FirstOrDefault();
-
-        if (dbUserTopic == null)
-        {
-          var newUserTopic = new UserTopic(UserId, TopicId, topicStatus);
-          this.mainContext.UserTopics.Add(newUserTopic);
-        }
-
-        this.mainContext.SaveChanges();
-      }
-    }
-
     public List<MentorshipVM> GetUserMentorships(Guid UserId)
     {
       var rtnList = new List<MentorshipVM>();
@@ -100,6 +90,7 @@ namespace Tete.Api.Services.Relationships
 
       return rtnList;
     }
+
     public MentorshipVM GetMentorship(Guid MentorshipId)
     {
       var dbMentorship = this.mainContext.Mentorships.Where(m => m.MentorshipId == MentorshipId).FirstOrDefault();
@@ -116,15 +107,72 @@ namespace Tete.Api.Services.Relationships
       return rtnMentorship;
     }
 
+    public MentorshipVM SetContactDetails(ContactUpdate contactDetails)
+    {
+      if (contactDetails.UserId == this.Actor.UserId || this.Actor.Roles.Contains("Admin"))
+      {
+        var dbMentorship = this.mainContext.Mentorships.Where(m => m.MentorshipId == contactDetails.MentorshipId).FirstOrDefault();
+
+        if (
+          dbMentorship != null
+          && (
+            dbMentorship.LearnerUserId == contactDetails.UserId
+            || dbMentorship.MentorUserId == contactDetails.UserId
+          )
+        )
+        {
+          if (dbMentorship.LearnerUserId == contactDetails.UserId)
+          {
+            dbMentorship.LearnerContact = contactDetails.ContactDetails;
+          }
+          else if (dbMentorship.MentorUserId == contactDetails.UserId)
+          {
+            dbMentorship.MentorContact = contactDetails.ContactDetails;
+          }
+
+          this.mainContext.Mentorships.Update(dbMentorship);
+          this.mainContext.SaveChanges();
+        }
+      }
+
+      return GetMentorship(contactDetails.MentorshipId);
+    }
+
+    #endregion
+
+    #region Private Functions
+
+    private void SetUserTopic(Guid UserId, Guid TopicId, TopicStatus topicStatus)
+    {
+      if (UserId == this.Actor.UserId || this.Actor.Roles.Contains("Admin"))
+      {
+        var dbUserTopic = this.mainContext.UserTopics.Where(t => t.UserId == UserId && t.TopicId == TopicId).FirstOrDefault();
+
+        if (dbUserTopic == null)
+        {
+          var newUserTopic = new UserTopic(UserId, TopicId, topicStatus);
+          this.mainContext.UserTopics.Add(newUserTopic);
+        }
+
+        this.mainContext.SaveChanges();
+      }
+    }
+
     private MentorshipVM GetMentorshipVM(Mentorship mentorship)
     {
       var dbTopic = this.mainContext.Topics.Where(t => t.TopicId == mentorship.TopicId).FirstOrDefault();
 
       var rtnMentorship = new MentorshipVM(mentorship, new TopicVM(dbTopic));
+
+      var dbLearner = this.mainContext.Users.Where(u => u.Id == mentorship.LearnerUserId).FirstOrDefault();
+      if (dbLearner != null)
+      {
+        rtnMentorship.Learner = new UserVM(dbLearner);
+      }
+
       if (rtnMentorship.HasMentor)
       {
         var dbMentor = this.mainContext.Users.Where(u => u.Id == mentorship.MentorUserId).FirstOrDefault();
-        var dbLearner = this.mainContext.Users.Where(u => u.Id == mentorship.LearnerUserId).FirstOrDefault();
 
         if (dbMentor != null)
         {
@@ -135,15 +183,11 @@ namespace Tete.Api.Services.Relationships
           rtnMentorship.MentorshipId = Guid.Empty;
           rtnMentorship.HasMentor = false;
         }
-
-        if (dbLearner != null)
-        {
-          rtnMentorship.Learner = new UserVM(dbLearner);
-        }
       }
 
       return rtnMentorship;
     }
+
     private void FillData(MainContext mainContext, UserVM actor)
     {
       this.mainContext = mainContext;
@@ -151,5 +195,9 @@ namespace Tete.Api.Services.Relationships
       this.userLanguageService = new UserLanguageService(mainContext, actor);
       this.logService = new Logging.LogService(mainContext, Logging.LogService.LoggingLayer.Api);
     }
+
+    #endregion
+
   }
+
 }

@@ -22,7 +22,9 @@ namespace Tete.Models.Relationships
     {
       this.MentorshipId = mentorship.MentorshipId;
       this.LearnerUserId = mentorship.LearnerUserId;
+      this.LearnerContact = mentorship.LearnerContact;
       this.MentorUserId = mentorship.MentorUserId;
+      this.MentorContact = mentorship.MentorContact;
       this.TopicId = mentorship.TopicId;
       this.Active = mentorship.Active;
       this.CreatedDate = mentorship.CreatedDate;

@@ -30,6 +30,10 @@ namespace Tete.Models.Relationships
       this.CreatedDate = mentorship.CreatedDate;
       this.StartDate = mentorship.StartDate;
       this.EndDate = mentorship.EndDate;
+      this.LearnerClosed = mentorship.LearnerClosed;
+      this.LearnerClosedDate = mentorship.LearnerClosedDate;
+      this.MentorClosed = mentorship.MentorClosed;
+      this.MentorClosedDate = mentorship.MentorClosedDate;
       this.Topic = Topic;
       this.HasMentor = (mentorship.MentorUserId != Guid.Empty);
     }

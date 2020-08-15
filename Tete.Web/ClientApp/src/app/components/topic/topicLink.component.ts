@@ -3,7 +3,7 @@ import { Topic } from '../../models/topic';
 
 @Component({
   selector: 'teteTopicLink',
-  template: `<a [routerLink]="['/topic/', topic.topicId]">{{topic.name}}</a>`
+  template: `<a [routerLink]="['/topic/', topic.topicId]" [title]="topic.description">{{topic.name}}</a>`
 })
 export class TopicLink {
   @Input('topic') topic: Topic;

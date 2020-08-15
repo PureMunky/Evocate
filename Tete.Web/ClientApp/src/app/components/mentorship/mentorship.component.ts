@@ -19,7 +19,11 @@ export class MentorshipComponent {
   public working = {
     editing: false,
     contactDetails: '',
-    unsavedContact: true
+    unsavedContact: true,
+    closing: false,
+    showLearner: false,
+    showMentor: false,
+    loading: true
   };
 
   constructor(private userService: UserService,
@@ -39,13 +43,18 @@ export class MentorshipComponent {
   }
 
   public load(mentorshipId: string) {
+    this.working.showLearner = false;
+    this.working.showMentor = false;
+
     return this.mentorshipService.GetMentorship(mentorshipId).then(m => {
       this.currentMentorship = m;
       let contactDetails: string = null;
       if (this.currentMentorship.learnerUserId == this.currentUser.userId) {
         contactDetails == this.currentMentorship.learnerContact;
+        this.working.showLearner = true;
       } else if (this.currentMentorship.mentorUserId == this.currentUser.userId) {
         contactDetails = this.currentMentorship.mentorContact;
+        this.working.showMentor = true;
       }
 
       if (contactDetails == null) {
@@ -57,6 +66,7 @@ export class MentorshipComponent {
       }
 
       this.working.editing = false;
+      this.working.loading = false;
     });
   }
 
@@ -70,6 +80,36 @@ export class MentorshipComponent {
 
   public toggleEdit() {
     this.working.editing = !this.working.editing;
+  }
+
+  public beginClose() {
+    this.working.closing = true;
+  }
+  public finishClose() {
+    return this.mentorshipService.CloseMentorship(this.currentMentorship).then(m => {
+      this.currentMentorship = m;
+      this.working.closing = false;
+    });
+  }
+
+  public cancelClose() {
+    this.working.closing = false;
+    this.currentMentorship.learnerClosingComments = null;
+    this.currentMentorship.learnerRating = null;
+    this.currentMentorship.mentorClosingComments = null;
+    this.currentMentorship.mentorRating = null;
+  }
+
+  public translateRating(rating: number): string {
+    let ratings = ['Blank',
+      'Terrible',
+      'Bad',
+      'Medium',
+      'Good',
+      'Great'
+    ];
+
+    return ratings[rating] || ratings[0];
   }
 
 }

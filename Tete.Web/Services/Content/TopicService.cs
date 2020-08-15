@@ -75,7 +75,7 @@ namespace Tete.Api.Services.Content
 
         if (dbUserTopic != null && rtnTopic.UserTopic.Status == TopicStatus.Mentor)
         {
-          rtnTopic.Mentorships = this.mainContext.Mentorships.Where(m => m.Active == true && m.TopicId == topicId && (m.MentorUserId == this.Actor.UserId || m.MentorUserId == Guid.Empty)).Select(m => new MentorshipVM(m, null)).ToList();
+          rtnTopic.Mentorships = this.mainContext.Mentorships.Where(m => m.Active == true && m.TopicId == topicId && (m.MentorUserId == this.Actor.UserId || m.MentorUserId == Guid.Empty) && m.LearnerUserId != this.Actor.UserId).Select(m => new MentorshipVM(m, null)).ToList();
         }
       }
 

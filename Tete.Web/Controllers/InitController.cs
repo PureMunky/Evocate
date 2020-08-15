@@ -36,6 +36,8 @@ namespace Tete.Api.Controllers
       var adminUserName = "admin";
       User adminUser;
 
+      this.mainContext.Migrate();
+
       var testAdminUser = this.mainContext.Users.Where(u => u.UserName == adminUserName).FirstOrDefault();
       if (testAdminUser == null)
       {

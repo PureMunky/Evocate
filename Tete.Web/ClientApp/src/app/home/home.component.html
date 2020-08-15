@@ -3,7 +3,8 @@
 <div>
   <h2>Active Mentorships</h2>
   <div *ngIf="mentorships.length > 0">
-    <div *ngFor="let mentorship of mentorships" class="tile">
+    <div *ngFor="let mentorship of mentorships" class="tile"
+      [ngClass]="{'green': mentorship.hasMentor, 'blue': mentorship.mentorUserId == currentUser.userId }">
       <div>{{ mentorship.hasMentor && mentorship.mentorUserId == currentUser.userId ? 'Teaching' : 'Learning' }}</div>
       <a [routerLink]="['/mentorship/', mentorship.mentorshipId]">{{mentorship.topic.name}}</a><br />
       <span *ngIf="mentorship.hasMentor && mentorship.mentorUserId != currentUser.userId">Mentor: <teteProfileLink

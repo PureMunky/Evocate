@@ -38,4 +38,10 @@ export class MentorshipService {
     });
   }
 
+  public CloseMentorship(mentorship: Mentorship) {
+    return this.apiService.post("/V1/Mentorship/CloseMentorship", mentorship).then(m => {
+      return m[0];
+    });
+  }
+
 }

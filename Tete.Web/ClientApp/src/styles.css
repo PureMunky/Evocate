@@ -6,3 +6,10 @@
   margin: 5px;
   padding: 10px;
 }
+
+.tile.green {
+  background-color: #90ee90;
+}
+.tile.blue {
+  background-color: lightblue;
+}

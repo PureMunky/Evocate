@@ -55,7 +55,7 @@ namespace Tete.Api.Services.Relationships
 
       if (UserId == this.Actor.UserId || this.Actor.Roles.Contains("Admin"))
       {
-        var dbMentorship = this.mainContext.Mentorships.Where(m => m.Active == true && m.MentorUserId == Guid.Empty).OrderBy(m => m.CreatedDate).FirstOrDefault();
+        var dbMentorship = this.mainContext.Mentorships.Where(m => m.Active == true && m.MentorUserId == Guid.Empty && m.LearnerUserId != UserId).OrderBy(m => m.CreatedDate).FirstOrDefault();
         var dbUserTopic = this.mainContext.UserTopics.Where(ut => ut.UserId == UserId).FirstOrDefault();
 
         if (dbMentorship != null && dbUserTopic != null && dbUserTopic.Status == TopicStatus.Mentor)
@@ -138,6 +138,48 @@ namespace Tete.Api.Services.Relationships
       return GetMentorship(contactDetails.MentorshipId);
     }
 
+    public MentorshipVM CloseMentorship(MentorshipVM mentorship)
+    {
+      MentorshipVM rtnMentorship = null;
+      var dbMentorship = this.mainContext.Mentorships.Where(m => m.MentorshipId == mentorship.MentorshipId).FirstOrDefault();
+
+      if (dbMentorship != null)
+      {
+        if (dbMentorship.MentorUserId == this.Actor.UserId && !dbMentorship.MentorClosed)
+        {
+          dbMentorship.MentorClosed = true;
+          dbMentorship.MentorClosedDate = DateTime.UtcNow;
+          dbMentorship.MentorClosingComments = mentorship.MentorClosingComments;
+          dbMentorship.LearnerRating = mentorship.LearnerRating;
+        }
+        else if (dbMentorship.LearnerUserId == this.Actor.UserId && !dbMentorship.LearnerClosed)
+        {
+          dbMentorship.LearnerClosed = true;
+          dbMentorship.LearnerClosedDate = DateTime.UtcNow;
+          dbMentorship.LearnerClosingComments = mentorship.LearnerClosingComments;
+          dbMentorship.MentorRating = mentorship.MentorRating;
+        }
+        else if (this.Actor.Roles.Contains("Admin"))
+        {
+          dbMentorship.Active = false;
+          dbMentorship.EndDate = DateTime.UtcNow;
+        }
+
+        if (dbMentorship.LearnerClosed && dbMentorship.MentorClosed && dbMentorship.Active)
+        {
+          dbMentorship.Active = false;
+          dbMentorship.EndDate = DateTime.UtcNow;
+        }
+
+        this.mainContext.Update(dbMentorship);
+        this.mainContext.SaveChanges();
+
+        rtnMentorship = GetMentorship(mentorship.MentorshipId);
+      }
+
+
+      return rtnMentorship;
+    }
     #endregion
 
     #region Private Functions

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Tete.Models.Relationships;
+using Tete.Models.Users;
 using Tete.Api.Helpers;
 using Tete.Web.Models;
 
@@ -66,7 +67,6 @@ namespace Tete.Api.Controllers
 
       return new Response<MentorshipVM>(service.CloseMentorship(Mentorship));
     }
-
 
   }
 }

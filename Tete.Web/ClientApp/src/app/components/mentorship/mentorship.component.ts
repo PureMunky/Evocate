@@ -94,10 +94,8 @@ export class MentorshipComponent {
 
   public cancelClose() {
     this.working.closing = false;
-    this.currentMentorship.learnerClosingComments = null;
-    this.currentMentorship.learnerRating = null;
-    this.currentMentorship.mentorClosingComments = null;
-    this.currentMentorship.mentorRating = null;
+    this.currentMentorship.comments = null;
+    this.currentMentorship.rating = null;
   }
 
   public translateRating(rating: number): string {

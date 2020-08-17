@@ -6,6 +6,7 @@ using Tete.Api.Services.Localization;
 using Tete.Models.Relationships;
 using Tete.Models.Authentication;
 using Tete.Models.Content;
+using Tete.Models.Users;
 
 namespace Tete.Api.Services.Relationships
 {
@@ -141,6 +142,7 @@ namespace Tete.Api.Services.Relationships
     public MentorshipVM CloseMentorship(MentorshipVM mentorship)
     {
       MentorshipVM rtnMentorship = null;
+      Evaluation evaluation = null;
       var dbMentorship = this.mainContext.Mentorships.Where(m => m.MentorshipId == mentorship.MentorshipId).FirstOrDefault();
 
       if (dbMentorship != null)
@@ -149,15 +151,13 @@ namespace Tete.Api.Services.Relationships
         {
           dbMentorship.MentorClosed = true;
           dbMentorship.MentorClosedDate = DateTime.UtcNow;
-          dbMentorship.MentorClosingComments = mentorship.MentorClosingComments;
-          dbMentorship.LearnerRating = mentorship.LearnerRating;
+          evaluation = new Evaluation(dbMentorship.MentorshipId, dbMentorship.LearnerUserId, EvaluationUserType.Learner);
         }
         else if (dbMentorship.LearnerUserId == this.Actor.UserId && !dbMentorship.LearnerClosed)
         {
           dbMentorship.LearnerClosed = true;
           dbMentorship.LearnerClosedDate = DateTime.UtcNow;
-          dbMentorship.LearnerClosingComments = mentorship.LearnerClosingComments;
-          dbMentorship.MentorRating = mentorship.MentorRating;
+          evaluation = new Evaluation(dbMentorship.MentorshipId, dbMentorship.MentorUserId, EvaluationUserType.Mentor);
         }
         else if (this.Actor.Roles.Contains("Admin"))
         {
@@ -171,6 +171,17 @@ namespace Tete.Api.Services.Relationships
           dbMentorship.EndDate = DateTime.UtcNow;
         }
 
+        if (evaluation != null)
+        {
+          var dbEvaluation = this.mainContext.Evaluations.Where(e => e.MentorshipId == evaluation.MentorshipId && e.UserId == evaluation.UserId).FirstOrDefault();
+          if (dbEvaluation == null)
+          {
+            evaluation.Comments = mentorship.Comments;
+            evaluation.Rating = mentorship.Rating;
+            this.mainContext.Evaluations.Add(evaluation);
+          }
+        }
+
         this.mainContext.Update(dbMentorship);
         this.mainContext.SaveChanges();
 
@@ -180,6 +191,25 @@ namespace Tete.Api.Services.Relationships
 
       return rtnMentorship;
     }
+
+    public void RateMentorship(Evaluation evaluation)
+    {
+      var dbEvaluation = this.mainContext.Evaluations.Where(e => e.MentorshipId == evaluation.MentorshipId && e.UserId == evaluation.UserId).FirstOrDefault();
+      var dbMentorship = this.mainContext.Mentorships.Where(m => m.MentorshipId == evaluation.MentorshipId).FirstOrDefault();
+      if (
+        dbEvaluation == null
+        && dbMentorship != null
+        && (
+          (dbMentorship.LearnerUserId == evaluation.UserId && dbMentorship.MentorUserId == this.Actor.UserId)
+          ||
+          (dbMentorship.MentorUserId == evaluation.UserId && dbMentorship.LearnerUserId == this.Actor.UserId)
+        )
+      )
+      {
+
+      }
+    }
+
     #endregion
 
     #region Private Functions

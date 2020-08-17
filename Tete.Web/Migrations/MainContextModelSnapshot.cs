@@ -240,11 +240,7 @@ namespace Tete.Api.Migrations
 
                     b.Property<DateTime>("LearnerClosedDate");
 
-                    b.Property<string>("LearnerClosingComments");
-
                     b.Property<string>("LearnerContact");
-
-                    b.Property<int>("LearnerRating");
 
                     b.Property<Guid>("LearnerUserId");
 
@@ -252,11 +248,7 @@ namespace Tete.Api.Migrations
 
                     b.Property<DateTime>("MentorClosedDate");
 
-                    b.Property<string>("MentorClosingComments");
-
                     b.Property<string>("MentorContact");
-
-                    b.Property<int>("MentorRating");
 
                     b.Property<Guid>("MentorUserId");
 
@@ -285,6 +277,28 @@ namespace Tete.Api.Migrations
                     b.HasKey("UserTopicID");
 
                     b.ToTable("UserTopics");
+                });
+
+            modelBuilder.Entity("Tete.Models.Users.Evaluation", b =>
+                {
+                    b.Property<Guid>("EvaluationId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Comments");
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<Guid>("MentorshipId");
+
+                    b.Property<int>("Rating");
+
+                    b.Property<Guid>("UserId");
+
+                    b.Property<int>("UserType");
+
+                    b.HasKey("EvaluationId");
+
+                    b.ToTable("Evaluations");
                 });
 
             modelBuilder.Entity("Tete.Models.Users.Profile", b =>

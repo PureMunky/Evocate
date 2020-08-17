@@ -34,11 +34,6 @@ namespace Tete.Models.Relationships
 
     public DateTime LearnerClosedDate { get; set; }
 
-    [Range(1, 5)]
-    public int LearnerRating { get; set; }
-
-    public string LearnerClosingComments { get; set; }
-
     #endregion
 
     #region Mentor Details
@@ -51,11 +46,6 @@ namespace Tete.Models.Relationships
     public bool MentorClosed { get; set; }
 
     public DateTime MentorClosedDate { get; set; }
-
-    [Range(1, 5)]
-    public int MentorRating { get; set; }
-
-    public string MentorClosingComments { get; set; }
 
     #endregion
 

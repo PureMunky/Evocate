@@ -12,11 +12,10 @@ export class Mentorship {
 
   public learnerClosed: boolean = false;
   public learnerClosedDate: Date;
-  public learnerRating: number;
-  public learnerClosingComments: string;
 
   public mentorClosed: boolean = false;
   public mentorClosedDate: Date;
-  public mentorRating: number;
-  public mentorClosingComments: string;
+
+  public rating: number;
+  public comments: string;
 }

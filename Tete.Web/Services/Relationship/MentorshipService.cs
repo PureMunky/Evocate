@@ -80,7 +80,7 @@ namespace Tete.Api.Services.Relationships
 
       if (UserId == this.Actor.UserId || this.Actor.Roles.Contains("Admin"))
       {
-        var dbMentorships = this.mainContext.Mentorships.Where(m => m.LearnerUserId == UserId || m.MentorUserId == UserId);
+        var dbMentorships = this.mainContext.Mentorships.Where(m => m.Active && ((m.LearnerUserId == UserId && !m.LearnerClosed) || (m.MentorUserId == UserId && !m.MentorClosed)));
 
         foreach (Mentorship m in dbMentorships)
         {
@@ -139,11 +139,11 @@ namespace Tete.Api.Services.Relationships
       return GetMentorship(contactDetails.MentorshipId);
     }
 
-    public MentorshipVM CloseMentorship(MentorshipVM mentorship)
+    public MentorshipVM CloseMentorship(Evaluation Evaluation)
     {
       MentorshipVM rtnMentorship = null;
       Evaluation evaluation = null;
-      var dbMentorship = this.mainContext.Mentorships.Where(m => m.MentorshipId == mentorship.MentorshipId).FirstOrDefault();
+      var dbMentorship = this.mainContext.Mentorships.Where(m => m.MentorshipId == Evaluation.MentorshipId).FirstOrDefault();
 
       if (dbMentorship != null)
       {
@@ -176,8 +176,8 @@ namespace Tete.Api.Services.Relationships
           var dbEvaluation = this.mainContext.Evaluations.Where(e => e.MentorshipId == evaluation.MentorshipId && e.UserId == evaluation.UserId).FirstOrDefault();
           if (dbEvaluation == null)
           {
-            evaluation.Comments = mentorship.Comments;
-            evaluation.Rating = mentorship.Rating;
+            evaluation.Comments = Evaluation.Comments;
+            evaluation.Rating = Evaluation.Rating;
             this.mainContext.Evaluations.Add(evaluation);
           }
         }
@@ -185,7 +185,7 @@ namespace Tete.Api.Services.Relationships
         this.mainContext.Update(dbMentorship);
         this.mainContext.SaveChanges();
 
-        rtnMentorship = GetMentorship(mentorship.MentorshipId);
+        rtnMentorship = GetMentorship(Evaluation.MentorshipId);
       }
 
 

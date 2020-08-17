@@ -67,7 +67,6 @@ export class TopicComponent {
   }
 
   public claimNextMentorship() {
-    // TODO: Forward over to mentorship page.
     this.topicService.ClaimNextMentorship(this.currentUser.userId, this.currentTopic.topicId).then(m => {
       this.router.navigate(['/mentorship/', m.mentorshipId]);
     });

@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Tete.Api.Contexts;
 
-namespace Tete.Api.Migrations
+namespace Tete.Web.Migrations
 {
     [DbContext(typeof(MainContext))]
-    [Migration("20200327203317_UserRoles")]
-    partial class UserRoles
+    [Migration("20200817121735_build")]
+    partial class build
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -130,6 +130,27 @@ namespace Tete.Api.Migrations
                     b.ToTable("Settings");
                 });
 
+            modelBuilder.Entity("Tete.Models.Content.Topic", b =>
+                {
+                    b.Property<Guid>("TopicId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("Created");
+
+                    b.Property<Guid>("CreatedBy");
+
+                    b.Property<string>("Description");
+
+                    b.Property<bool>("Elligible");
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.HasKey("TopicId");
+
+                    b.ToTable("Topics");
+                });
+
             modelBuilder.Entity("Tete.Models.Localization.Element", b =>
                 {
                     b.Property<Guid>("ElementId")
@@ -206,6 +227,82 @@ namespace Tete.Api.Migrations
                     b.ToTable("Logs");
                 });
 
+            modelBuilder.Entity("Tete.Models.Relationships.Mentorship", b =>
+                {
+                    b.Property<Guid>("MentorshipId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Active");
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<DateTime>("EndDate");
+
+                    b.Property<bool>("LearnerClosed");
+
+                    b.Property<DateTime>("LearnerClosedDate");
+
+                    b.Property<string>("LearnerContact");
+
+                    b.Property<Guid>("LearnerUserId");
+
+                    b.Property<bool>("MentorClosed");
+
+                    b.Property<DateTime>("MentorClosedDate");
+
+                    b.Property<string>("MentorContact");
+
+                    b.Property<Guid>("MentorUserId");
+
+                    b.Property<DateTime>("StartDate");
+
+                    b.Property<Guid>("TopicId");
+
+                    b.HasKey("MentorshipId");
+
+                    b.ToTable("Mentorships");
+                });
+
+            modelBuilder.Entity("Tete.Models.Relationships.UserTopic", b =>
+                {
+                    b.Property<Guid>("UserTopicID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<int>("Status");
+
+                    b.Property<Guid>("TopicId");
+
+                    b.Property<Guid>("UserId");
+
+                    b.HasKey("UserTopicID");
+
+                    b.ToTable("UserTopics");
+                });
+
+            modelBuilder.Entity("Tete.Models.Users.Evaluation", b =>
+                {
+                    b.Property<Guid>("EvaluationId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Comments");
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<Guid>("MentorshipId");
+
+                    b.Property<int>("Rating");
+
+                    b.Property<Guid>("UserId");
+
+                    b.Property<int>("UserType");
+
+                    b.HasKey("EvaluationId");
+
+                    b.ToTable("Evaluations");
+                });
+
             modelBuilder.Entity("Tete.Models.Users.Profile", b =>
                 {
                     b.Property<Guid>("ProfileId")
@@ -224,7 +321,7 @@ namespace Tete.Api.Migrations
 
             modelBuilder.Entity("Tete.Models.Localization.Element", b =>
                 {
-                    b.HasOne("Tete.Models.Localization.Language", "Language")
+                    b.HasOne("Tete.Models.Localization.Language")
                         .WithMany("Elements")
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade);

@@ -1,6 +1,7 @@
 import { Injectable, Inject } from "@angular/core";
 import { ApiService } from "./api.service";
 import { Mentorship } from "../models/mentorship";
+import { Evaluation } from "../models/evaluation";
 
 @Injectable({
   providedIn: "root"
@@ -38,8 +39,8 @@ export class MentorshipService {
     });
   }
 
-  public CloseMentorship(mentorship: Mentorship) {
-    return this.apiService.post("/V1/Mentorship/CloseMentorship", mentorship).then(m => {
+  public CloseMentorship(evaluation: Evaluation) {
+    return this.apiService.post("/V1/Mentorship/CloseMentorship", evaluation).then(m => {
       return m[0];
     });
   }

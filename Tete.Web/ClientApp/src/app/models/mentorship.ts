@@ -15,7 +15,4 @@ export class Mentorship {
 
   public mentorClosed: boolean = false;
   public mentorClosedDate: Date;
-
-  public rating: number;
-  public comments: string;
 }

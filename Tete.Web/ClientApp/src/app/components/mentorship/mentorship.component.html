@@ -3,13 +3,21 @@
     <h2>{{currentMentorship.topic.name}}</h2>
     <p>{{currentMentorship.topic.description}}</p>
   </div>
-  <div *ngIf="working.editing">
-    <div>Update your contact info for this mentorship.</div>
-    <div *ngIf="working.unsavedContact">This has not been saved or made visible until you save it.</div>
-    <input type="text" [(ngModel)]="working.contactDetails" />
-    <button (click)="save()">Save</button>
+
+  <div *ngIf="working.closed">
+    This mentorship is closed and cannot be edited.
   </div>
-  <button (click)="toggleEdit()">Toggle</button>
+
+  <div *ngIf="!working.closed">
+    <div *ngIf="working.editing">
+      <div>Update your contact info for this mentorship.</div>
+      <div *ngIf="working.unsavedContact">This has not been saved or made visible until you save it.</div>
+      <input type="text" [(ngModel)]="working.contactDetails" />
+      <button (click)="save()">Save</button>
+    </div>
+    <button (click)="toggleEdit()">Toggle</button>
+  </div>
+
   <div>
     <div>
       <teteProfileLink [user]="currentMentorship.mentor" style="font-weight: bold;"></teteProfileLink> - Mentor<br />
@@ -20,7 +28,8 @@
       <span>{{currentMentorship.learnerContact}}</span>
     </div>
   </div>
-  <div>
+
+  <div *ngIf="!working.closed">
     <button *ngIf="!working.closing" (click)="beginClose()">Close Mentorship</button>
     <div *ngIf="working.closing">
 
@@ -28,9 +37,9 @@
         <p>By closing this mentorship you agree that you no longer require anything from
           {{currentMentorship.mentor.displayName}}.</p>
         <p>How would you rate {{currentMentorship.mentor.displayName}}?</p>
-        <input type="number" name="mentorRating" [(ngModel)]="currentMentorship.rating" min="0" max="5">
+        <input type="number" name="mentorRating" [(ngModel)]="working.evaluation.rating" min="0" max="5">
         <p>Any comments you'd like to leave regarding your experience with {{currentMentorship.mentor.displayName}}?</p>
-        <textarea [(ngModel)]="currentMentorship.comments"></textarea>
+        <textarea [(ngModel)]="working.evaluation.comments"></textarea>
       </div>
 
       <div *ngIf="working.showMentor">
@@ -39,11 +48,11 @@
           for you to teach {{currentMentorship.learner.displayName}} about {{currentMentorship.topic.name}}.
         </div>
         <div>How would you rate {{currentMentorship.learner.displayName}} as a learner?</div>
-        <input type="number" name="learnerRating" [(ngModel)]="currentMentorship.rating" min="0" max="5">
-        <span *ngIf="currentMentorship.rating > 0">{{translateRating(currentMentorship.rating)}}</span>
+        <input type="number" name="learnerRating" [(ngModel)]="working.evaluation.rating" min="0" max="5">
+        <span *ngIf="working.evaluation.rating > 0">{{translateRating(working.evaluation.rating)}}</span>
         <div>Would you care to elaborate on why {{currentMentorship.learner.displayName}} deserved a
-          {{translateRating(currentMentorship.rating)}} rating?</div>
-        <textarea [(ngModel)]="currentMentorship.comments"></textarea>
+          {{translateRating(working.evaluation.rating)}} rating?</div>
+        <textarea [(ngModel)]="working.evaluation.comments"></textarea>
       </div>
 
       <button (click)="finishClose()">End Mentorship</button>

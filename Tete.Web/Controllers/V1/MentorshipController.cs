@@ -61,11 +61,12 @@ namespace Tete.Api.Controllers
     }
 
     [HttpPost]
-    public Response<MentorshipVM> CloseMentorship([FromBody] MentorshipVM Mentorship)
+    public Response<MentorshipVM> CloseMentorship([FromBody] Evaluation evaluation)
     {
+      // TODO: Create a Close Mentorship model, maybe use evaluation.
       var service = new Services.Relationships.MentorshipService(this.context, UserHelper.CurrentUser(HttpContext, this.context));
 
-      return new Response<MentorshipVM>(service.CloseMentorship(Mentorship));
+      return new Response<MentorshipVM>(service.CloseMentorship(evaluation));
     }
 
   }

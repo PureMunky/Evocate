@@ -33,5 +33,12 @@ namespace Tete.Api.Controllers
       return new Response<UserVM>(value);
     }
 
+    [HttpGet]
+    public Response<UserVM> Search(string searchText)
+    {
+      var service = new Services.Users.UserService(Context, CurrentAdmin);
+
+      return new Response<UserVM>(service.Search(searchText));
+    }
   }
 }

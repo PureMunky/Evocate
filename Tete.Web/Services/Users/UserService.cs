@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Tete.Api.Contexts;
 using Tete.Api.Services.Localization;
@@ -54,6 +55,19 @@ namespace Tete.Api.Services.Users
         this.mainContext.SaveChanges();
       }
 
+    }
+
+    public IEnumerable<UserVM> Search(string searchText)
+    {
+      var search = searchText.ToLower();
+      IEnumerable<UserVM> users = null;
+
+      if (this.Actor.Roles.Contains("Admin"))
+      {
+        users = this.mainContext.Users.Where(u => u.DisplayName.ToLower().Contains(search) || u.Email.ToLower().Contains(search) || u.UserName.ToLower().Contains(search)).Select(u => new UserVM(u));
+      }
+
+      return users;
     }
 
     private void FillData(MainContext mainContext, UserVM actor)

@@ -46,4 +46,15 @@ export class TopicService {
     return this.apiService.get("/V1/Topic/GetUserTopics?userId=" + userId);
   }
 
+  public GetTopTopics() {
+    return this.apiService.get("/V1/Topic/GetTopTopics");
+  }
+
+  public GetNewestTopics() {
+    return this.apiService.get("/V1/Topic/GetNewestTopics");
+  }
+
+  public GetWaitingTopics() {
+    return this.apiService.get("/V1/Topic/GetWaitingTopics");
+  }
 }

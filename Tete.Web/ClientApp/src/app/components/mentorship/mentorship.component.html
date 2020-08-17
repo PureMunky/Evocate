@@ -19,10 +19,12 @@
   </div>
 
   <div>
-    <div>
-      <teteProfileLink [user]="currentMentorship.mentor" style="font-weight: bold;"></teteProfileLink> - Mentor<br />
+    <div *ngIf="currentMentorship.mentor">
+      <teteProfileLink [user]="currentMentorship.mentor" style="font-weight: bold;">
+      </teteProfileLink> - Mentor<br />
       <span>{{currentMentorship.mentorContact}}</span>
     </div>
+    <div *ngIf="!currentMentorship.mentor">No Mentor Yet</div>
     <div>
       <teteProfileLink [user]="currentMentorship.learner" style="font-weight: bold;"></teteProfileLink> - Learner<br />
       <span>{{currentMentorship.learnerContact}}</span>

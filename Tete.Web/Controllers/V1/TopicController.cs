@@ -74,6 +74,30 @@ namespace Tete.Api.Controllers
     }
 
     [HttpGet]
+    public Response<TopicVM> GetTopTopics()
+    {
+      var service = new Services.Content.TopicService(Context, CurrentUser);
+
+      return new Response<TopicVM>(service.GetTopTopics());
+    }
+
+    [HttpGet]
+    public Response<TopicVM> GetNewestTopics()
+    {
+      var service = new Services.Content.TopicService(Context, CurrentUser);
+
+      return new Response<TopicVM>(service.GetNewestTopics());
+    }
+
+    [HttpGet]
+    public Response<TopicVM> GetWaitingTopics()
+    {
+      var service = new Services.Content.TopicService(Context, CurrentUser);
+
+      return new Response<TopicVM>(service.GetWaitingTopics());
+    }
+
+    [HttpGet]
     public Response<TopicVM> GetUserTopics(Guid userId)
     {
       var service = new Services.Content.TopicService(Context, CurrentUser);

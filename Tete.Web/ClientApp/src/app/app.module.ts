@@ -11,6 +11,8 @@ import { LoggingComponent } from "./components/logging/logging.component";
 import { LanguageAdminComponent } from "./components/languageAdmin/languageAdmin.component";
 import { ProfileComponent } from "./components/profile/profile.component";
 import { TopicComponent } from "./components/topic/topic.component";
+import { TopicSearchComponent } from "./components/topic/topicSearch.component";
+import { TopicDiscoveryComponent } from "./components/topic/discovery.component";
 import { MentorshipComponent } from "./components/mentorship/mentorship.component";
 import { ProfileLink } from "./components/profile/profileLink.component";
 import { TopicLink } from "./components/topic/topicLink.component";
@@ -24,6 +26,8 @@ import { TopicLink } from "./components/topic/topicLink.component";
     LanguageAdminComponent,
     ProfileComponent,
     TopicComponent,
+    TopicDiscoveryComponent,
+    TopicSearchComponent,
     MentorshipComponent,
     ProfileLink,
     TopicLink
@@ -37,6 +41,7 @@ import { TopicLink } from "./components/topic/topicLink.component";
       { path: "logging", component: LoggingComponent },
       { path: "languageAdmin", component: LanguageAdminComponent },
       { path: "profile/:username", component: ProfileComponent },
+      { path: "discovery", component: TopicDiscoveryComponent },
       { path: "topic/create/:name", component: TopicComponent },
       { path: "topic/:topicId", component: TopicComponent },
       { path: "mentorship/:mentorshipId", component: MentorshipComponent }

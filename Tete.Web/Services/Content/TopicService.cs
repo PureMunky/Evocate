@@ -91,6 +91,47 @@ namespace Tete.Api.Services.Content
         .ThenBy(tv => tv.Name);
     }
 
+    public IEnumerable<TopicVM> GetTopTopics()
+    {
+      var startDate = DateTime.UtcNow.AddMonths(-1);
+      var dbMentorshipCounts = this.mainContext.Mentorships.Where(m => m.CreatedDate >= startDate).GroupBy(m => m.TopicId).Select(m => new { topicId = m.Key, count = m.Count() });
+      var dbUserTopicCounts = this.mainContext.UserTopics.Where(ut => ut.CreatedDate >= startDate).GroupBy(ut => ut.TopicId).Select(g => new { topicId = g.Key, count = g.Count() });
+      var topicIds = dbMentorshipCounts.Join(dbUserTopicCounts, m => m.topicId, ut => ut.topicId, (m, ut) => new { topicId = m.topicId, count = m.count + ut.count }).OrderByDescending(t => t.count);
+      var rtnTopics = new List<TopicVM>();
+
+      if (topicIds.Count() >= 10)
+      {
+        foreach (var t in topicIds.Take(10))
+        {
+          rtnTopics.Add(GetTopic(t.topicId));
+        }
+      }
+
+      return rtnTopics;
+    }
+
+    public IEnumerable<TopicVM> GetNewestTopics()
+    {
+      var count = 10;
+      var dbTopics = this.mainContext.Topics.OrderByDescending(t => t.Created).Take(count).Select(t => new TopicVM(t));
+
+      return dbTopics;
+    }
+
+    public IEnumerable<TopicVM> GetWaitingTopics()
+    {
+      var count = 10;
+      var dbTopics = this.mainContext.Mentorships
+        .Where(m => m.MentorUserId == Guid.Empty)
+        .GroupBy(m => m.TopicId)
+        .Select(g => new { topicId = g.Key, count = g.Count() })
+        .OrderByDescending(g => g.count)
+        .Join(this.mainContext.Topics, g => g.topicId, t => t.TopicId, (g, t) => new TopicVM(t) { OpenMentorships = g.count })
+        .Take(count);
+
+      return dbTopics;
+    }
+
     private void FillData(MainContext mainContext, UserVM actor)
     {
       this.mainContext = mainContext;

@@ -12,7 +12,7 @@ namespace Tete.Api.Controllers
     {
       get
       {
-        return UserHelper.CurrentUser(HttpContext, this.context);
+        return UserHelper.CurrentUser(HttpContext, Context);
       }
     }
 

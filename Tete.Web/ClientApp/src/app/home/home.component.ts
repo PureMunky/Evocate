@@ -40,14 +40,4 @@ export class HomeComponent {
       });
     });
   }
-
-  public Search() {
-    this.search.done = false;
-    this.topicService.Search(this.tmp.searchText).then(d => {
-      this.topics = d;
-      this.search.done = true;
-      this.search.text = this.tmp.searchText;
-      this.search.newTopic = !this.topics.some(t => t.name == this.search.text);
-    });
-  }
 }

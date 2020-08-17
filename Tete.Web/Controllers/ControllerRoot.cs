@@ -4,7 +4,7 @@ using Tete.Api.Helpers;
 
 namespace Tete.Api.Controllers
 {
-  public class ControllerRoot : ControllerBase
+  public abstract class ControllerRoot : ControllerBase
   {
     private Contexts.MainContext context;
 
@@ -13,6 +13,19 @@ namespace Tete.Api.Controllers
       get
       {
         return UserHelper.CurrentUser(HttpContext, this.context);
+      }
+    }
+
+    public UserVM CurrentAdmin
+    {
+      get
+      {
+        var current = UserHelper.CurrentUser(HttpContext, Context);
+
+        if (!current.Roles.Contains("Admin"))
+          throw new System.Exception("Not an admin user!");
+
+        return current;
       }
     }
 

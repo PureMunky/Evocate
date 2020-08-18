@@ -1,19 +1,13 @@
 <h1>Home</h1>
 
-<div>
-  <h2>Active Mentorships</h2>
-  <div *ngIf="mentorships.length > 0">
-    <div *ngFor="let mentorship of mentorships" class="tile"
-      [ngClass]="{'green': mentorship.hasMentor, 'blue': mentorship.mentorUserId == currentUser.userId }">
-      <div>{{ mentorship.hasMentor && mentorship.mentorUserId == currentUser.userId ? 'Teaching' : 'Learning' }}</div>
-      <a [routerLink]="['/mentorship/', mentorship.mentorshipId]">{{mentorship.topic.name}}</a><br />
-      <span *ngIf="mentorship.hasMentor && mentorship.mentorUserId != currentUser.userId">Mentor: <teteProfileLink
-          [user]="mentorship.mentor"></teteProfileLink></span>
-      <span *ngIf="mentorship.hasMentor && mentorship.mentorUserId == currentUser.userId">Learner: <teteProfileLink
-          [user]="mentorship.learner"></teteProfileLink></span>
-      <span *ngIf="!mentorship.hasMentor">Mentor: Not Assigned</span>
-    </div>
-  </div>
+<div *ngIf="learningMentorships.length > 0">
+  <h2>Learning</h2>
+  <teteMentorList [mentorships]="learningMentorships"></teteMentorList>
+</div>
+
+<div *ngIf="teachingMentorships.length > 0">
+  <h2>Teaching</h2>
+  <teteMentorList [mentorships]="teachingMentorships"></teteMentorList>
 </div>
 
 <div>

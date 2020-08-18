@@ -67,6 +67,7 @@ export class TopicComponent {
   }
 
   public claimNextMentorship() {
+    // TODO: Figure out notifications.
     this.topicService.ClaimNextMentorship(this.currentUser.userId, this.currentTopic.topicId).then(m => {
       this.router.navigate(['/mentorship/', m.mentorshipId]);
     });

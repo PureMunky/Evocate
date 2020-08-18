@@ -16,12 +16,15 @@ import { TopicDiscoveryComponent } from "./components/topic/discovery.component"
 import { MentorshipComponent } from "./components/mentorship/mentorship.component";
 import { ProfileLink } from "./components/profile/profileLink.component";
 import { TopicLink } from "./components/topic/topicLink.component";
+import { MentorList } from "./components/mentorship/mentorList.component";
+import { AdminHome } from "./components/admin/adminHome.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
     HomeComponent,
+    AdminHome,
     LoggingComponent,
     LanguageAdminComponent,
     ProfileComponent,
@@ -30,7 +33,8 @@ import { TopicLink } from "./components/topic/topicLink.component";
     TopicSearchComponent,
     MentorshipComponent,
     ProfileLink,
-    TopicLink
+    TopicLink,
+    MentorList
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
@@ -40,6 +44,7 @@ import { TopicLink } from "./components/topic/topicLink.component";
       { path: "", component: HomeComponent, pathMatch: "full" },
       { path: "logging", component: LoggingComponent },
       { path: "languageAdmin", component: LanguageAdminComponent },
+      { path: "admin", component: AdminHome },
       { path: "profile/:username", component: ProfileComponent },
       { path: "discovery", component: TopicDiscoveryComponent },
       { path: "topic/create/:name", component: TopicComponent },

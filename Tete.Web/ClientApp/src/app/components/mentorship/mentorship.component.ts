@@ -61,6 +61,7 @@ export class MentorshipComponent {
   }
 
   public beginClose() {
+    // TODO: Work through mentorship request cancellation - how do you close a mentorship when there is no mentor yet because you changed your mind?
     this.working.closing = true;
   }
   public finishClose() {

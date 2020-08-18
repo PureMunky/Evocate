@@ -23,7 +23,8 @@ export class HomeComponent {
   };
 
   public topics: Array<Topic> = [];
-  public mentorships: Array<Mentorship> = [];
+  public learningMentorships: Array<Mentorship> = [];
+  public teachingMentorships: Array<Mentorship> = [];
   public currentUserTopics: Array<Topic>[] = [];
 
   constructor(private userService: UserService,
@@ -33,7 +34,8 @@ export class HomeComponent {
     initService.Register(() => {
       this.currentUser = userService.CurrentUser();
       mentorshipService.GetUserMentorships(userService.CurrentUser().userId).then(m => {
-        this.mentorships = m;
+        this.teachingMentorships = m.filter(m => m.mentorUserId == this.currentUser.userId);
+        this.learningMentorships = m.filter(m => m.learnerUserId == this.currentUser.userId);
       });
       topicService.GetUserTopics(this.currentUser.userId).then(topics => {
         this.currentUserTopics = topics;

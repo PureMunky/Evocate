@@ -11,8 +11,14 @@
   <div *ngIf="!working.closed">
     <div *ngIf="working.editing">
       <div>Update your contact info for this mentorship.</div>
-      <div *ngIf="working.unsavedContact">This has not been saved or made visible until you save it.</div>
-      <input type="text" [(ngModel)]="working.contactDetails" />
+      <div class="warning">
+        Don't give personally identifying information to a stranger on the internet.<br />
+        We recommend video chatting with them first if that's possible.
+      </div>
+      <div *ngIf="working.unsavedContact && working.contactDetails.length > 0">
+        This has not been saved or made visible until you save it.
+      </div>
+      <textarea [(ngModel)]="working.contactDetails"></textarea>
       <button (click)="save()">Save</button>
     </div>
     <button (click)="toggleEdit()">Toggle</button>

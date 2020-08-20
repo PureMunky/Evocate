@@ -69,7 +69,7 @@ namespace Tete.Api.Controllers
     {
       var service = new Services.Content.TopicService(Context, CurrentUser);
 
-      return new Response<TopicVM>(service.GetTopic(topicId));
+      return new Response<TopicVM>(service.GetTopicVM(topicId));
     }
 
     [HttpGet]
@@ -101,7 +101,7 @@ namespace Tete.Api.Controllers
     {
       var service = new Services.Content.TopicService(Context, CurrentUser);
 
-      return new Response<TopicVM>(service.GetUserTopics(userId));
+      return new Response<TopicVM>(service.GetUsersTopics(userId));
     }
 
   }

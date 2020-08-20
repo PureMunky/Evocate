@@ -22,7 +22,7 @@ namespace Tete.Api.Services.Content
 
     public TopicVM SaveTopic(TopicVM topic)
     {
-      var dbTopic = this.mainContext.Topics.Where(t => t.TopicId == topic.TopicId).FirstOrDefault();
+      var dbTopic = GetTopic(topic.TopicId);
       var dbSameNameCount = this.mainContext.Topics.Where(t => t.Name.ToLower() == topic.Name.ToLower() && t.TopicId != topic.TopicId).Count();
       Guid TopicId = Guid.Empty;
 
@@ -64,12 +64,13 @@ namespace Tete.Api.Services.Content
         if (this.Actor.Roles.Contains("Admin") && TopicId != Guid.Empty)
         {
           SaveKeywords(topic.Keywords, TopicId);
+          // TODO: Save links
         }
 
         this.mainContext.SaveChanges();
       }
 
-      return GetTopic(topic.TopicId);
+      return GetTopicVM(topic.TopicId);
     }
 
     public IEnumerable<TopicVM> Search(string searchText)
@@ -79,14 +80,15 @@ namespace Tete.Api.Services.Content
       return this.mainContext.Topics.Where(t => t.Name.ToLower().Contains(searchText) || t.Description.ToLower().Contains(searchText)).Select(t => new TopicVM(t));
     }
 
-    public TopicVM GetTopic(Guid topicId)
+    public TopicVM GetTopicVM(Guid topicId)
     {
-      var dbTopic = this.mainContext.Topics.Where(t => t.TopicId == topicId).FirstOrDefault();
+      var dbTopic = GetTopic(topicId);
       TopicVM rtnTopic = new TopicVM();
 
       if (dbTopic != null)
       {
-        var dbUserTopic = this.mainContext.UserTopics.Where(ts => ts.UserId == this.Actor.UserId && ts.TopicId == topicId).FirstOrDefault();
+
+        var dbUserTopic = GetUserTopics(this.Actor.UserId, topicId).FirstOrDefault();
         rtnTopic = new TopicVM(dbTopic, dbUserTopic);
 
         rtnTopic.Links = this.mainContext.Links.Where(l => l.Active).Join(this.mainContext.TopicLinks.Where(tl => tl.TopicId == rtnTopic.TopicId && tl.Active), l => l.LinkId, tl => tl.LinkId, (l, tl) => l).OrderBy(l => l.Name).ToList();
@@ -94,17 +96,36 @@ namespace Tete.Api.Services.Content
 
         if (dbUserTopic != null && rtnTopic.UserTopic.Status == TopicStatus.Mentor)
         {
-          rtnTopic.Mentorships = this.mainContext.Mentorships.Where(m => m.Active == true && m.TopicId == topicId && (m.MentorUserId == this.Actor.UserId || m.MentorUserId == Guid.Empty) && m.LearnerUserId != this.Actor.UserId).Select(m => new MentorshipVM(m, null)).ToList();
+          rtnTopic.Mentorships = MentorshipService.OpenMentorships(this.Actor.UserId, topicId).Select(m => new MentorshipVM(m, null)).ToList();
         }
       }
 
       return rtnTopic;
     }
 
-    public IEnumerable<TopicVM> GetUserTopics(Guid UserId)
+    #region GetUserTopics
+    public IQueryable<UserTopic> GetUserTopics(Guid UserId)
     {
-      return this.mainContext.UserTopics
-        .Where(ut => ut.UserId == UserId).ToList()
+      return this.mainContext.UserTopics.Where(ut => ut.UserId == UserId);
+    }
+
+    public IQueryable<UserTopic> GetUserTopics(Guid UserId, Guid TopicId)
+    {
+      return GetUserTopics(UserId).Where(ut => ut.TopicId == ut.TopicId);
+    }
+
+    #endregion
+    #region GetTopic
+
+    public Topic GetTopic(Guid TopicId)
+    {
+      return this.mainContext.Topics.Where(t => t.TopicId == TopicId).FirstOrDefault();
+    }
+    #endregion
+
+    public IEnumerable<TopicVM> GetUsersTopics(Guid UserId)
+    {
+      return GetUserTopics(UserId).ToList()
         .Join(this.mainContext.Topics, ut => ut.TopicId, t => t.TopicId, (ut, t) => new TopicVM(t, ut))
         .OrderByDescending(tv => tv.UserTopic.Status)
         .ThenBy(tv => tv.Name);
@@ -132,7 +153,7 @@ namespace Tete.Api.Services.Content
       {
         foreach (var t in topicIds.Take(10))
         {
-          rtnTopics.Add(GetTopic(t.topicId));
+          rtnTopics.Add(GetTopicVM(t.topicId));
         }
       }
 

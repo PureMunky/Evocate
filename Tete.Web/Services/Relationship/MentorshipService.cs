@@ -47,7 +47,7 @@ namespace Tete.Api.Services.Relationships
 
     public void RegisterMentor(Guid UserId, Guid TopicId)
     {
-      var topic = this.mainContext.Topics.Where(t => t.TopicId == TopicId).FirstOrDefault();
+      var topic = TopicService.GetTopic(TopicId);
       if (topic != null && (!topic.Elligible || this.Actor.Roles.Contains("Admin")))
       {
         SetUserTopic(UserId, TopicId, TopicStatus.Mentor);
@@ -60,8 +60,8 @@ namespace Tete.Api.Services.Relationships
 
       if (UserId == this.Actor.UserId || this.Actor.Roles.Contains("Admin"))
       {
-        var dbMentorship = this.mainContext.Mentorships.Where(m => m.Active == true && m.MentorUserId == Guid.Empty && m.LearnerUserId != UserId).OrderBy(m => m.CreatedDate).FirstOrDefault();
-        var dbUserTopic = this.mainContext.UserTopics.Where(ut => ut.UserId == UserId).FirstOrDefault();
+        var dbMentorship = OpenMentorships(UserId, TopicId).OrderBy(m => m.CreatedDate).FirstOrDefault();
+        var dbUserTopic = TopicService.GetUserTopics(UserId, TopicId).FirstOrDefault();
 
         if (dbMentorship != null && dbUserTopic != null && dbUserTopic.Status == TopicStatus.Mentor)
         {
@@ -76,6 +76,11 @@ namespace Tete.Api.Services.Relationships
       }
 
       return rtnMentorship;
+    }
+
+    public IQueryable<Mentorship> OpenMentorships(Guid UserId, Guid TopicId)
+    {
+      return this.mainContext.Mentorships.Where(m => m.Active && m.TopicId == TopicId && m.MentorUserId == Guid.Empty && m.LearnerUserId != UserId);
     }
 
     public List<MentorshipVM> GetUserMentorships(Guid UserId)
@@ -218,11 +223,12 @@ namespace Tete.Api.Services.Relationships
 
     #region Private Functions
 
+    // TODO: Consider moving SetUserTopic to TopicService.
     private void SetUserTopic(Guid UserId, Guid TopicId, TopicStatus topicStatus)
     {
       if (UserId == this.Actor.UserId || this.Actor.Roles.Contains("Admin"))
       {
-        var dbUserTopic = this.mainContext.UserTopics.Where(t => t.UserId == UserId && t.TopicId == TopicId).FirstOrDefault();
+        var dbUserTopic = TopicService.GetUserTopics(UserId, TopicId).FirstOrDefault();
 
         if (dbUserTopic == null)
         {
@@ -236,7 +242,7 @@ namespace Tete.Api.Services.Relationships
 
     private MentorshipVM GetMentorshipVM(Mentorship mentorship)
     {
-      var dbTopic = this.mainContext.Topics.Where(t => t.TopicId == mentorship.TopicId).FirstOrDefault();
+      var dbTopic = TopicService.GetTopic(mentorship.TopicId);
 
       var rtnMentorship = new MentorshipVM(mentorship, new TopicVM(dbTopic));
 

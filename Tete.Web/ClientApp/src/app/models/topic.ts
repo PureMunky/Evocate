@@ -1,4 +1,5 @@
 import { UserTopic } from './userTopic';
+import { Keyword } from "./keyword";
 
 export class Topic {
   public topicId: string;
@@ -7,6 +8,7 @@ export class Topic {
   public elligible: boolean;
   public mentorshipCount: number;
   public userTopic: UserTopic;
+  public keywords: Array<Keyword>;
 
   constructor() {
     this.name = '';
@@ -14,5 +16,6 @@ export class Topic {
     this.elligible = false;
     this.mentorshipCount = 0;
     this.userTopic = new UserTopic();
+    this.keywords = [];
   }
 }

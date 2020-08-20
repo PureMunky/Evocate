@@ -7,6 +7,7 @@ import { MentorshipService } from "../../services/mentorship.service";
 import { User } from "../../models/user";
 import { Topic } from "../../models/topic";
 import { Mentorship } from "../../models/mentorship";
+import { Keyword } from "src/app/models/keyword";
 
 @Component({
   selector: "topic",
@@ -16,9 +17,11 @@ export class TopicComponent {
   public currentUser: User = new User();
   public currentTopic: Topic = new Topic();
   public topics: Array<Topic> = [];
+  public adminUser: boolean = false;
 
   public working = {
-    editing: false
+    editing: false,
+    keywordName: ''
   };
 
   constructor(private userService: UserService,
@@ -29,6 +32,8 @@ export class TopicComponent {
     private router: Router) {
     initService.Register(() => {
       this.currentUser = this.userService.CurrentUser();
+      this.adminUser = this.currentUser.roles.some(r => r == "Admin");
+
       this.route.params.subscribe(params => {
         if (params["name"]) {
           this.currentTopic.name = params["name"];
@@ -54,12 +59,21 @@ export class TopicComponent {
 
   public save() {
     // TODO: How does a topic get edited after being created?
-    // By the creator? Admins? Mentors?
     // Add a featured flag and admin lock down for support items?
     // Topic link for admin topics that can be edited to link to FAQ/etc.
     this.topicService.Save(this.currentTopic).then(t => {
       this.router.navigate(['/topic/', t.topicId])
     });
+  }
+
+  public addKeyword() {
+    var newKeyword = new Keyword();
+    newKeyword.name = this.working.keywordName;
+    this.currentTopic.keywords.push(newKeyword);
+  }
+
+  public removeKeyword(keyword) {
+    this.currentTopic.keywords = this.currentTopic.keywords.filter(k => k.name != keyword.name);
   }
 
   public learn() {

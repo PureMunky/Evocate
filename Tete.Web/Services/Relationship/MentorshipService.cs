@@ -47,7 +47,11 @@ namespace Tete.Api.Services.Relationships
 
     public void RegisterMentor(Guid UserId, Guid TopicId)
     {
-      SetUserTopic(UserId, TopicId, TopicStatus.Mentor);
+      var topic = this.mainContext.Topics.Where(t => t.TopicId == TopicId).FirstOrDefault();
+      if (topic != null && (!topic.Elligible || this.Actor.Roles.Contains("Admin")))
+      {
+        SetUserTopic(UserId, TopicId, TopicStatus.Mentor);
+      }
     }
 
     public MentorshipVM ClaimNextMentorship(Guid UserId, Guid TopicId)

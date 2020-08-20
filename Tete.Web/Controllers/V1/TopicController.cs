@@ -26,9 +26,8 @@ namespace Tete.Api.Controllers
     public Response<TopicVM> Post([FromBody] TopicVM value)
     {
       var service = new Services.Content.TopicService(Context, CurrentUser);
-      service.SaveTopic(value);
 
-      return new Response<TopicVM>(value);
+      return new Response<TopicVM>(service.SaveTopic(value));
     }
 
     [HttpPost]

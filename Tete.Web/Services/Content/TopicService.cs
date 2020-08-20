@@ -20,7 +20,7 @@ namespace Tete.Api.Services.Content
       FillData(mainContext, actor);
     }
 
-    public void SaveTopic(TopicVM topic)
+    public TopicVM SaveTopic(TopicVM topic)
     {
       var dbTopic = this.mainContext.Topics.Where(t => t.TopicId == topic.TopicId).FirstOrDefault();
       var dbSameNameCount = this.mainContext.Topics.Where(t => t.Name.ToLower() == topic.Name.ToLower() && t.TopicId != topic.TopicId).Count();
@@ -42,9 +42,13 @@ namespace Tete.Api.Services.Content
           }
           newTopic.Name = topic.Name;
           newTopic.Description = topic.Description;
-          newTopic.Created = DateTime.UtcNow;
           newTopic.CreatedBy = this.Actor.UserId;
-          newTopic.Elligible = false;
+
+          if (this.Actor.Roles.Contains("Admin"))
+          {
+            newTopic.Elligible = topic.Elligible;
+          }
+
           TopicId = newTopic.TopicId;
           this.mainContext.Topics.Add(newTopic);
         }
@@ -52,6 +56,7 @@ namespace Tete.Api.Services.Content
         {
           dbTopic.Name = topic.Name;
           dbTopic.Description = topic.Description;
+          dbTopic.Elligible = topic.Elligible;
           TopicId = dbTopic.TopicId;
           this.mainContext.Topics.Update(dbTopic);
         }
@@ -63,6 +68,8 @@ namespace Tete.Api.Services.Content
 
         this.mainContext.SaveChanges();
       }
+
+      return GetTopic(topic.TopicId);
     }
 
     public IEnumerable<TopicVM> Search(string searchText)
@@ -168,9 +175,11 @@ namespace Tete.Api.Services.Content
 
     public void SaveKeywords(List<Keyword> Keywords, Guid TopicId)
     {
-      // TODO: remove non-exsitant links and create new ones.
       var newKeywords = Keywords.ToList();
       newKeywords.RemoveAll(k => this.mainContext.Keywords.Select(dbK => dbK.Name.ToLower()).Contains(k.Name.ToLower()));
+
+      var newLinks = Keywords.Join(this.mainContext.Keywords, k => k.Name.ToLower(), dbK => dbK.Name.ToLower(), (k, dbK) => dbK.KeywordId).ToList();
+      newLinks.RemoveAll(l => this.mainContext.TopicKeywords.Where(dbTK => dbTK.TopicId == TopicId).Select(dbTK => dbTK.KeywordId).Contains(l));
 
       var deletedTopicKeywords = this.mainContext.TopicKeywords.Where(tk => tk.TopicId == TopicId).ToList();
       deletedTopicKeywords.RemoveAll(tk => Keywords.Select(dbK => dbK.KeywordId).Contains(tk.KeywordId));
@@ -179,10 +188,15 @@ namespace Tete.Api.Services.Content
       {
         k.Name = k.Name.ToLower();
         this.mainContext.Keywords.Add(k);
+        newLinks.Add(k.KeywordId);
+      }
+
+      foreach (var k in newLinks)
+      {
         this.mainContext.TopicKeywords.Add(new TopicKeyword()
         {
           TopicId = TopicId,
-          KeywordId = k.KeywordId
+          KeywordId = k
         });
       }
 

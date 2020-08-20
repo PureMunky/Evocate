@@ -108,11 +108,11 @@ namespace Tete.Api.Controllers
       {
         Name = "Support",
         Description = "Testing support here.",
+        Elligible = true,
         Keywords = new List<Models.Content.Keyword>() {
           new Models.Content.Keyword() {
             Name = "Support",
             Restricted = true
-
           }
         }
       });

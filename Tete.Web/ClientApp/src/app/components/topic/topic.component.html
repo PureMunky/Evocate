@@ -1,10 +1,25 @@
+<div *ngIf="adminUser">
+  Admin: <button (click)="working.editing = !working.editing">ToggleEdit</button>
+</div>
+
 <div *ngIf="working.editing">
   <h2>Editing</h2>
   <div>
-    Name: <input type="text" [(ngModel)]="currentTopic.name" />
+    <label for="txtName">Name</label>
+    <input id="txtName" type="text" [(ngModel)]="currentTopic.name" />
   </div>
   <div>
-    Description: <textarea [(ngModel)]="currentTopic.description"></textarea>
+    <label for="txtDescription">Description</label>
+    <textarea id="txtDescription" [(ngModel)]="currentTopic.description"></textarea>
+  </div>
+  <div *ngIf="adminUser">
+    <label for="txtKeyword">New Keyword</label>
+    <input id="txtKeyword" type="text" [(ngModel)]="working.keywordName" />
+    <button (click)="addKeyword()">+</button>
+    <span *ngFor="let keyword of currentTopic.keywords">
+      {{keyword.name}}
+      <button (click)="removeKeyword(keyword)">-</button>
+    </span>
   </div>
   <div>
     <button (click)="save()">Save</button>
@@ -14,12 +29,14 @@
 <div *ngIf="!working.editing">
   <h2>{{currentTopic.name}}</h2>
   <h3 *ngIf="currentTopic.userTopic">Your role: {{currentTopic.userTopic.statusText}}</h3>
+  <div *ngIf="currentTopic.keywords.length > 0">
+    <span *ngFor="let keyword of currentTopic.keywords">#{{keyword.name}}</span>
+  </div>
   <p>{{currentTopic.description}}</p>
 
   <div *ngIf="(!currentTopic.userTopic) && currentTopic.topicId">
-    Are you looking to learn or teach {{currentTopic.name}}?
-    <button (click)="learn()">Learn</button>
-    <button (click)="teach()">Teach</button>
+    <button (click)="learn()">Request a Mentor</button>
+    <button (click)="teach()" *ngIf="!currentTopic.elligible || adminUser">Register as a Mentor</button>
   </div>
 
   <div *ngIf="currentTopic.userTopic &&  currentTopic.userTopic.status == 4">

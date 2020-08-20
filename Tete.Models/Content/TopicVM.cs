@@ -51,7 +51,7 @@ namespace Tete.Models.Content
       this.TopicId = Guid.NewGuid();
       this.Name = Name;
       this.Description = Description;
-      this.Elligible = false;
+      this.Elligible = Elligible;
       this.Created = Created;
       this.CreatedBy = CreatedBy;
       this.UserTopic = null;

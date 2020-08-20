@@ -32,6 +32,11 @@ namespace Tete.Models.Relationships
 
     public DateTime CreatedDate { get; set; }
 
+    public UserTopic()
+    {
+      this.UserTopicID = Guid.NewGuid();
+    }
+
     public UserTopic(Guid UserId, Guid TopicId, TopicStatus Status)
     {
       this.UserTopicID = Guid.NewGuid();

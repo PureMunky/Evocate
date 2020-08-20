@@ -80,7 +80,7 @@ namespace Tete.Api.Services.Relationships
 
       if (UserId == this.Actor.UserId || this.Actor.Roles.Contains("Admin"))
       {
-        var dbMentorships = this.mainContext.Mentorships.Where(m => m.Active && ((m.LearnerUserId == UserId && !m.LearnerClosed) || (m.MentorUserId == UserId && !m.MentorClosed)));
+        var dbMentorships = this.mainContext.Mentorships.Where(m => m.Active && ((m.LearnerUserId == UserId && !m.LearnerClosed) || (m.MentorUserId == UserId && !m.MentorClosed))).ToList();
 
         foreach (Mentorship m in dbMentorships)
         {

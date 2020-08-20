@@ -26,6 +26,11 @@ namespace Tete.Models.Users
     [Required]
     public EvaluationUserType UserType { get; set; }
 
+    public Evaluation()
+    {
+      this.EvaluationId = Guid.NewGuid();
+    }
+
     public Evaluation(Guid MentorshipId, Guid UserId, EvaluationUserType UserType)
     {
       this.EvaluationId = Guid.NewGuid();

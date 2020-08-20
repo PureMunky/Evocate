@@ -26,6 +26,9 @@ namespace Tete.Models.Content
 
     public List<MentorshipVM> Mentorships { get; set; }
 
+    public List<Link> Links { get; set; }
+    public List<Keyword> Keywords { get; set; }
+
     public TopicVM()
     {
       FillData("", "", false, DateTime.UtcNow, Guid.Empty);

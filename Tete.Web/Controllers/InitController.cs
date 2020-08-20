@@ -103,21 +103,24 @@ namespace Tete.Api.Controllers
         output.Add("English language already existed.");
       }
 
-      var topicNames = new List<string>();
-      var topicDescriptions = new List<string>();
-
-      topicNames.Add("Software Development");
-      topicDescriptions.Add("All things related to software development.");
-
-      for (int i = 0; i < topicNames.Count; i++)
+      List<Tete.Models.Content.TopicVM> SetupTopics = new List<Models.Content.TopicVM>();
+      SetupTopics.Add(new Models.Content.TopicVM()
       {
-        this.topicService.SaveTopic(new Models.Content.TopicVM(new Models.Content.Topic()
-        {
-          Name = topicNames[i],
-          Description = topicDescriptions[i]
-        }));
+        Name = "Support",
+        Description = "Testing support here.",
+        Keywords = new List<Models.Content.Keyword>() {
+          new Models.Content.Keyword() {
+            Name = "Support",
+            Restricted = true
 
-        output.Add(String.Format("Created {0} Topic", topicNames[i]));
+          }
+        }
+      });
+
+      foreach (Tete.Models.Content.TopicVM t in SetupTopics)
+      {
+        topicService.SaveTopic(t);
+        output.Add(string.Format("Created {0} Topic", t.Name));
       }
 
       return output;

@@ -13,3 +13,7 @@
 .tile.blue {
   background-color: lightblue;
 }
+
+.subLinks > a {
+  margin: 5px;
+}

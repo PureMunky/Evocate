@@ -42,9 +42,12 @@ import { AdminHome } from "./components/admin/adminHome.component";
     FormsModule,
     RouterModule.forRoot([
       { path: "", component: HomeComponent, pathMatch: "full" },
-      { path: "logging", component: LoggingComponent },
-      { path: "languageAdmin", component: LanguageAdminComponent },
-      { path: "admin", component: AdminHome },
+      {
+        path: "admin", component: AdminHome, children: [
+          { path: "language", component: LanguageAdminComponent },
+          { path: "logging", component: LoggingComponent },
+        ]
+      },
       { path: "profile/:username", component: ProfileComponent },
       { path: "discovery", component: TopicDiscoveryComponent },
       { path: "topic/create/:name", component: TopicComponent },

@@ -53,6 +53,10 @@ export class TopicComponent {
   }
 
   public save() {
+    // TODO: How does a topic get edited after being created?
+    // By the creator? Admins? Mentors?
+    // Add a featured flag and admin lock down for support items?
+    // Topic link for admin topics that can be edited to link to FAQ/etc.
     this.topicService.Save(this.currentTopic).then(t => {
       this.router.navigate(['/topic/', t.topicId])
     });

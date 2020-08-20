@@ -55,6 +55,20 @@ namespace Tete.Web.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Keywords",
+                columns: table => new
+                {
+                    KeywordId = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    Restricted = table.Column<bool>(nullable: false),
+                    Active = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Keywords", x => x.KeywordId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Languages",
                 columns: table => new
                 {
@@ -65,6 +79,23 @@ namespace Tete.Web.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Languages", x => x.LanguageId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Links",
+                columns: table => new
+                {
+                    LinkId = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    Destination = table.Column<string>(nullable: false),
+                    Active = table.Column<bool>(nullable: false),
+                    Reviewed = table.Column<bool>(nullable: false),
+                    Created = table.Column<DateTime>(nullable: false),
+                    CreatedBy = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Links", x => x.LinkId);
                 });
 
             migrationBuilder.CreateTable(
@@ -195,21 +226,6 @@ namespace Tete.Web.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserTopics",
-                columns: table => new
-                {
-                    UserTopicID = table.Column<Guid>(nullable: false),
-                    UserId = table.Column<Guid>(nullable: false),
-                    TopicId = table.Column<Guid>(nullable: false),
-                    Status = table.Column<int>(nullable: false),
-                    CreatedDate = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserTopics", x => x.UserTopicID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Elements",
                 columns: table => new
                 {
@@ -251,15 +267,125 @@ namespace Tete.Web.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "TopicKeywords",
+                columns: table => new
+                {
+                    TopicKeywordId = table.Column<Guid>(nullable: false),
+                    TopicId = table.Column<Guid>(nullable: false),
+                    KeywordId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TopicKeywords", x => x.TopicKeywordId);
+                    table.ForeignKey(
+                        name: "FK_TopicKeywords_Keywords_KeywordId",
+                        column: x => x.KeywordId,
+                        principalTable: "Keywords",
+                        principalColumn: "KeywordId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TopicKeywords_Topics_TopicId",
+                        column: x => x.TopicId,
+                        principalTable: "Topics",
+                        principalColumn: "TopicId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TopicLinks",
+                columns: table => new
+                {
+                    TopicLinkId = table.Column<Guid>(nullable: false),
+                    TopicId = table.Column<Guid>(nullable: false),
+                    LinkId = table.Column<Guid>(nullable: false),
+                    Active = table.Column<bool>(nullable: false),
+                    Created = table.Column<DateTime>(nullable: false),
+                    CreatedBy = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TopicLinks", x => x.TopicLinkId);
+                    table.ForeignKey(
+                        name: "FK_TopicLinks_Links_LinkId",
+                        column: x => x.LinkId,
+                        principalTable: "Links",
+                        principalColumn: "LinkId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TopicLinks_Topics_TopicId",
+                        column: x => x.TopicId,
+                        principalTable: "Topics",
+                        principalColumn: "TopicId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserTopics",
+                columns: table => new
+                {
+                    UserTopicID = table.Column<Guid>(nullable: false),
+                    UserId = table.Column<Guid>(nullable: false),
+                    TopicId = table.Column<Guid>(nullable: false),
+                    Status = table.Column<int>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserTopics", x => x.UserTopicID);
+                    table.ForeignKey(
+                        name: "FK_UserTopics_Topics_TopicId",
+                        column: x => x.TopicId,
+                        principalTable: "Topics",
+                        principalColumn: "TopicId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserTopics_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Elements_LanguageId",
                 table: "Elements",
                 column: "LanguageId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_TopicKeywords_KeywordId",
+                table: "TopicKeywords",
+                column: "KeywordId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TopicKeywords_TopicId",
+                table: "TopicKeywords",
+                column: "TopicId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TopicLinks_LinkId",
+                table: "TopicLinks",
+                column: "LinkId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TopicLinks_TopicId",
+                table: "TopicLinks",
+                column: "TopicId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserLanguages_LanguageId",
                 table: "UserLanguages",
                 column: "LanguageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserTopics_TopicId",
+                table: "UserTopics",
+                column: "TopicId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserTopics_UserId",
+                table: "UserTopics",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -292,7 +418,10 @@ namespace Tete.Web.Migrations
                 name: "Settings");
 
             migrationBuilder.DropTable(
-                name: "Topics");
+                name: "TopicKeywords");
+
+            migrationBuilder.DropTable(
+                name: "TopicLinks");
 
             migrationBuilder.DropTable(
                 name: "UserLanguages");
@@ -301,13 +430,22 @@ namespace Tete.Web.Migrations
                 name: "UserProfiles");
 
             migrationBuilder.DropTable(
-                name: "Users");
-
-            migrationBuilder.DropTable(
                 name: "UserTopics");
 
             migrationBuilder.DropTable(
+                name: "Keywords");
+
+            migrationBuilder.DropTable(
+                name: "Links");
+
+            migrationBuilder.DropTable(
                 name: "Languages");
+
+            migrationBuilder.DropTable(
+                name: "Topics");
+
+            migrationBuilder.DropTable(
+                name: "Users");
         }
     }
 }

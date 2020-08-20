@@ -46,4 +46,10 @@ export class MentorshipService {
     });
   }
 
+  public CancelMentorship(mentorshipId: string) {
+    return this.apiService.post("/V1/Mentorship/CancelMentorship?MentorshipId=" + mentorshipId, {}).then(m => {
+      return m[0];
+    });
+  }
+
 }

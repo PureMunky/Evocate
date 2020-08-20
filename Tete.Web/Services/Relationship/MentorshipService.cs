@@ -201,6 +201,22 @@ namespace Tete.Api.Services.Relationships
       return rtnMentorship;
     }
 
+    public MentorshipVM CancelMentorship(Guid MentorshipId)
+    {
+      var dbMentorship = this.mainContext.Mentorships.Where(m => m.MentorshipId == MentorshipId).FirstOrDefault();
+
+      if (dbMentorship != null && dbMentorship.MentorUserId == Guid.Empty)
+      {
+        dbMentorship.LearnerClosed = true;
+        dbMentorship.EndDate = DateTime.UtcNow;
+        dbMentorship.Active = false;
+        this.mainContext.Update(dbMentorship);
+        this.mainContext.SaveChanges();
+      }
+
+      return GetMentorship(MentorshipId);
+    }
+
     public void RateMentorship(Evaluation evaluation)
     {
       var dbEvaluation = this.mainContext.Evaluations.Where(e => e.MentorshipId == evaluation.MentorshipId && e.UserId == evaluation.UserId).FirstOrDefault();

@@ -15,4 +15,6 @@ export class Mentorship {
 
   public mentorClosed: boolean = false;
   public mentorClosedDate: Date;
+
+  public hasMentor: boolean = false;
 }

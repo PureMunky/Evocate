@@ -111,7 +111,7 @@ namespace Tete.Api.Services.Content
 
     public IQueryable<UserTopic> GetUserTopics(Guid UserId, Guid TopicId)
     {
-      return GetUserTopics(UserId).Where(ut => ut.TopicId == ut.TopicId);
+      return GetUserTopics(UserId).Where(ut => ut.TopicId == TopicId);
     }
 
     #endregion

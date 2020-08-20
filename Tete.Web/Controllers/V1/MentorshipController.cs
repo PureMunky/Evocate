@@ -65,5 +65,13 @@ namespace Tete.Api.Controllers
       return new Response<MentorshipVM>(service.CloseMentorship(evaluation));
     }
 
+    [HttpPost]
+    public Response<MentorshipVM> CancelMentorship(Guid MentorshipId)
+    {
+      var service = new Services.Relationships.MentorshipService(Context, CurrentUser);
+
+      return new Response<MentorshipVM>(service.CancelMentorship(MentorshipId));
+    }
+
   }
 }

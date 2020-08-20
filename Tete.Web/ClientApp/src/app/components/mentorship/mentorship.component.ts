@@ -61,12 +61,16 @@ export class MentorshipComponent {
   }
 
   public beginClose() {
-    // TODO: Work through mentorship request cancellation - how do you close a mentorship when there is no mentor yet because you changed your mind?
     this.working.closing = true;
   }
+
   public finishClose() {
-    this.working.evaluation.mentorshipId = this.currentMentorship.mentorshipId;
-    return this.mentorshipService.CloseMentorship(this.working.evaluation).then(m => this.processMentorship(m));
+    if (this.currentMentorship.hasMentor) {
+      this.working.evaluation.mentorshipId = this.currentMentorship.mentorshipId;
+      return this.mentorshipService.CloseMentorship(this.working.evaluation).then(m => this.processMentorship(m));
+    } else {
+      return this.mentorshipService.CancelMentorship(this.currentMentorship.mentorshipId).then(m => this.processMentorship(m));
+    }
   }
 
   public cancelClose() {

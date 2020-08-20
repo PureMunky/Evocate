@@ -58,9 +58,8 @@ export class TopicComponent {
   }
 
   public save() {
-    // TODO: How does a topic get edited after being created?
-    // Add a featured flag and admin lock down for support items?
-    // Topic link for admin topics that can be edited to link to FAQ/etc.
+    // TODO: Add a featured flag and admin lock down for support items?
+    // TODO: Topic link for admin topics that can be edited to link to FAQ/etc.
     this.topicService.Save(this.currentTopic).then(t => {
       this.router.navigate(['/topic/', t.topicId])
     });
@@ -77,6 +76,7 @@ export class TopicComponent {
   }
 
   public learn() {
+    // TODO: Work through how to request a mentor for a topic you've already been mentored in.
     this.topicService.RegisterLearner(this.currentUser.userId, this.currentTopic.topicId).then(() => this.reload());
   }
 
@@ -85,7 +85,7 @@ export class TopicComponent {
   }
 
   public claimNextMentorship() {
-    // TODO: Figure out notifications.
+    // TODO: Figure out notifications/notify the learner that they've been picked up.
     this.topicService.ClaimNextMentorship(this.currentUser.userId, this.currentTopic.topicId).then(m => {
       this.router.navigate(['/mentorship/', m.mentorshipId]);
     });

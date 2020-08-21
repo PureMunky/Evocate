@@ -80,6 +80,15 @@ namespace Tete.Api.Services.Content
       return this.mainContext.Topics.Where(t => t.Name.ToLower().Contains(searchText) || t.Description.ToLower().Contains(searchText)).Select(t => new TopicVM(t));
     }
 
+    public IEnumerable<TopicVM> GetKeywordTopics(string keyword)
+    {
+      keyword = keyword.ToLower();
+      return this.mainContext.TopicKeywords
+        .Where(tk => tk.Keyword.Name.ToLower() == keyword)
+        .Join(this.mainContext.Topics, tk => tk.TopicId, t => t.TopicId, (tk, t) => new TopicVM(t))
+        .ToList();
+    }
+
     public TopicVM GetTopicVM(Guid topicId)
     {
       var dbTopic = GetTopic(topicId);

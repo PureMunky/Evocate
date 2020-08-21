@@ -17,8 +17,13 @@
 
 <div *ngIf="currentUserTopics.length > 0">
   <h2>Your Topics</h2>
-  <div *ngFor="let topic of currentUserTopics" class="tile">
-    <teteTopicLink [topic]="topic"></teteTopicLink><br />
-    {{topic.userTopic.statusText}}
+  <div class="card" *ngFor="let topic of currentUserTopics">
+    <div class="card-body">
+      <h5 class="card-title">
+        <teteTopicLink [topic]="topic"></teteTopicLink>
+      </h5>
+      <h6 class="card-subtitle">{{topic.userTopic.statusText}}</h6>
+      <p>{{topic.description}}</p>
+    </div>
   </div>
 </div>

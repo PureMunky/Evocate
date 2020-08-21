@@ -18,6 +18,7 @@ import { ProfileLink } from "./components/profile/profileLink.component";
 import { TopicLink } from "./components/topic/topicLink.component";
 import { MentorList } from "./components/mentorship/mentorList.component";
 import { AdminHome } from "./components/admin/adminHome.component";
+import { SupportComponent } from "./components/support/support.component";
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { AdminHome } from "./components/admin/adminHome.component";
     MentorshipComponent,
     ProfileLink,
     TopicLink,
-    MentorList
+    MentorList,
+    SupportComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
@@ -52,7 +54,8 @@ import { AdminHome } from "./components/admin/adminHome.component";
       { path: "discovery", component: TopicDiscoveryComponent },
       { path: "topic/create/:name", component: TopicComponent },
       { path: "topic/:topicId", component: TopicComponent },
-      { path: "mentorship/:mentorshipId", component: MentorshipComponent }
+      { path: "mentorship/:mentorshipId", component: MentorshipComponent },
+      { path: "support", component: SupportComponent }
     ])
   ],
   providers: [],

@@ -104,5 +104,13 @@ namespace Tete.Api.Controllers
       return new Response<TopicVM>(service.GetUsersTopics(userId));
     }
 
+    [HttpGet]
+    public Response<TopicVM> GetKeywordTopics(string keyword)
+    {
+      var service = new Services.Content.TopicService(Context, CurrentUser);
+
+      return new Response<TopicVM>(service.GetKeywordTopics(keyword));
+    }
+
   }
 }

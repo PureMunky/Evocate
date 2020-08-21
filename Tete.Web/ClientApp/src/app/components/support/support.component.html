@@ -1,0 +1,8 @@
+<h1>Support</h1>
+<p>Having trouble? Use our support topics below to reach out!</p>
+<div>
+  <div *ngFor="let topic of topics" class="tile">
+    <teteTopicLink [topic]="topic"></teteTopicLink><br />
+    {{topic.description}}
+  </div>
+</div>

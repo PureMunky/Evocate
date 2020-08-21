@@ -64,7 +64,7 @@ namespace Tete.Api.Services.Content
         if (this.Actor.Roles.Contains("Admin") && TopicId != Guid.Empty)
         {
           SaveKeywords(topic.Keywords, TopicId);
-          // TODO: Save links
+          SaveLinks(topic.Links, TopicId);
         }
 
         this.mainContext.SaveChanges();
@@ -196,38 +196,78 @@ namespace Tete.Api.Services.Content
 
     public void SaveKeywords(List<Keyword> Keywords, Guid TopicId)
     {
-      var newKeywords = Keywords.ToList();
-      newKeywords.RemoveAll(k => this.mainContext.Keywords.Select(dbK => dbK.Name.ToLower()).Contains(k.Name.ToLower()));
-
-      var newLinks = Keywords.Join(this.mainContext.Keywords, k => k.Name.ToLower(), dbK => dbK.Name.ToLower(), (k, dbK) => dbK.KeywordId).ToList();
-      newLinks.RemoveAll(l => this.mainContext.TopicKeywords.Where(dbTK => dbTK.TopicId == TopicId).Select(dbTK => dbTK.KeywordId).Contains(l));
-
-      var deletedTopicKeywords = this.mainContext.TopicKeywords.Where(tk => tk.TopicId == TopicId).ToList();
-      deletedTopicKeywords.RemoveAll(tk => Keywords.Select(dbK => dbK.KeywordId).Contains(tk.KeywordId));
-
-      foreach (var k in newKeywords)
+      if (Keywords != null)
       {
-        k.Name = k.Name.ToLower();
-        this.mainContext.Keywords.Add(k);
-        newLinks.Add(k.KeywordId);
-      }
+        var newKeywords = Keywords.ToList();
+        newKeywords.RemoveAll(k => this.mainContext.Keywords.Select(dbK => dbK.Name.ToLower()).Contains(k.Name.ToLower()));
 
-      foreach (var k in newLinks)
-      {
-        this.mainContext.TopicKeywords.Add(new TopicKeyword()
+        var newLinks = Keywords.Join(this.mainContext.Keywords, k => k.Name.ToLower(), dbK => dbK.Name.ToLower(), (k, dbK) => dbK.KeywordId).ToList();
+        newLinks.RemoveAll(l => this.mainContext.TopicKeywords.Where(dbTK => dbTK.TopicId == TopicId).Select(dbTK => dbTK.KeywordId).Contains(l));
+
+        var deletedTopicKeywords = this.mainContext.TopicKeywords.Where(tk => tk.TopicId == TopicId).ToList();
+        deletedTopicKeywords.RemoveAll(tk => Keywords.Select(dbK => dbK.KeywordId).Contains(tk.KeywordId));
+
+        foreach (var k in newKeywords)
         {
-          TopicId = TopicId,
-          KeywordId = k
-        });
-      }
+          k.Name = k.Name.ToLower();
+          this.mainContext.Keywords.Add(k);
+          newLinks.Add(k.KeywordId);
+        }
 
-      foreach (var tk in deletedTopicKeywords)
+        foreach (var k in newLinks)
+        {
+          this.mainContext.TopicKeywords.Add(new TopicKeyword()
+          {
+            TopicId = TopicId,
+            KeywordId = k
+          });
+        }
+
+        foreach (var tk in deletedTopicKeywords)
+        {
+          this.mainContext.TopicKeywords.Remove(tk);
+        }
+
+        this.mainContext.SaveChanges();
+      }
+    }
+
+    public void SaveLinks(List<Link> Links, Guid TopicId)
+    {
+      if (Links != null)
       {
-        this.mainContext.TopicKeywords.Remove(tk);
+        var newLinks = Links.ToList();
+        newLinks.RemoveAll(l => this.mainContext.Links.Select(dbL => dbL.Destination.ToLower()).Contains(l.Destination.ToLower()));
+
+        var newTopicLinks = Links.Join(this.mainContext.Links, l => l.Destination.ToLower(), dbL => dbL.Destination.ToLower(), (l, dbL) => dbL.LinkId).ToList();
+        newTopicLinks.RemoveAll(l => this.mainContext.TopicLinks.Where(dbTL => dbTL.TopicId == TopicId).Select(dbTL => dbTL.LinkId).Contains(l));
+
+        var deletedTopicLinks = this.mainContext.TopicLinks.Where(tl => tl.TopicId == TopicId).ToList();
+        deletedTopicLinks.RemoveAll(tl => Links.Select(dbL => dbL.LinkId).Contains(tl.LinkId));
+
+        foreach (var l in newLinks)
+        {
+          this.mainContext.Links.Add(l);
+          newTopicLinks.Add(l.LinkId);
+        }
+
+        foreach (var l in newTopicLinks)
+        {
+          this.mainContext.TopicLinks.Add(new TopicLink()
+          {
+            TopicId = TopicId,
+            LinkId = l,
+            CreatedBy = this.Actor.UserId
+          });
+        }
+
+        foreach (var tl in deletedTopicLinks)
+        {
+          this.mainContext.TopicLinks.Remove(tl);
+        }
+
+        this.mainContext.SaveChanges();
       }
-
-
-      this.mainContext.SaveChanges();
     }
 
     private void FillData(MainContext mainContext, UserVM actor)

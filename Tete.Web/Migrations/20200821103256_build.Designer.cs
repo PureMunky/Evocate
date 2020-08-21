@@ -10,7 +10,7 @@ using Tete.Api.Contexts;
 namespace Tete.Web.Migrations
 {
     [DbContext(typeof(MainContext))]
-    [Migration("20200820100302_build")]
+    [Migration("20200821103256_build")]
     partial class build
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -264,8 +264,8 @@ namespace Tete.Web.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("CreatedBy")
-                        .HasColumnType("datetime2");
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("LinkId")
                         .HasColumnType("uniqueidentifier");

@@ -21,5 +21,12 @@ namespace Tete.Models.Content
     public DateTime Created { get; set; }
 
     public Guid CreatedBy { get; set; }
+
+    public Link()
+    {
+      this.LinkId = Guid.NewGuid();
+      this.Active = true;
+      this.Reviewed = false;
+    }
   }
 }

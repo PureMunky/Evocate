@@ -13,13 +13,25 @@
     <textarea id="txtDescription" [(ngModel)]="currentTopic.description"></textarea>
   </div>
   <div *ngIf="adminUser">
-    <label for="txtKeyword">New Keyword</label>
+    <h3>Keywords</h3>
+    <label for="txtKeyword">Keyword</label>
     <input id="txtKeyword" type="text" [(ngModel)]="working.keywordName" />
-    <button (click)="addKeyword()">+</button>
+    <button (click)="addKeyword()">+</button><br />
     <span *ngFor="let keyword of currentTopic.keywords">
       {{keyword.name}}
       <button (click)="removeKeyword(keyword)">-</button>
     </span>
+
+    <h3>Links</h3>
+    <label for="txtLinkName">Name</label>
+    <input id="txtLinkName" type="text" [(ngModel)]="working.linkName" />
+    <label for="txtLinkDestination">Url</label>
+    <input id="txtLinkDestination" type="text" [(ngModel)]="working.linkDestination" />
+    <button (click)="addLink()">+</button>
+    <div *ngFor="let link of currentTopic.links">
+      <a [href]="link.destination" target="_blank">{{link.name}}</a>
+      <button (click)="removeLink(link)">-</button>
+    </div>
   </div>
   <div>
     <button (click)="save()">Save</button>
@@ -31,6 +43,11 @@
   <h3 *ngIf="currentTopic.userTopic">Your role: {{currentTopic.userTopic.statusText}}</h3>
   <div *ngIf="currentTopic.keywords.length > 0">
     <span *ngFor="let keyword of currentTopic.keywords">#{{keyword.name}}</span>
+  </div>
+  <div *ngIf="currentTopic.keywords.length > 0">
+    <div *ngFor="let link of currentTopic.links">
+      <a [href]="link.destination" target="_blank">{{link.name}}</a>
+    </div>
   </div>
   <p>{{currentTopic.description}}</p>
 

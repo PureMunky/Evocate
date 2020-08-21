@@ -8,6 +8,7 @@ import { User } from "../../models/user";
 import { Topic } from "../../models/topic";
 import { Mentorship } from "../../models/mentorship";
 import { Keyword } from "src/app/models/keyword";
+import { Link } from "../../models/link";
 
 @Component({
   selector: "topic",
@@ -21,7 +22,10 @@ export class TopicComponent {
 
   public working = {
     editing: false,
-    keywordName: ''
+    keywordName: '',
+    linkName: '',
+    linkDestination: '',
+    creating: false
   };
 
   constructor(private userService: UserService,
@@ -38,9 +42,11 @@ export class TopicComponent {
         if (params["name"]) {
           this.currentTopic.name = params["name"];
           this.working.editing = true;
+          this.working.creating = true;
         } else if (params["topicId"]) {
           this.loadTopic(params["topicId"]);
           this.working.editing = false;
+          this.working.creating = false;
         }
       })
     });
@@ -61,18 +67,40 @@ export class TopicComponent {
     // TODO: Add a featured flag and admin lock down for support items?
     // TODO: Topic link for admin topics that can be edited to link to FAQ/etc.
     this.topicService.Save(this.currentTopic).then(t => {
-      this.router.navigate(['/topic/', t.topicId])
+      if (this.working.creating) {
+        this.router.navigate(['/topic/', t.topicId])
+      } else {
+        this.reload();
+      }
     });
   }
 
   public addKeyword() {
-    var newKeyword = new Keyword();
-    newKeyword.name = this.working.keywordName;
-    this.currentTopic.keywords.push(newKeyword);
+    if (this.working.keywordName.length > 0) {
+      var newKeyword = new Keyword();
+      newKeyword.name = this.working.keywordName;
+      this.currentTopic.keywords.push(newKeyword);
+      this.working.keywordName = '';
+    }
   }
 
-  public removeKeyword(keyword) {
+  public removeKeyword(keyword: Keyword) {
     this.currentTopic.keywords = this.currentTopic.keywords.filter(k => k.name != keyword.name);
+  }
+
+  public addLink() {
+    if (this.working.linkName.length > 0 && this.working.linkDestination.length > 0) {
+      var newLink = new Link();
+      newLink.name = this.working.linkName;
+      newLink.destination = this.working.linkDestination;
+      this.currentTopic.links.push(newLink);
+      this.working.linkName = '';
+      this.working.linkDestination = '';
+    }
+  }
+
+  public removeLink(link: Link) {
+    this.currentTopic.links = this.currentTopic.links.filter(l => l.destination != link.destination);
   }
 
   public learn() {

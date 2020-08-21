@@ -19,7 +19,7 @@ namespace Tete.Models.Content
 
     public DateTime Created { get; set; }
 
-    public DateTime CreatedBy { get; set; }
+    public Guid CreatedBy { get; set; }
 
     public TopicLink()
     {

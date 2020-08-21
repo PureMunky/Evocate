@@ -301,7 +301,7 @@ namespace Tete.Web.Migrations
                     LinkId = table.Column<Guid>(nullable: false),
                     Active = table.Column<bool>(nullable: false),
                     Created = table.Column<DateTime>(nullable: false),
-                    CreatedBy = table.Column<DateTime>(nullable: false)
+                    CreatedBy = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {

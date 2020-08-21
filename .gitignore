@@ -3,3 +3,4 @@ obj/
 out/
 coverage/
 coverage.json
+*.log

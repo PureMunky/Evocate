@@ -1,11 +1,13 @@
 import { Injectable, Inject } from "@angular/core";
 import { ApiService } from "./api.service";
 import { Mentorship } from "../models/mentorship";
+import { Evaluation } from "../models/evaluation";
 
 @Injectable({
   providedIn: "root"
 })
 export class MentorshipService {
+  // TODO: setup local caching service structure.
   constructor(private apiService: ApiService) {
 
   }
@@ -24,6 +26,28 @@ export class MentorshipService {
 
   public GetMentorship(mentorshipId: string) {
     return this.apiService.get("/V1/Mentorship/GetMentorship?MentorshipId=" + mentorshipId).then(m => {
+      return m[0];
+    });
+  }
+
+  public SetContactDetails(mentorshipId: string, userId: string, contactDetails: string) {
+    return this.apiService.post("/V1/Mentorship/SetContactDetails", {
+      mentorshipId: mentorshipId,
+      userId: userId,
+      ContactDetails: contactDetails
+    }).then(m => {
+      return m[0];
+    });
+  }
+
+  public CloseMentorship(evaluation: Evaluation) {
+    return this.apiService.post("/V1/Mentorship/CloseMentorship", evaluation).then(m => {
+      return m[0];
+    });
+  }
+
+  public CancelMentorship(mentorshipId: string) {
+    return this.apiService.post("/V1/Mentorship/CancelMentorship?MentorshipId=" + mentorshipId, {}).then(m => {
       return m[0];
     });
   }

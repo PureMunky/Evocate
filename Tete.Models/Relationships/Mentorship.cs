@@ -11,12 +11,6 @@ namespace Tete.Models.Relationships
     public Guid MentorshipId { get; set; }
 
     [Required]
-    public Guid LearnerUserId { get; set; }
-
-    // A mentorship without a mentor user id is a request for a mentor.
-    public Guid MentorUserId { get; set; }
-
-    [Required]
     public Guid TopicId { get; set; }
 
     [Required]
@@ -29,6 +23,32 @@ namespace Tete.Models.Relationships
 
     public DateTime EndDate { get; set; }
 
+    #region Learner Details
+
+    [Required]
+    public Guid LearnerUserId { get; set; }
+
+    public string LearnerContact { get; set; }
+
+    public bool LearnerClosed { get; set; }
+
+    public DateTime LearnerClosedDate { get; set; }
+
+    #endregion
+
+    #region Mentor Details
+
+    // A mentorship without a mentor user id is a request for a mentor.
+    public Guid MentorUserId { get; set; }
+
+    public string MentorContact { get; set; }
+
+    public bool MentorClosed { get; set; }
+
+    public DateTime MentorClosedDate { get; set; }
+
+    #endregion
+
     public Mentorship(Guid LearnerUserId, Guid TopicId)
     {
       this.MentorshipId = Guid.NewGuid();
@@ -37,7 +57,8 @@ namespace Tete.Models.Relationships
       this.TopicId = TopicId;
       this.Active = true;
       this.CreatedDate = DateTime.UtcNow;
-
+      this.LearnerClosed = false;
+      this.MentorClosed = false;
     }
   }
 }

@@ -6,13 +6,14 @@ namespace Tete.Api.Controllers
 {
   [Route("V1/[controller]")]
   [ApiController]
-  public class FlagsController : ControllerBase
+  public class FlagsController : ControllerRoot
   {
 
     private Api.Services.Config.FlagService service;
     private Api.Services.Logging.LogService logService;
+    // TODO: update to current controller structure.
 
-    public FlagsController(Contexts.MainContext mainContext)
+    public FlagsController(Contexts.MainContext mainContext) : base(mainContext)
     {
       this.service = new Services.Config.FlagService(mainContext);
       this.logService = new Services.Logging.LogService(mainContext, Tete.Api.Services.Logging.LogService.LoggingLayer.Api);

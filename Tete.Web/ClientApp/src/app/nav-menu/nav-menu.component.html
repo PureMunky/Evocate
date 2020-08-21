@@ -11,14 +11,14 @@
           <li class="nav-item" [routerLinkActive]="['link-active']" [routerLinkActiveOptions]="{ exact: true }">
             <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
           </li>
-          <li *ngIf="adminRole" class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/logging']">Logging</a>
+          <li class="nav-item" [routerLinkActive]="['link-active']" [routerLinkActiveOptions]="{ exact: true }">
+            <a class="nav-link text-dark" [routerLink]="['/discovery']">Discover</a>
           </li>
           <li *ngIf="adminRole" class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/languageAdmin']">Language</a>
+            <a class="nav-link text-dark" [routerLink]="['/admin']">Admin</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']" *ngIf="profileLink.length > 0">
-            <a class="nav-link text-dark" [routerLink]="profileLink">Profile</a>
+            <a class="nav-link text-dark" [routerLink]="profileLink">{{currentUser.displayName}}</a>
           </li>
           <li class="nav-item">
             <a class="nav-link text-dark" href="/Login/Logout">Logout</a>

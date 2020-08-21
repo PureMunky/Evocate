@@ -2,8 +2,8 @@ import { Profile } from "./profile";
 
 export class User {
   public userId: string;
-  public userName: String;
-  public displayName: String;
+  public userName: string;
+  public displayName: string;
   public profile: Profile;
   public languages: Array<any>;
   public roles: Array<string>;

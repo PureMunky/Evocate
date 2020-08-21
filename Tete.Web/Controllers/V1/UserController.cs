@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
 using Tete.Models.Authentication;
 using Tete.Api.Helpers;
 using Tete.Web.Models;
@@ -12,16 +7,13 @@ namespace Tete.Api.Controllers
 {
   [Route("V1/[controller]/[action]")]
   [ApiController]
-  public class UserController : ControllerBase
+  public class UserController : ControllerRoot
   {
 
     private Api.Services.Logging.LogService logService;
 
-    private Contexts.MainContext context;
-
-    public UserController(Contexts.MainContext mainContext)
+    public UserController(Contexts.MainContext mainContext) : base(mainContext)
     {
-      this.context = mainContext;
       this.logService = new Services.Logging.LogService(mainContext, Tete.Api.Services.Logging.LogService.LoggingLayer.Api);
     }
 
@@ -29,19 +21,24 @@ namespace Tete.Api.Controllers
     [HttpPost]
     public Response<UserVM> Post([FromBody] UserVM value)
     {
-      var CurrentUser = UserHelper.CurrentUser(HttpContext, this.context);
-
-      var userService = new Services.Users.UserService(this.context, CurrentUser);
+      var userService = new Services.Users.UserService(Context, CurrentUser);
       userService.SaveUser(value);
 
-      var profService = new Services.Users.ProfileService(this.context, CurrentUser);
+      var profService = new Services.Users.ProfileService(Context, CurrentUser);
       profService.SaveProfile(value.Profile);
 
-      var langService = new Services.Localization.UserLanguageService(this.context, CurrentUser);
+      var langService = new Services.Localization.UserLanguageService(Context, CurrentUser);
       langService.SaveUserLanguages(value.UserId, value.Languages);
 
       return new Response<UserVM>(value);
     }
 
+    [HttpGet]
+    public Response<UserVM> Search(string searchText)
+    {
+      var service = new Services.Users.UserService(Context, CurrentAdmin);
+
+      return new Response<UserVM>(service.Search(searchText));
+    }
   }
 }

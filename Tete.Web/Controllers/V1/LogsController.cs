@@ -10,12 +10,12 @@ namespace Tete.Api.Controllers
 {
   [Route("V1/[controller]")]
   [ApiController]
-  public class LogsController : ControllerBase
+  public class LogsController : ControllerRoot
   {
 
     private Api.Services.Logging.LogService service;
 
-    public LogsController(Contexts.MainContext mainContext)
+    public LogsController(Contexts.MainContext mainContext) : base(mainContext)
     {
       this.service = new Services.Logging.LogService(mainContext, Tete.Api.Services.Logging.LogService.LoggingLayer.Api);
     }

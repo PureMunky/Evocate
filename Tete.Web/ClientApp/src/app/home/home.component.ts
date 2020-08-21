@@ -15,14 +15,17 @@ export class HomeComponent {
   public currentUser: User = null;
   public search = {
     done: false,
-    text: ''
+    text: '',
+    newTopic: false
   };
   public tmp = {
     searchText: ''
   };
 
   public topics: Array<Topic> = [];
-  public mentorships: Array<Mentorship> = [];
+  public learningMentorships: Array<Mentorship> = [];
+  public teachingMentorships: Array<Mentorship> = [];
+  public currentUserTopics: Array<Topic>[] = [];
 
   constructor(private userService: UserService,
     private initService: InitService,
@@ -31,17 +34,12 @@ export class HomeComponent {
     initService.Register(() => {
       this.currentUser = userService.CurrentUser();
       mentorshipService.GetUserMentorships(userService.CurrentUser().userId).then(m => {
-        this.mentorships = m;
-      })
-    });
-  }
-
-  public Search() {
-    this.search.done = false;
-    this.topicService.Search(this.tmp.searchText).then(d => {
-      this.topics = d;
-      this.search.done = true;
-      this.search.text = this.tmp.searchText;
+        this.teachingMentorships = m.filter(m => m.mentorUserId == this.currentUser.userId);
+        this.learningMentorships = m.filter(m => m.learnerUserId == this.currentUser.userId);
+      });
+      topicService.GetUserTopics(this.currentUser.userId).then(topics => {
+        this.currentUserTopics = topics;
+      });
     });
   }
 }

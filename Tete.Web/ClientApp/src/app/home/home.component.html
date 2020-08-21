@@ -1,31 +1,24 @@
-<h1 *ngIf="currentUser">Hello, {{currentUser.displayName}}!</h1>
-<div *ngIf="mentorships.length > 0">
-  <h2>Current Mentorships</h2>
-  <div *ngFor="let mentorship of mentorships"
-    style="border: 1px solid #000; display: inline-block; margin: 5px; padding: 10px;">
-    Topic: <a [routerLink]="['/mentorship/', mentorship.mentorshipId]">{{mentorship.topic.name}}</a><br />
-    <span *ngIf="mentorship.hasMentor && mentorship.mentorUserId != currentUser.userId">Mentor: <a
-        [routerLink]="['/profile/', mentorship.mentor.userName]">{{mentorship.mentor.displayName}}</a></span>
-    <span *ngIf="mentorship.hasMentor && mentorship.mentorUserId == currentUser.userId">Learner: <a
-        [routerLink]="['/profile/', mentorship.learner.userName]">{{mentorship.learner.displayName}}</a></span>
-    <span *ngIf="!mentorship.hasMentor">Mentor: Not Assigned</span>
-  </div>
+<h1>Home</h1>
+
+<div *ngIf="learningMentorships.length > 0">
+  <h2>Learning</h2>
+  <teteMentorList [mentorships]="learningMentorships"></teteMentorList>
 </div>
-<h2>What do you want to do today?</h2>
-<input type="text" [(ngModel)]="tmp.searchText" (keyup.enter)="Search()" />
-<button (click)="Search()">Go</button>
-<div *ngIf="search.done">
-  <h3>Results</h3>
-  <div *ngFor="let topic of topics">
-    <a [routerLink]="['/topic/', topic.topicId]">{{topic.name}}</a>
-    <div>{{topic.description}}</div>
-  </div>
-  <div>
-    <h4>Didn't see what you were looking for?</h4>
-    <a [routerLink]="['/topic/create/', search.text]">Create new topic:
-      {{search.text}}</a>
-    <div>
-      Create the topic now to request or become a mentor for whatever you want to do.
-    </div>
+
+<div *ngIf="teachingMentorships.length > 0">
+  <h2>Teaching</h2>
+  <teteMentorList [mentorships]="teachingMentorships"></teteMentorList>
+</div>
+
+<div>
+  <h2>Topic Search</h2>
+  <teteTopicSearch></teteTopicSearch>
+</div>
+
+<div *ngIf="currentUserTopics.length > 0">
+  <h2>Your Topics</h2>
+  <div *ngFor="let topic of currentUserTopics" class="tile">
+    <teteTopicLink [topic]="topic"></teteTopicLink><br />
+    {{topic.userTopic.statusText}}
   </div>
 </div>

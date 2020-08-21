@@ -1,6 +1,6 @@
 export class Profile {
-  public about: String;
-  public privateAbout: String;
+  public about: string;
+  public privateAbout: string;
 
   constructor() {
     this.about = '';

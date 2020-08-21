@@ -1,12 +1,76 @@
-<div *ngIf="working.editing">
-
-</div>
-
-<div *ngIf="!working.editing">
-  <h2>{{currentMentorship.topic.name}}</h2>
-  <p>{{currentMentorship.topic.description}}</p>
+<div *ngIf="!working.loading">
   <div>
-    Mentor: {{currentMentorship.mentor.displayName}}<br />
-    Learner: {{currentMentorship.learner. displayName}}
+    <h2>{{currentMentorship.topic.name}}</h2>
+    <p>{{currentMentorship.topic.description}}</p>
+  </div>
+
+  <div *ngIf="working.closed">
+    This mentorship is closed and cannot be edited.
+  </div>
+
+  <div *ngIf="!working.closed">
+    <div *ngIf="working.editing">
+      <div>Update your contact info for this mentorship.</div>
+      <div class="warning">
+        Don't give personally identifying information to a stranger on the internet.<br />
+        We recommend video chatting with them first if that's possible.
+      </div>
+      <div *ngIf="working.unsavedContact && working.contactDetails.length > 0">
+        This has not been saved or made visible until you save it.
+      </div>
+      <textarea [(ngModel)]="working.contactDetails"></textarea>
+      <button (click)="save()">Save</button>
+    </div>
+    <button (click)="toggleEdit()">Toggle</button>
+  </div>
+
+  <div>
+    <div *ngIf="currentMentorship.mentor">
+      <teteProfileLink [user]="currentMentorship.mentor" style="font-weight: bold;">
+      </teteProfileLink> - Mentor<br />
+      <span>{{currentMentorship.mentorContact}}</span>
+    </div>
+    <div *ngIf="!currentMentorship.mentor">No Mentor Yet</div>
+    <div>
+      <teteProfileLink [user]="currentMentorship.learner" style="font-weight: bold;"></teteProfileLink> - Learner<br />
+      <span>{{currentMentorship.learnerContact}}</span>
+    </div>
+  </div>
+
+  <div *ngIf="!working.closed">
+    <button *ngIf="!working.closing" (click)="beginClose()">Close Mentorship</button>
+    <div *ngIf="working.closing">
+
+      <div *ngIf="currentMentorship.mentor">
+        <div *ngIf="working.showLearner">
+          <p>By closing this mentorship you agree that you no longer require anything from
+            {{currentMentorship.mentor.displayName}}.</p>
+          <p>How would you rate {{currentMentorship.mentor.displayName}}?</p>
+          <input type="number" name="mentorRating" [(ngModel)]="working.evaluation.rating" min="0" max="5">
+          <p>Any comments you'd like to leave regarding your experience with {{currentMentorship.mentor.displayName}}?
+          </p>
+          <textarea [(ngModel)]="working.evaluation.comments"></textarea>
+        </div>
+
+        <div *ngIf="working.showMentor">
+          <div>
+            By closing this relationship you agree that this mentorship is complete and that there is nothing remaining
+            for you to teach {{currentMentorship.learner.displayName}} about {{currentMentorship.topic.name}}.
+          </div>
+          <div>How would you rate {{currentMentorship.learner.displayName}} as a learner?</div>
+          <input type="number" name="learnerRating" [(ngModel)]="working.evaluation.rating" min="0" max="5">
+          <span *ngIf="working.evaluation.rating > 0">{{translateRating(working.evaluation.rating)}}</span>
+          <div>Would you care to elaborate on why {{currentMentorship.learner.displayName}} deserved a
+            {{translateRating(working.evaluation.rating)}} rating?</div>
+          <textarea [(ngModel)]="working.evaluation.comments"></textarea>
+        </div>
+      </div>
+
+      <div *ngIf="!currentMentorship.hasMentor">
+        Would you like to end this mentorship before you've been asigned a mentor?
+      </div>
+      <button (click)="finishClose()">End Mentorship</button>
+      <button (click)="cancelClose()">Cancel</button>
+    </div>
   </div>
 </div>

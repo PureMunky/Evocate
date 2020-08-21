@@ -14,6 +14,14 @@ namespace Tete.Models.Users
 
     public string PrivateAbout { get; set; }
 
+    public Profile()
+    {
+      this.ProfileId = Guid.NewGuid();
+      this.UserId = Guid.Empty;
+      this.About = "";
+      this.PrivateAbout = "";
+    }
+
     public Profile(Guid UserId)
     {
       this.ProfileId = Guid.NewGuid();

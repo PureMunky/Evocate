@@ -39,8 +39,6 @@ namespace Tete.Api.Services.Localization
         var previousLanguages = GetUserLanguages(UserId);
         var newLangIds = new List<Guid>();
 
-        // TODO: Update priority, remove old languages, add new ones.
-        // TODO: Validate each userlanguage associates with the passed userId.
         for (int i = 0; i < Languages.Count; i++)
         {
           var found = false;

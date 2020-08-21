@@ -1,0 +1,17 @@
+<input type="text" [(ngModel)]="tmp.searchText" (keyup.enter)="Search()" />
+<button (click)="Search()">Go</button>
+<div *ngIf="search.done">
+  <h3>Results</h3>
+  <div *ngFor="let topic of topics">
+    <a [routerLink]="['/topic/', topic.topicId]">{{topic.name}}</a>
+    <div>{{topic.description}}</div>
+  </div>
+  <div *ngIf="search.newTopic">
+    <h4>Didn't see what you were looking for?</h4>
+    <a [routerLink]="['/topic/create/', search.text]">Create new topic:
+      {{search.text}}</a>
+    <div>
+      Create the topic now to request or become a mentor for whatever you want to do.
+    </div>
+  </div>
+</div>

@@ -14,4 +14,7 @@ docker build -f Db.Dockerfile -t tete-db-img .
 # run docker image
 docker run -dit --name tete-db -p 1433:1433 tete-db-img
 
+# create database migration
+# cd Tete.Web && dotnet-ef migrations add build
+
 # ./run-db.sh

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Tete.Api.Contexts;
 
-namespace Tete.Api.Migrations
+namespace Tete.Web.Migrations
 {
     [DbContext(typeof(MainContext))]
     partial class MainContextModelSnapshot : ModelSnapshot
@@ -15,22 +15,27 @@ namespace Tete.Api.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
+                .HasAnnotation("ProductVersion", "3.1.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Tete.Models.Authentication.AccessRole", b =>
                 {
                     b.Property<Guid>("AccessRoleId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("Created");
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
 
-                    b.Property<Guid>("CreatedBy");
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("UserId");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("AccessRoleId");
 
@@ -40,16 +45,21 @@ namespace Tete.Api.Migrations
             modelBuilder.Entity("Tete.Models.Authentication.Login", b =>
                 {
                     b.Property<Guid>("LoginId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("Created");
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("LastAccessed");
+                    b.Property<DateTime>("LastAccessed")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("PasswordHash")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("UserId");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("LoginId");
 
@@ -59,14 +69,18 @@ namespace Tete.Api.Migrations
             modelBuilder.Entity("Tete.Models.Authentication.Session", b =>
                 {
                     b.Property<Guid>("SessionId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("Created");
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Token")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("UserId");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("SessionId");
 
@@ -76,18 +90,23 @@ namespace Tete.Api.Migrations
             modelBuilder.Entity("Tete.Models.Authentication.User", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("DisplayName");
+                    b.Property<string>("DisplayName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("Salt")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("UserName")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -97,17 +116,21 @@ namespace Tete.Api.Migrations
             modelBuilder.Entity("Tete.Models.Config.Flag", b =>
                 {
                     b.Property<string>("Key")
-                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(30)")
                         .HasMaxLength(30);
 
-                    b.Property<DateTime>("Created");
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Data")
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
-                    b.Property<DateTime>("Modified");
+                    b.Property<DateTime>("Modified")
+                        .HasColumnType("datetime2");
 
-                    b.Property<bool>("Value");
+                    b.Property<bool>("Value")
+                        .HasColumnType("bit");
 
                     b.HasKey("Key");
 
@@ -117,10 +140,11 @@ namespace Tete.Api.Migrations
             modelBuilder.Entity("Tete.Models.Config.Setting", b =>
                 {
                     b.Property<string>("Key")
-                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(30)")
                         .HasMaxLength(30);
 
                     b.Property<string>("Value")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
                     b.HasKey("Key");
@@ -128,37 +152,148 @@ namespace Tete.Api.Migrations
                     b.ToTable("Settings");
                 });
 
+            modelBuilder.Entity("Tete.Models.Content.Keyword", b =>
+                {
+                    b.Property<Guid>("KeywordId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Restricted")
+                        .HasColumnType("bit");
+
+                    b.HasKey("KeywordId");
+
+                    b.ToTable("Keywords");
+                });
+
+            modelBuilder.Entity("Tete.Models.Content.Link", b =>
+                {
+                    b.Property<Guid>("LinkId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Destination")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Reviewed")
+                        .HasColumnType("bit");
+
+                    b.HasKey("LinkId");
+
+                    b.ToTable("Links");
+                });
+
             modelBuilder.Entity("Tete.Models.Content.Topic", b =>
                 {
                     b.Property<Guid>("TopicId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("Created");
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
 
-                    b.Property<Guid>("CreatedBy");
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Elligible");
+                    b.Property<bool>("Elligible")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("TopicId");
 
                     b.ToTable("Topics");
                 });
 
+            modelBuilder.Entity("Tete.Models.Content.TopicKeyword", b =>
+                {
+                    b.Property<Guid>("TopicKeywordId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("KeywordId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TopicId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("TopicKeywordId");
+
+                    b.HasIndex("KeywordId");
+
+                    b.HasIndex("TopicId");
+
+                    b.ToTable("TopicKeywords");
+                });
+
+            modelBuilder.Entity("Tete.Models.Content.TopicLink", b =>
+                {
+                    b.Property<Guid>("TopicLinkId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("LinkId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TopicId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("TopicLinkId");
+
+                    b.HasIndex("LinkId");
+
+                    b.HasIndex("TopicId");
+
+                    b.ToTable("TopicLinks");
+                });
+
             modelBuilder.Entity("Tete.Models.Localization.Element", b =>
                 {
                     b.Property<Guid>("ElementId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Key");
+                    b.Property<string>("Key")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("LanguageId");
+                    b.Property<Guid>("LanguageId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Text");
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ElementId");
 
@@ -170,11 +305,14 @@ namespace Tete.Api.Migrations
             modelBuilder.Entity("Tete.Models.Localization.Language", b =>
                 {
                     b.Property<Guid>("LanguageId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("Active");
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("LanguageId");
 
@@ -184,17 +322,23 @@ namespace Tete.Api.Migrations
             modelBuilder.Entity("Tete.Models.Localization.UserLanguage", b =>
                 {
                     b.Property<Guid>("UserLanguageId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("LanguageId");
+                    b.Property<Guid>("LanguageId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Priority");
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
 
-                    b.Property<bool>("Read");
+                    b.Property<bool>("Read")
+                        .HasColumnType("bit");
 
-                    b.Property<bool>("Speak");
+                    b.Property<bool>("Speak")
+                        .HasColumnType("bit");
 
-                    b.Property<Guid>("UserId");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("UserLanguageId");
 
@@ -206,19 +350,26 @@ namespace Tete.Api.Migrations
             modelBuilder.Entity("Tete.Models.Logging.Log", b =>
                 {
                     b.Property<Guid>("LogId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Data");
+                    b.Property<string>("Data")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Domain");
+                    b.Property<string>("Domain")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("MachineName");
+                    b.Property<string>("MachineName")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Occured");
+                    b.Property<DateTime>("Occured")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("StackTrace");
+                    b.Property<string>("StackTrace")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("LogId");
 
@@ -228,21 +379,47 @@ namespace Tete.Api.Migrations
             modelBuilder.Entity("Tete.Models.Relationships.Mentorship", b =>
                 {
                     b.Property<Guid>("MentorshipId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("Active");
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTime>("CreatedDate");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("EndDate");
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<Guid>("LearnerUserId");
+                    b.Property<bool>("LearnerClosed")
+                        .HasColumnType("bit");
 
-                    b.Property<Guid>("MentorUserId");
+                    b.Property<DateTime>("LearnerClosedDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("StartDate");
+                    b.Property<string>("LearnerContact")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("TopicId");
+                    b.Property<Guid>("LearnerUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("MentorClosed")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("MentorClosedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("MentorContact")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("MentorUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("TopicId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("MentorshipId");
 
@@ -252,43 +429,116 @@ namespace Tete.Api.Migrations
             modelBuilder.Entity("Tete.Models.Relationships.UserTopic", b =>
                 {
                     b.Property<Guid>("UserTopicID")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("TopicId");
+                    b.Property<Guid>("TopicId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("UserId");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("UserTopicID");
 
+                    b.HasIndex("TopicId");
+
+                    b.HasIndex("UserId");
+
                     b.ToTable("UserTopics");
+                });
+
+            modelBuilder.Entity("Tete.Models.Users.Evaluation", b =>
+                {
+                    b.Property<Guid>("EvaluationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Comments")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("MentorshipId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("UserType")
+                        .HasColumnType("int");
+
+                    b.HasKey("EvaluationId");
+
+                    b.ToTable("Evaluations");
                 });
 
             modelBuilder.Entity("Tete.Models.Users.Profile", b =>
                 {
                     b.Property<Guid>("ProfileId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("About");
+                    b.Property<string>("About")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PrivateAbout");
+                    b.Property<string>("PrivateAbout")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("UserId");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ProfileId");
 
                     b.ToTable("UserProfiles");
                 });
 
+            modelBuilder.Entity("Tete.Models.Content.TopicKeyword", b =>
+                {
+                    b.HasOne("Tete.Models.Content.Keyword", "Keyword")
+                        .WithMany()
+                        .HasForeignKey("KeywordId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tete.Models.Content.Topic", "Topic")
+                        .WithMany()
+                        .HasForeignKey("TopicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Tete.Models.Content.TopicLink", b =>
+                {
+                    b.HasOne("Tete.Models.Content.Link", "Link")
+                        .WithMany()
+                        .HasForeignKey("LinkId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tete.Models.Content.Topic", "Topic")
+                        .WithMany()
+                        .HasForeignKey("TopicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Tete.Models.Localization.Element", b =>
                 {
-                    b.HasOne("Tete.Models.Localization.Language")
+                    b.HasOne("Tete.Models.Localization.Language", null)
                         .WithMany("Elements")
                         .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Tete.Models.Localization.UserLanguage", b =>
@@ -296,7 +546,23 @@ namespace Tete.Api.Migrations
                     b.HasOne("Tete.Models.Localization.Language", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Tete.Models.Relationships.UserTopic", b =>
+                {
+                    b.HasOne("Tete.Models.Content.Topic", "Topic")
+                        .WithMany()
+                        .HasForeignKey("TopicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tete.Models.Authentication.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

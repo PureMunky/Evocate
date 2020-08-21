@@ -12,23 +12,20 @@ namespace Tete.Api.Controllers
 {
   [Route("V1/[controller]/[action]")]
   [ApiController]
-  public class LanguagesController : ControllerBase
+  public class LanguagesController : ControllerRoot
   {
 
     private Api.Services.Logging.LogService logService;
 
-    private Contexts.MainContext context;
-
-    public LanguagesController(Contexts.MainContext mainContext)
+    public LanguagesController(Contexts.MainContext mainContext) : base(mainContext)
     {
-      this.context = mainContext;
       this.logService = new Services.Logging.LogService(mainContext, Tete.Api.Services.Logging.LogService.LoggingLayer.Api);
     }
     // GET api/values
     [HttpGet]
     public Response<Language> Get()
     {
-      var service = new Services.Localization.LanguageService(this.context, UserHelper.CurrentUser(HttpContext, this.context));
+      var service = new Services.Localization.LanguageService(Context, CurrentUser);
 
       return new Response<Language>(service.GetLanguages());
     }
@@ -43,7 +40,7 @@ namespace Tete.Api.Controllers
     [HttpPost]
     public Response<Language> Post([FromBody] Language value)
     {
-      var service = new Services.Localization.LanguageService(this.context, UserHelper.CurrentUser(HttpContext, this.context));
+      var service = new Services.Localization.LanguageService(Context, CurrentUser);
 
       return new Response<Language>(service.CreateLanguage(value));
     }
@@ -51,7 +48,7 @@ namespace Tete.Api.Controllers
     [HttpPut]
     public Response<Language> Update([FromBody] Language language)
     {
-      var service = new Services.Localization.LanguageService(this.context, UserHelper.CurrentUser(HttpContext, this.context));
+      var service = new Services.Localization.LanguageService(Context, CurrentUser);
 
       return new Response<Language>(service.Update(language));
     }

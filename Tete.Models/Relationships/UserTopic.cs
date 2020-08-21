@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using Tete.Models.Content;
 
 namespace Tete.Models.Relationships
 {
@@ -12,15 +13,29 @@ namespace Tete.Models.Relationships
 
     [Required]
     public Guid UserId { get; set; }
-
+    public Authentication.User User { get; set; }
 
     [Required]
     public Guid TopicId { get; set; }
+    public Topic Topic { get; set; }
 
     [Required]
     public TopicStatus Status { get; set; }
 
+    public string StatusText
+    {
+      get
+      {
+        return this.Status.ToString();
+      }
+    }
+
     public DateTime CreatedDate { get; set; }
+
+    public UserTopic()
+    {
+      this.UserTopicID = Guid.NewGuid();
+    }
 
     public UserTopic(Guid UserId, Guid TopicId, TopicStatus Status)
     {

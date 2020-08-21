@@ -1,5 +1,6 @@
 using System;
 using Microsoft.EntityFrameworkCore;
+using Tete.Models;
 
 namespace Tete.Api.Contexts
 {
@@ -22,21 +23,29 @@ namespace Tete.Api.Contexts
     // User Details
     public virtual DbSet<Tete.Models.Users.Profile> UserProfiles { get; set; }
     public virtual DbSet<Tete.Models.Authentication.AccessRole> AccessRoles { get; set; }
+    public virtual DbSet<Tete.Models.Users.Evaluation> Evaluations { get; set; }
 
     // Topics
     public virtual DbSet<Tete.Models.Content.Topic> Topics { get; set; }
     public virtual DbSet<Tete.Models.Relationships.Mentorship> Mentorships { get; set; }
     public virtual DbSet<Tete.Models.Relationships.UserTopic> UserTopics { get; set; }
+    public virtual DbSet<Tete.Models.Content.TopicLink> TopicLinks { get; set; }
+    public virtual DbSet<Tete.Models.Content.Link> Links { get; set; }
+    public virtual DbSet<Tete.Models.Content.Keyword> Keywords { get; set; }
+    public virtual DbSet<Tete.Models.Content.TopicKeyword> TopicKeywords { get; set; }
 
     public MainContext(DbContextOptions options) : base(options)
     {
-      Console.WriteLine("Initializing MainContext");
-      Database.Migrate();
     }
 
     public MainContext()
     {
 
+    }
+
+    public void Migrate()
+    {
+      Database.Migrate();
     }
 
   }

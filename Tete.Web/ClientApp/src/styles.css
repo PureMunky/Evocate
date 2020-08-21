@@ -1,1 +1,24 @@
 /* You can add global styles to this file, and also import other style files */
+
+.tile {
+  border: 1px solid #000;
+  display: inline-block;
+  margin: 5px;
+  padding: 10px;
+}
+
+.tile.green {
+  background-color: #90ee90;
+}
+.tile.blue {
+  background-color: lightblue;
+}
+
+.subLinks > a {
+  margin: 5px;
+}
+
+.warning {
+  font-weight: bold;
+  color: rgb(180, 0, 0);
+}

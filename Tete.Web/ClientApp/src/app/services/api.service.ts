@@ -23,6 +23,8 @@ export class ApiService {
   }
 
   authTest() {
+    // TODO: Add authtest to each call but also not require it to be a full round trip on most cases.
+    // TODO: Determine the "logged out" functionality for if someone comes to the site before logging in.
     return this.http
       .get("/Login/CurrentUser")
       .toPromise()
@@ -33,7 +35,7 @@ export class ApiService {
       .catch(this.handleError);
   }
 
-  post(url: string, body: object) {
+  post(url: string, body: object): Promise<any[]> {
     return this.http
       .post<Response>(url, body)
       .toPromise()

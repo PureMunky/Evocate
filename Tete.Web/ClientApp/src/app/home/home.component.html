@@ -1,5 +1,3 @@
-<h1>Home</h1>
-
 <div *ngIf="learningMentorships.length > 0">
   <h2>Learning</h2>
   <teteMentorList [mentorships]="learningMentorships"></teteMentorList>
@@ -23,7 +21,7 @@
         <teteTopicLink [topic]="topic"></teteTopicLink>
       </h5>
       <h6 class="card-subtitle">{{topic.userTopic.statusText}}</h6>
-      <p>{{topic.description}}</p>
+      {{topic.description}}
     </div>
   </div>
 </div>

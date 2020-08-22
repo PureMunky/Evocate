@@ -13,7 +13,7 @@
       <h5 class="card-title">
         <teteTopicLink [topic]="topic"></teteTopicLink>
       </h5>
-      <p>{{topic.description}}</p>
+      {{topic.description}}
     </div>
   </div>
 
@@ -23,9 +23,7 @@
       <h6 class="card-subtitle">
         <a [routerLink]="['/topic/create/', search.text]">Create new topic: {{search.text}}</a>
       </h6>
-      <div>
-        Create the topic now to request or become a mentor for whatever you want to do.
-      </div>
+      Create the topic now to request or become a mentor for whatever you want to do.
     </div>
 
   </div>

@@ -1,3 +1,6 @@
+export teteDBUser="sa"
+export teteDBPass="tetePassword!"
+
 # stop existing container
 docker stop tete-web
 docker stop tete-db
@@ -16,8 +19,8 @@ sleep 5
 #dotnet ef database update -p Tete.Api
 
 # build a new version of core
-docker build -f Web.Dockerfile -t tete-web-img .
-docker build -f Db.Dockerfile -t tete-db-img .
+docker build -f Web.Dockerfile -t tete-web-img . --build-arg teteDBPass=$teteDBPass --no-cache
+# docker build -f Db.Dockerfile -t tete-db-img . --build-arg saPassword=$teteDBPass
 
 # run core app
 docker run -dit --name tete-web -p 80:80 tete-web-img

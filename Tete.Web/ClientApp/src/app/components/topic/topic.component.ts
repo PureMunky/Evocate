@@ -64,8 +64,6 @@ export class TopicComponent {
   }
 
   public save() {
-    // TODO: Add a featured flag and admin lock down for support items?
-    // TODO: Topic link for admin topics that can be edited to link to FAQ/etc.
     this.topicService.Save(this.currentTopic).then(t => {
       if (this.working.creating) {
         this.router.navigate(['/topic/', t.topicId])

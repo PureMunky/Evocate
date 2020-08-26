@@ -26,7 +26,7 @@ namespace Tete.Web
         setup.EnableEndpointRouting = false;
       });
       services.AddDbContext<Tete.Api.Contexts.MainContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]));
-      System.Console.WriteLine(System.Environment.GetEnvironmentVariable("teteDBPass"));
+
       // In production, the Angular files will be served from this directory
       services.AddSpaStaticFiles(configuration =>
       {

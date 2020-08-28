@@ -8,23 +8,24 @@
 <div *ngIf="search.done">
   <h4>Results</h4>
 
-  <div class="card" *ngFor="let topic of topics">
-    <div class="card-body">
-      <h5 class="card-title">
-        <teteTopicLink [topic]="topic"></teteTopicLink>
-      </h5>
-      {{topic.description}}
-    </div>
-  </div>
-
-  <div class="card" *ngIf="search.newTopic">
-    <div class="card-body">
-      <h5 class="card-title">Didn't see what you were looking for?</h5>
-      <h6 class="card-subtitle">
-        <a [routerLink]="['/topic/create/', search.text]">Create new topic: {{search.text}}</a>
-      </h6>
-      Create the topic now to request or become a mentor for whatever you want to do.
+  <div class="card-columns">
+    <div class="card teteCard" *ngFor="let topic of topics">
+      <div class="card-body">
+        <h5 class="card-title">
+          <teteTopicLink [topic]="topic"></teteTopicLink>
+        </h5>
+        {{topic.description}}
+      </div>
     </div>
 
+    <div class="card" *ngIf="search.newTopic">
+      <div class="card-body">
+        <h5 class="card-title">Didn't see what you were looking for?</h5>
+        <h6 class="card-subtitle">
+          <a [routerLink]="['/topic/create/', search.text]">Create new topic: {{search.text}}</a>
+        </h6>
+        Create the topic now to request or become a mentor for whatever you want to do.
+      </div>
+    </div>
   </div>
 </div>

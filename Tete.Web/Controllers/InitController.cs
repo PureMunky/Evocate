@@ -8,6 +8,7 @@ using Tete.Api.Services.Content;
 using Tete.Models.Authentication;
 using Tete.Models.Localization;
 using Tete.Api.Services.Users;
+using Tete.Api.Helpers;
 
 
 namespace Tete.Api.Controllers
@@ -119,6 +120,24 @@ namespace Tete.Api.Controllers
 
       foreach (Tete.Models.Content.TopicVM t in SetupTopics)
       {
+        topicService.SaveTopic(t);
+        output.Add(string.Format("Created {0} Topic", t.Name));
+      }
+
+      for (int i = 0; i < 1000; i++)
+      {
+        var t = new Models.Content.TopicVM()
+        {
+          Name = Crypto.Hash(Guid.NewGuid().ToString(), Crypto.NewSalt()),
+          Description = "Testing",
+          Keywords = new List<Models.Content.Keyword>() {
+            new Models.Content.Keyword() {
+              Name = "Test",
+              Restricted = false
+            }
+          }
+        };
+
         topicService.SaveTopic(t);
         output.Add(string.Format("Created {0} Topic", t.Name));
       }

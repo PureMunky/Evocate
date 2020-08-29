@@ -9,14 +9,7 @@
   <h4>Results</h4>
 
   <div class="card-columns">
-    <div class="card teteCard" *ngFor="let topic of topics">
-      <div class="card-body">
-        <h5 class="card-title">
-          <teteTopicLink [topic]="topic"></teteTopicLink>
-        </h5>
-        {{topic.description}}
-      </div>
-    </div>
+    <teteTile *ngFor="let topic of topics" [topic]="topic"></teteTile>
 
     <div class="card" *ngIf="search.newTopic">
       <div class="card-body">

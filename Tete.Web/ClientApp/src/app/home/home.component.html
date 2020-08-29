@@ -16,17 +16,6 @@
 <div *ngIf="currentUserTopics.length > 0">
   <h2>Your Topics</h2>
   <div class="card-columns">
-    <!-- Test Tile component -->
-    <teteTile *ngFor="let topic of currentUserTopics" [title]="topic.name" [subTitle]="topic.userTopic.statusText" [body]="topic.description"></teteTile>
-    
-    <div class="card teteCard" *ngFor="let topic of currentUserTopics">
-      <div class="card-body">
-        <h5 class="card-title">
-          <teteTopicLink [topic]="topic"></teteTopicLink>
-        </h5>
-        <h6 class="card-subtitle">{{topic.userTopic.statusText}}</h6>
-        {{topic.description}}
-      </div>
-    </div>
+    <teteTile *ngFor="let topic of currentUserTopics" [topic]="topic"></teteTile>
   </div>
 </div>

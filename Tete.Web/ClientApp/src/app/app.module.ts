@@ -19,6 +19,7 @@ import { TopicLink } from "./components/topic/topicLink.component";
 import { MentorList } from "./components/mentorship/mentorList.component";
 import { AdminHome } from "./components/admin/adminHome.component";
 import { SupportComponent } from "./components/support/support.component";
+import { TileComponent } from "./components/tile/tile.component";
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { SupportComponent } from "./components/support/support.component";
     ProfileLink,
     TopicLink,
     MentorList,
-    SupportComponent
+    SupportComponent,
+    TileComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),

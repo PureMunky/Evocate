@@ -29,6 +29,21 @@ namespace Tete.Models.Content
     public List<Link> Links { get; set; }
     public List<Keyword> Keywords { get; set; }
 
+    public string ShortDescription
+    {
+      get
+      {
+        string rtnDes = this.Description;
+        int cutOff = rtnDes.IndexOf(".") + 1;
+
+        if (cutOff > 1)
+        {
+          rtnDes = rtnDes.Substring(0, cutOff);
+        }
+
+        return rtnDes;
+      }
+    }
     public TopicVM()
     {
       FillData("", "", false, DateTime.UtcNow, Guid.Empty);

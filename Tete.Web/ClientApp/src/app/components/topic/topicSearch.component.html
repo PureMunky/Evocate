@@ -7,7 +7,9 @@
 
 <div *ngIf="search.done">
   <h4>Results</h4>
-
+  <button id="btnClearSearch" class="btn btn-secondary" (click)="search.done = false; tmp.searchText = '';">
+    Clear Results
+  </button>
   <div class="card-columns">
     <teteTile *ngFor="let topic of topics" [topic]="topic"></teteTile>
 

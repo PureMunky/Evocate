@@ -6,6 +6,5 @@ import { Component } from "@angular/core";
   styleUrls: ["./app.component.css"]
 })
 export class AppComponent {
-  // TODO: global loading component
-  title = "app";
+  public title = "app";
 }

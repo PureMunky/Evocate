@@ -3,6 +3,9 @@
     <div class="container">
       <a class="navbar-brand" [routerLink]="['/']">Tête <span class="badge badge-primary"
           style="font-size: .6em; vertical-align: super;">beta</span></a>
+      <div class="spinner-border" role="status" *ngIf="loading">
+        <span class="sr-only">Loading...</span>
+      </div>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse"
         aria-label="Toggle navigation" [attr.aria-expanded]="isExpanded" (click)="toggle()">
         <span class="navbar-toggler-icon"></span>

@@ -6,6 +6,7 @@ import { MentorshipService } from "../services/mentorship.service";
 import { User } from "../models/user";
 import { Topic } from "../models/topic";
 import { Mentorship } from "../models/mentorship";
+import { LoadingService } from "../services/loading.service";
 
 @Component({
   selector: "app-home",
@@ -30,16 +31,20 @@ export class HomeComponent {
   constructor(private userService: UserService,
     private initService: InitService,
     private topicService: TopicService,
-    private mentorshipService: MentorshipService) {
+    private mentorshipService: MentorshipService,
+    private loadingService: LoadingService) {
+    loadingService.Loading();
     initService.Register(() => {
       this.currentUser = userService.CurrentUser();
-      mentorshipService.GetUserMentorships(userService.CurrentUser().userId).then(m => {
-        this.teachingMentorships = m.filter(m => m.mentorUserId == this.currentUser.userId);
-        this.learningMentorships = m.filter(m => m.learnerUserId == this.currentUser.userId);
-      });
-      topicService.GetUserTopics(this.currentUser.userId).then(topics => {
-        this.currentUserTopics = topics;
-      });
+      Promise.all([
+        mentorshipService.GetUserMentorships(userService.CurrentUser().userId).then(m => {
+          this.teachingMentorships = m.filter(m => m.mentorUserId == this.currentUser.userId);
+          this.learningMentorships = m.filter(m => m.learnerUserId == this.currentUser.userId);
+        }),
+        topicService.GetUserTopics(this.currentUser.userId).then(topics => {
+          this.currentUserTopics = topics;
+        })
+      ]).then(() => loadingService.FinishedLoading());
     });
   }
 }

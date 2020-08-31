@@ -17,7 +17,10 @@ namespace Tete.Api.Controllers
 
     public LogsController(Contexts.MainContext mainContext) : base(mainContext)
     {
-      this.service = new Services.Logging.LogService(mainContext, Tete.Api.Services.Logging.LogService.LoggingLayer.Api);
+      if (CurrentAdmin != null)
+      {
+        this.service = new Services.Logging.LogService(mainContext, Tete.Api.Services.Logging.LogService.LoggingLayer.Api);
+      }
     }
     // GET api/values
     [HttpGet]

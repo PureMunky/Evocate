@@ -7,7 +7,7 @@ import { MentorshipService } from "../../services/mentorship.service";
 import { User } from "../../models/user";
 import { Topic } from "../../models/topic";
 import { Mentorship } from "../../models/mentorship";
-import { Keyword } from "src/app/models/keyword";
+import { Keyword } from "../../models/keyword";
 import { Link } from "../../models/link";
 
 @Component({

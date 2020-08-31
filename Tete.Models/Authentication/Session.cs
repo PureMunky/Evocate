@@ -7,9 +7,6 @@ namespace Tete.Models.Authentication
   {
 
     [Key]
-    public Guid SessionId { get; set; }
-
-    [Required]
     public string Token { get; set; }
 
     [Required]
@@ -18,10 +15,12 @@ namespace Tete.Models.Authentication
     [Required]
     public DateTime Created { get; set; }
 
+    public DateTime LastUsed { get; set; }
+
     public Session()
     {
-      this.SessionId = Guid.NewGuid();
       this.Created = DateTime.UtcNow;
+      this.LastUsed = DateTime.UtcNow;
     }
   }
 }

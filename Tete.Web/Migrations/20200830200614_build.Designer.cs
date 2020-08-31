@@ -10,7 +10,7 @@ using Tete.Api.Contexts;
 namespace Tete.Web.Migrations
 {
     [DbContext(typeof(MainContext))]
-    [Migration("20200821103256_build")]
+    [Migration("20200830200614_build")]
     partial class build
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -70,21 +70,19 @@ namespace Tete.Web.Migrations
 
             modelBuilder.Entity("Tete.Models.Authentication.Session", b =>
                 {
-                    b.Property<Guid>("SessionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Token")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Token")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("LastUsed")
+                        .HasColumnType("datetime2");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("SessionId");
+                    b.HasKey("Token");
 
                     b.ToTable("Sessions");
                 });

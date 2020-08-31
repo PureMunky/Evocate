@@ -54,7 +54,6 @@ namespace Tete.Api.Controllers
 
     public UserVM CurrentUser(string token)
     {
-      this.logService.Write("Getting Current User");
       return this.service.GetUserVMFromToken(token);
     }
   }

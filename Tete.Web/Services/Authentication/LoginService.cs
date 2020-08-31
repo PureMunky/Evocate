@@ -27,6 +27,16 @@ namespace Tete.Api.Services.Authentication
       return GetNewToken(login);
     }
 
+    public void Logout(string Token)
+    {
+      var session = this.mainContext.Sessions.Where(s => s.Token == Token).FirstOrDefault();
+      if (session != null)
+      {
+        this.mainContext.Sessions.Remove(session);
+        this.mainContext.SaveChanges();
+      }
+    }
+
     /// <summary>
     /// Attempts to register a new user with the provided
     /// registration attempt.
@@ -75,6 +85,16 @@ namespace Tete.Api.Services.Authentication
       if (session != null)
       {
         user = this.mainContext.Users.Where(u => u.Id == session.UserId).FirstOrDefault();
+        if (user != null)
+        {
+          session.LastUsed = DateTime.UtcNow;
+          this.mainContext.Sessions.Update(session);
+        }
+        else
+        {
+          this.mainContext.Sessions.Remove(session);
+        }
+        this.mainContext.SaveChanges();
       }
 
       return user;

@@ -20,6 +20,7 @@ import { MentorList } from "./components/mentorship/mentorList.component";
 import { AdminHome } from "./components/admin/adminHome.component";
 import { SupportComponent } from "./components/support/support.component";
 import { TileComponent } from "./components/tile/tile.component";
+import { LinkAdminComponent } from "./components/linkAdmin/linkAdmin.component";
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { TileComponent } from "./components/tile/tile.component";
     TopicLink,
     MentorList,
     SupportComponent,
-    TileComponent
+    TileComponent,
+    LinkAdminComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
@@ -50,6 +52,7 @@ import { TileComponent } from "./components/tile/tile.component";
         path: "admin", component: AdminHome, children: [
           { path: "language", component: LanguageAdminComponent },
           { path: "logging", component: LoggingComponent },
+          { path: "link", component: LinkAdminComponent }
         ]
       },
       { path: "profile/:username", component: ProfileComponent },

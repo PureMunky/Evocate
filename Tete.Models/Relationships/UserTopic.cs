@@ -22,14 +22,6 @@ namespace Tete.Models.Relationships
     [Required]
     public TopicStatus Status { get; set; }
 
-    public string StatusText
-    {
-      get
-      {
-        return this.Status.ToString();
-      }
-    }
-
     public DateTime CreatedDate { get; set; }
 
     public UserTopic()

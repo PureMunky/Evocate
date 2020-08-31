@@ -104,40 +104,36 @@ namespace Tete.Api.Controllers
         output.Add("English language already existed.");
       }
 
-      List<Tete.Models.Content.TopicVM> SetupTopics = new List<Models.Content.TopicVM>();
-      SetupTopics.Add(new Models.Content.TopicVM()
+      List<Tete.Models.Content.TopicVM> SetupTopics = new List<Models.Content.TopicVM>()
       {
-        Name = "Support",
-        Description = "Testing support here.",
-        Elligible = true,
-        Keywords = new List<Models.Content.Keyword>() {
-          new Models.Content.Keyword() {
-            Name = "Support",
-            Restricted = true
+        new Models.Content.TopicVM()
+        {
+          Name = "Tete General Questions",
+          Description = "Ask any general questions you have about Tete here.",
+          Elligible = true,
+          Keywords = new List<Models.Content.Keyword>() {
+            new Models.Content.Keyword() {
+              Name = "Support",
+              Restricted = true
+            }
+          }
+        },
+        new Models.Content.TopicVM()
+        {
+          Name = "Tete Issues",
+          Description = "If you're experiencing an error and need help resolving it the reqest a mentor for this topic.",
+          Elligible = true,
+          Keywords = new List<Models.Content.Keyword>() {
+            new Models.Content.Keyword() {
+              Name = "support",
+              Restricted = true
+            }
           }
         }
-      });
+      };
 
       foreach (Tete.Models.Content.TopicVM t in SetupTopics)
       {
-        topicService.SaveTopic(t);
-        output.Add(string.Format("Created {0} Topic", t.Name));
-      }
-
-      for (int i = 0; i < 1000; i++)
-      {
-        var t = new Models.Content.TopicVM()
-        {
-          Name = Crypto.Hash(Guid.NewGuid().ToString(), Crypto.NewSalt()),
-          Description = "Testing",
-          Keywords = new List<Models.Content.Keyword>() {
-            new Models.Content.Keyword() {
-              Name = "Test",
-              Restricted = false
-            }
-          }
-        };
-
         topicService.SaveTopic(t);
         output.Add(string.Format("Created {0} Topic", t.Name));
       }

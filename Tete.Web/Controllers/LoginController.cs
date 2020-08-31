@@ -34,7 +34,16 @@ namespace Tete.Web.Controllers
     [HttpGet]
     public IActionResult Index()
     {
-      return View();
+      var user = CurrentUser();
+      if (user != null)
+      {
+        return Redirect("/");
+      }
+      else
+      {
+        return View();
+      }
+
     }
 
     [HttpPost]
@@ -55,7 +64,7 @@ namespace Tete.Web.Controllers
         HttpContext.Response.Cookies.Append(Constants.SessionTokenName, session.Token, new Microsoft.AspNetCore.Http.CookieOptions()
         {
           HttpOnly = true,
-          Expires = DateTime.Now.AddMinutes(Constants.AuthenticationCookieLife),
+          Expires = DateTime.Now.AddYears(5)
           // Secure = true
         });
       }
@@ -74,7 +83,7 @@ namespace Tete.Web.Controllers
       HttpContext.Response.StatusCode = 401;
 
       var service = new Tete.Api.Services.Authentication.LoginService(this.context);
-      var token = HttpContext.Request.Cookies["Tete.SessionToken"];
+      var token = HttpContext.Request.Cookies[Constants.SessionTokenName];
 
       var user = service.GetUserVMFromToken(token);
 
@@ -89,6 +98,10 @@ namespace Tete.Web.Controllers
     [HttpGet]
     public IActionResult Logout()
     {
+      var token = HttpContext.Request.Cookies[Constants.SessionTokenName];
+      var service = new Tete.Api.Services.Authentication.LoginService(this.context);
+      service.Logout(token);
+
       HttpContext.Response.Cookies.Delete(Constants.SessionTokenName);
 
       return Redirect("/Login");
@@ -132,7 +145,7 @@ namespace Tete.Web.Controllers
         HttpContext.Response.Cookies.Append(Constants.SessionTokenName, session.Token, new Microsoft.AspNetCore.Http.CookieOptions()
         {
           HttpOnly = true,
-          Expires = DateTime.Now.AddMinutes(Constants.AuthenticationCookieLife),
+          Expires = DateTime.Now.AddYears(4)
           // Secure = true
         });
       }

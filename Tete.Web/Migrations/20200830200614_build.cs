@@ -158,14 +158,14 @@ namespace Tete.Web.Migrations
                 name: "Sessions",
                 columns: table => new
                 {
-                    SessionId = table.Column<Guid>(nullable: false),
                     Token = table.Column<string>(nullable: false),
                     UserId = table.Column<Guid>(nullable: false),
-                    Created = table.Column<DateTime>(nullable: false)
+                    Created = table.Column<DateTime>(nullable: false),
+                    LastUsed = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Sessions", x => x.SessionId);
+                    table.PrimaryKey("PK_Sessions", x => x.Token);
                 });
 
             migrationBuilder.CreateTable(

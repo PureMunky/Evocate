@@ -20,7 +20,7 @@ namespace Tete.Models.Content
 
     public Guid CreatedBy { get; set; }
 
-    public UserTopic UserTopic { get; set; }
+    public UserTopicVM UserTopic { get; set; }
 
     public int OpenMentorships { get; set; }
 
@@ -44,6 +44,7 @@ namespace Tete.Models.Content
         return rtnDes;
       }
     }
+
     public TopicVM()
     {
       FillData("", "", false, DateTime.UtcNow, Guid.Empty);
@@ -54,7 +55,7 @@ namespace Tete.Models.Content
       FillData(topic.Name, topic.Description, topic.Elligible, topic.Created, topic.CreatedBy);
       this.TopicId = topic.TopicId;
     }
-    public TopicVM(Topic topic, UserTopic userTopic)
+    public TopicVM(Topic topic, UserTopicVM userTopic)
     {
       FillData(topic.Name, topic.Description, topic.Elligible, topic.Created, topic.CreatedBy);
       this.TopicId = topic.TopicId;

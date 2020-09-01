@@ -39,7 +39,8 @@ namespace Tete.Web
     {
       if (env.IsDevelopment())
       {
-        app.UseDeveloperExceptionPage();
+        app.UseExceptionHandler("/Error");
+        // app.UseDeveloperExceptionPage();
       }
       else
       {

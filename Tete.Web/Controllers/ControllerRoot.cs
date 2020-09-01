@@ -12,7 +12,14 @@ namespace Tete.Api.Controllers
     {
       get
       {
-        return UserHelper.CurrentUser(HttpContext, Context);
+        var current = UserHelper.CurrentUser(HttpContext, Context);
+
+        if (current == null)
+        {
+          throw new NotLoggedInException("Not logged in.");
+        }
+
+        return current;
       }
     }
 
@@ -23,7 +30,9 @@ namespace Tete.Api.Controllers
         var current = UserHelper.CurrentUser(HttpContext, Context);
 
         if (!current.Roles.Contains("Admin"))
-          throw new System.Exception("Not an admin user!");
+        {
+          throw new InsufficientPriviledgesException("Not an admin user!");
+        }
 
         return current;
       }

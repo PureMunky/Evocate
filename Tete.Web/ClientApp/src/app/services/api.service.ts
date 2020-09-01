@@ -1,16 +1,17 @@
 import { Injectable, Inject } from "@angular/core";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { LoadingService } from "./loading.service";
+import { ErrorService } from "./error.service";
 
 @Injectable({
   providedIn: "root"
 })
 export class ApiService {
-  private http: HttpClient;
   private user;
 
-  constructor(http: HttpClient, private loadingService: LoadingService) {
-    this.http = http;
+  constructor(private http: HttpClient,
+    private loadingService: LoadingService,
+    private errorService: ErrorService) {
   }
 
   get(url): Promise<any[]> {
@@ -22,7 +23,7 @@ export class ApiService {
         this.loadingService.FinishedLoading();
         return result.data;
       })
-      .catch(this.handleError);
+      .catch(err => this.handleError(err));
   }
 
   authTest() {
@@ -37,7 +38,7 @@ export class ApiService {
         this.loadingService.FinishedLoading();
         return user;
       })
-      .catch(this.handleError);
+      .catch(err => this.handleError(err));
   }
 
   post(url: string, body: object): Promise<any[]> {
@@ -49,17 +50,19 @@ export class ApiService {
         this.loadingService.FinishedLoading();
         return res.data;
       })
-      .catch(this.handleError);
+      .catch(err => this.handleError(err));
   }
 
   put(url: string, body: object) {
     return this.http
       .put(url, body)
       .toPromise()
-      .catch(this.handleError);
+      .catch(err => this.handleError(err));
   }
 
   private handleError(error: HttpErrorResponse) {
+    this.errorService.Error('Loading Error');
+    this.loadingService.FinishedLoading();
     if (error.status == 401) {
       // UnAuthorized
       window.location.href = "/Login";

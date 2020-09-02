@@ -4,3 +4,4 @@ out/
 coverage/
 coverage.json
 *.log
+*.pfx

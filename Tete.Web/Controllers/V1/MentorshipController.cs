@@ -16,11 +16,9 @@ namespace Tete.Api.Controllers
   public class MentorshipController : ControllerRoot
   {
 
-    private Api.Services.Logging.LogService logService;
 
     public MentorshipController(Contexts.MainContext mainContext) : base(mainContext)
     {
-      this.logService = new Services.Logging.LogService(mainContext, Tete.Api.Services.Logging.LogService.LoggingLayer.Api);
     }
 
     // POST api/values

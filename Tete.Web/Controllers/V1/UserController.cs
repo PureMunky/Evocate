@@ -10,11 +10,9 @@ namespace Tete.Api.Controllers
   public class UserController : ControllerRoot
   {
 
-    private Api.Services.Logging.LogService logService;
 
     public UserController(Contexts.MainContext mainContext) : base(mainContext)
     {
-      this.logService = new Services.Logging.LogService(mainContext, Tete.Api.Services.Logging.LogService.LoggingLayer.Api);
     }
 
     // POST api/values

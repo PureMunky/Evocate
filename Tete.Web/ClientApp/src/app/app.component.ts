@@ -32,5 +32,5 @@ export class AppComponent {
 interface Error {
   message: string;
   display: boolean;
-  timer: NodeJS.Timer
+  timer: any
 }

@@ -16,7 +16,7 @@ namespace Tete.Tests.Api.Services.Logging
     [SetUp]
     public void SetUp()
     {
-      logService = new LogService(mockContext.Object, Tete.Api.Services.Logging.LogService.LoggingLayer.Service);
+      logService = new LogService(mockContext.Object, Tete.Api.Services.Logging.LogService.LoggingLayer.Service, AdminUserVM);
     }
 
     [Test]

@@ -119,6 +119,7 @@ namespace Tete.Web.Migrations
                 {
                     LogId = table.Column<Guid>(nullable: false),
                     Occured = table.Column<DateTime>(nullable: false),
+                    UserId = table.Column<Guid>(nullable: false),
                     Description = table.Column<string>(nullable: true),
                     MachineName = table.Column<string>(nullable: true),
                     Data = table.Column<string>(nullable: true),

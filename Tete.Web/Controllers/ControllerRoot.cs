@@ -46,6 +46,14 @@ namespace Tete.Api.Controllers
       }
     }
 
+    public Tete.Api.Services.Logging.LogService LogService
+    {
+      get
+      {
+        return new Tete.Api.Services.Logging.LogService(Context, Tete.Api.Services.Logging.LogService.LoggingLayer.Web, CurrentUser);
+      }
+    }
+
     public ControllerRoot(Contexts.MainContext mainContext)
     {
       this.context = mainContext;

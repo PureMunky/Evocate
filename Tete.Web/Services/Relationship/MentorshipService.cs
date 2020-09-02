@@ -13,13 +13,6 @@ namespace Tete.Api.Services.Relationships
   public class MentorshipService : ServiceBase
   {
 
-    #region Private Variables
-
-    private UserLanguageService userLanguageService;
-    private Logging.LogService logService;
-
-    #endregion
-
     #region Public Functions
 
     public MentorshipService(MainContext mainContext, UserVM actor)
@@ -290,8 +283,6 @@ namespace Tete.Api.Services.Relationships
     {
       this.mainContext = mainContext;
       this.Actor = actor;
-      this.userLanguageService = new UserLanguageService(mainContext, actor);
-      this.logService = new Logging.LogService(mainContext, Logging.LogService.LoggingLayer.Api);
     }
 
     #endregion

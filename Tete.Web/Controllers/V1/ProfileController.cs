@@ -15,11 +15,9 @@ namespace Tete.Api.Controllers
   public class ProfileController : ControllerRoot
   {
 
-    private Api.Services.Logging.LogService logService;
 
     public ProfileController(Contexts.MainContext mainContext) : base(mainContext)
     {
-      this.logService = new Services.Logging.LogService(mainContext, Tete.Api.Services.Logging.LogService.LoggingLayer.Api);
     }
 
     // POST api/values
@@ -31,14 +29,6 @@ namespace Tete.Api.Controllers
 
       return new Response<Profile>(value);
     }
-
-    // [HttpPut]
-    // public Response<Language> Update([FromBody] Language language)
-    // {
-    //   var service = new Services.Localization.LanguageService(this.context, UserHelper.CurrentUser(HttpContext, this.context));
-
-    //   return new Response<Language>(service.Update(language));
-    // }
 
   }
 }

@@ -10,8 +10,6 @@ namespace Tete.Api.Services.Users
   public class ProfileService : ServiceBase
   {
 
-    private UserLanguageService userLanguageService;
-    private Logging.LogService logService;
 
     public ProfileService(MainContext mainContext, UserVM actor)
     {
@@ -45,8 +43,6 @@ namespace Tete.Api.Services.Users
     {
       this.mainContext = mainContext;
       this.Actor = actor;
-      this.userLanguageService = new UserLanguageService(mainContext, actor);
-      this.logService = new Logging.LogService(mainContext, Logging.LogService.LoggingLayer.Api);
     }
   }
 }

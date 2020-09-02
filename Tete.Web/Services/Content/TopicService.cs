@@ -13,7 +13,6 @@ namespace Tete.Api.Services.Content
   {
 
     private UserLanguageService userLanguageService;
-    private Logging.LogService logService;
 
     public TopicService(MainContext mainContext, UserVM actor)
     {
@@ -284,7 +283,6 @@ namespace Tete.Api.Services.Content
       this.mainContext = mainContext;
       this.Actor = actor;
       this.userLanguageService = new UserLanguageService(mainContext, actor);
-      this.logService = new Logging.LogService(mainContext, Logging.LogService.LoggingLayer.Api);
     }
   }
 }

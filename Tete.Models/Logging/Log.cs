@@ -9,6 +9,8 @@ namespace Tete.Models.Logging
 
     public DateTime Occured { get; set; }
 
+    public Guid UserId { get; set; }
+
     public string Description { get; set; }
 
     public string MachineName { get; set; }
@@ -24,10 +26,11 @@ namespace Tete.Models.Logging
       Init();
     }
 
-    public Log(string Description, string Data = "", string Domain = "")
+    public Log(string Description, Guid UserId, string Data = "", string Domain = "")
     {
       Init();
       this.Description = Description;
+      this.UserId = UserId;
       this.Data = Data;
       this.Domain = Domain;
     }

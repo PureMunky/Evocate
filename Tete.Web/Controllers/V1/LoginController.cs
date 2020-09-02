@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Tete.Models.Authentication;
 using Tete.Web.Models;
+using Tete.Web.Helpers;
 
 namespace Tete.Api.Controllers
 {
@@ -10,25 +11,21 @@ namespace Tete.Api.Controllers
   public class LoginController : ControllerBase
   {
     private Api.Services.Authentication.LoginService service;
-    private Api.Services.Logging.LogService logService;
 
     public LoginController(Contexts.MainContext mainContext)
     {
       this.service = new Services.Authentication.LoginService(mainContext);
-      this.logService = new Services.Logging.LogService(mainContext, Tete.Api.Services.Logging.LogService.LoggingLayer.Api);
     }
 
     [HttpPost]
     public SessionVM Login(LoginAttempt login)
     {
-      this.logService.Write("Attempting Login", login.UserName);
       return this.service.Login(login);
     }
 
     [HttpPost]
     public SessionVM Register(RegistrationAttempt registration)
     {
-      this.logService.Write("Registering User", registration.UserName);
       this.service.Register(registration);
       return this.service.Login(new LoginAttempt()
       {
@@ -40,7 +37,7 @@ namespace Tete.Api.Controllers
     [HttpGet]
     public Response<UserVM> GetUser(string userName)
     {
-      var token = HttpContext.Request.Cookies["Tete.SessionToken"];
+      var token = HttpContext.Request.Cookies[Constants.SessionTokenName];
       var actor = CurrentUser(token);
       return new Response<UserVM>(this.service.GetUserVMFromUsername(userName, actor));
     }
@@ -48,7 +45,7 @@ namespace Tete.Api.Controllers
     [HttpGet]
     public UserVM CurrentUser()
     {
-      var token = HttpContext.Request.Cookies["Tete.SessionToken"];
+      var token = HttpContext.Request.Cookies[Constants.SessionTokenName];
       return CurrentUser(token);
     }
 

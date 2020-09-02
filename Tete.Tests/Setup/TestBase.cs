@@ -24,6 +24,19 @@ namespace Tete.Tests.Setup
       UserName = "admin"
     };
 
+    public UserVM AdminUserVM
+    {
+      get
+      {
+        return new UserVM(adminUser)
+        {
+          Roles = new List<string>() {
+            "Admin"
+          }
+        };
+      }
+    }
+
     [SetUp]
     public void Setup()
     {

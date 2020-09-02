@@ -27,7 +27,6 @@ export class ApiService {
   }
 
   authTest() {
-    // TODO: Add authtest to each call but also not require it to be a full round trip on most cases.
     // TODO: Determine the "logged out" functionality for if someone comes to the site before logging in.
     this.loadingService.Loading();
     return this.http

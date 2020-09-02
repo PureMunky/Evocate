@@ -11,6 +11,7 @@ namespace Tete.Api.Services.Authentication
   {
     private MainContext mainContext;
 
+    //TODO: add logging for the login service.
 
     public LoginService(MainContext mainContext)
     {

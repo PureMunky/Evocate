@@ -15,11 +15,9 @@ namespace Tete.Api.Controllers
   public class LinkController : ControllerRoot
   {
 
-    private Api.Services.Logging.LogService logService;
 
     public LinkController(Contexts.MainContext mainContext) : base(mainContext)
     {
-      this.logService = new Services.Logging.LogService(mainContext, Tete.Api.Services.Logging.LogService.LoggingLayer.Api);
     }
 
     [HttpPost]

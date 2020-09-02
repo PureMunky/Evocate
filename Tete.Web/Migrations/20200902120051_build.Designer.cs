@@ -10,7 +10,7 @@ using Tete.Api.Contexts;
 namespace Tete.Web.Migrations
 {
     [DbContext(typeof(MainContext))]
-    [Migration("20200830200614_build")]
+    [Migration("20200902120051_build")]
     partial class build
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -370,6 +370,9 @@ namespace Tete.Web.Migrations
 
                     b.Property<string>("StackTrace")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("LogId");
 

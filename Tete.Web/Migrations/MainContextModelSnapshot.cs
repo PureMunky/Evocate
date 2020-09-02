@@ -369,6 +369,9 @@ namespace Tete.Web.Migrations
                     b.Property<string>("StackTrace")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("LogId");
 
                     b.ToTable("Logs");

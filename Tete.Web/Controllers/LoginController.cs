@@ -64,7 +64,7 @@ namespace Tete.Web.Controllers
         HttpContext.Response.Cookies.Append(Constants.SessionTokenName, session.Token, new Microsoft.AspNetCore.Http.CookieOptions()
         {
           HttpOnly = true,
-          Expires = DateTime.Now.AddYears(5)
+          Expires = DateTime.Now.AddYears(Constants.AuthenticationCookieLifeYears)
           // Secure = true
         });
       }
@@ -145,7 +145,7 @@ namespace Tete.Web.Controllers
         HttpContext.Response.Cookies.Append(Constants.SessionTokenName, session.Token, new Microsoft.AspNetCore.Http.CookieOptions()
         {
           HttpOnly = true,
-          Expires = DateTime.Now.AddYears(4)
+          Expires = DateTime.Now.AddYears(Constants.AuthenticationCookieLifeYears)
           // Secure = true
         });
       }

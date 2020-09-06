@@ -1,5 +1,4 @@
-# https://kubernetes.io/blog/2015/07/strong-simple-ssl-for-kubernetes/
-# https://github.com/Lybecker/k8s-friendly-aspnetcore
+# https://www.digitalocean.com/community/tutorials/how-to-automate-deployments-to-digitalocean-kubernetes-with-circleci
 ---
 apiVersion: v1
 kind: Namespace
@@ -47,7 +46,7 @@ metadata:
   name: tete-web
   namespace: tete
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: tete-web

@@ -1,4 +1,5 @@
 #!/bin/bash
+# TODO: Push to dev k8s cluster.
 echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
 docker tag tete-db-img:latest puremunky/tete-db:build-$TRAVIS_BUILD_NUMBER

@@ -10,7 +10,7 @@ docker stop tete-db
 docker rm tete-web
 docker rm tete-db
 
-# clean the dotnet build files
+# clean the dotnet build
 dotnet clean
 
 # build a new version of core
@@ -18,8 +18,8 @@ docker build -f Web.Dockerfile -t tete-web-img .
 docker build -f Db.Dockerfile -t tete-db-img .
 
 # run core app
-docker run -dit --name tete-db -p 1433:1433 --env SA_PASSWORD=$teteDBPassword tete-db-img
-docker run -dit --name tete-web -p 80:80 --link tete-db --env ConnectionStrings__DefaultConnection="Server=$teteDBServer; Database=Tete; User ID=$teteDBUser; Password=$teteDBPassword" tete-web-img
+docker run -dit --name tete-db --env SA_PASSWORD=$teteDBPassword tete-db-img
+docker run -dit --name tete-web -p 80:80 -p 443:443 --link tete-db --env ASPNETCORE_URLS="https://+:443;http://+:80" --env ConnectionStrings__DefaultConnection="Server=$teteDBServer; Database=Tete; User ID=$teteDBUser; Password=$teteDBPassword" --env ASPNETCORE_Kestrel__Certificates__Default__Path="./Tete.Web.pfx" --env ASPNETCORE_Kestrel__Certificates__Default__Password="tetePassword!" tete-web-img
 
 #dotnet run --project Tete.Web/Tete.Web.csproj
 

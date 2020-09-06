@@ -1,4 +1,5 @@
 # https://kubernetes.io/blog/2015/07/strong-simple-ssl-for-kubernetes/
+# https://github.com/Lybecker/k8s-friendly-aspnetcore
 ---
 apiVersion: v1
 kind: Namespace
@@ -32,6 +33,9 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 80
+    - protocol: TCP
+      port: 443
+      targetPort: 443
   type: LoadBalancer
 
 ---
@@ -55,6 +59,13 @@ spec:
           image: puremunky/tete-web:latest
           ports:
             - containerPort: 80
+            - containerPort: 443
+          env:
+            - name: ConnectionStrings__DefaultConnection # Server=$teteDBServer; Database=Tete; User ID=$teteDBUser; Password=$teteDBPassword
+              valueFrom:
+                secretKeyRef:
+                  name: db-connection
+                  key: connection-string
 
 ---
 apiVersion: apps/v1

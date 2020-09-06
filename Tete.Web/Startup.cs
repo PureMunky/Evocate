@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Tete.Web
 {
@@ -29,13 +30,20 @@ namespace Tete.Web
       services.AddHttpsRedirection(opts =>
       {
         opts.RedirectStatusCode = 308;
-        opts.HttpsPort = 5001;
+        opts.HttpsPort = 443;
       });
 
       services.AddHttpsRedirection(opts =>
       {
         opts.RedirectStatusCode = 307;
-        opts.HttpsPort = 5001;
+        opts.HttpsPort = 443;
+      });
+
+      services.AddHsts(opts =>
+      {
+        opts.Preload = true;
+        opts.IncludeSubDomains = true;
+        opts.MaxAge = TimeSpan.FromHours(2);
       });
 
       // In production, the Angular files will be served from this directory

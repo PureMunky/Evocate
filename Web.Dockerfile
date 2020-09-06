@@ -2,6 +2,7 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build-env
 WORKDIR /app
 
 RUN apt-get update
+RUN apt-get -y install build-essential
 RUN apt-get -y install curl gnupg
 RUN curl -sL https://deb.nodesource.com/setup_14.x  | bash -
 RUN apt-get install nodejs -y

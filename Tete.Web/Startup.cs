@@ -68,6 +68,7 @@ namespace Tete.Web
         app.UseHsts();
       }
 
+      // TODO: Setup automatic SSL Cert handling.
       app.UseHttpsRedirection();
       app.UseStaticFiles();
       app.UseSpaStaticFiles();

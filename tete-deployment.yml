@@ -30,10 +30,12 @@ spec:
   selector:
     app: tete-web
   ports:
-    - protocol: TCP
+    - name: http
+      protocol: TCP
       port: 80
       targetPort: 80
-    - protocol: TCP
+    - name: https
+      protocol: TCP
       port: 443
       targetPort: 443
   type: LoadBalancer
@@ -61,10 +63,19 @@ spec:
             - containerPort: 80
             - containerPort: 443
           env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: ASPNETCORE_Kestrel__Certificates__Default__Path
+              value: ./Tete.Web.pfx
+            - name: ASPNETCORE_Kestrel__Certificates__Default__Password
+              valueFrom:
+                secretKeyRef:
+                  name: cert-credentials
+                  key: cert-password
             - name: ConnectionStrings__DefaultConnection # Server=$teteDBServer; Database=Tete; User ID=$teteDBUser; Password=$teteDBPassword
               valueFrom:
                 secretKeyRef:
-                  name: db-connection
+                  name: db-credentials
                   key: connection-string
 
 ---

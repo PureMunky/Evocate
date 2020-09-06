@@ -19,7 +19,8 @@ namespace Tete.Tests.Models.Logging
     public void HasDescription()
     {
       string testDescription = "hello description";
-      var l = new Log(testDescription);
+      System.Guid userId = System.Guid.NewGuid();
+      var l = new Log(testDescription, userId);
 
       Assert.AreEqual(testDescription, l.Description);
     }

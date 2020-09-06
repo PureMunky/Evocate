@@ -13,7 +13,6 @@ namespace Tete.Models.Content
     [Required]
     public string Destination { get; set; }
 
-    // TODO: Administer links at a site-wide level to remove abusive sites being linked.
     public bool Active { get; set; }
 
     public bool Reviewed { get; set; }

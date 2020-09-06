@@ -2,5 +2,7 @@ bin/
 obj/
 out/
 coverage/
+secrets/
 coverage.json
 *.log
+*.pfx

@@ -11,6 +11,7 @@ export class Topic {
   public userTopic: UserTopic;
   public keywords: Array<Keyword>;
   public links: Array<Link>;
+  public shortDescription: string;
 
   constructor() {
     this.name = '';

@@ -1,11 +1,3 @@
-<div *ngFor="let mentorship of mentorships" class="tile"
-  [ngClass]="{'green': mentorship.hasMentor, 'blue': mentorship.mentorUserId == currentUser.userId }">
-  <a [routerLink]="['/mentorship/', mentorship.mentorshipId]">{{mentorship.topic.name}}</a><br />
-
-  <span *ngIf="mentorship.hasMentor && mentorship.mentorUserId != currentUser.userId">Mentor: <teteProfileLink
-      [user]="mentorship.mentor"></teteProfileLink></span>
-
-  <span *ngIf="mentorship.hasMentor && mentorship.mentorUserId == currentUser.userId">Learner: <teteProfileLink
-      [user]="mentorship.learner"></teteProfileLink></span>
-  <span *ngIf="!mentorship.hasMentor">Waiting on Mentor</span>
+<div class="card-columns">
+  <teteTile *ngFor="let mentorship of mentorships" [mentorship]="mentorship"></teteTile>
 </div>

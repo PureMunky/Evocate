@@ -4,11 +4,12 @@ using System.Linq;
 using System.Collections.Generic;
 using Tete.Api.Contexts;
 using Tete.Models.Logging;
+using Tete.Models.Authentication;
 
 namespace Tete.Api.Services.Logging
 {
 
-  public class LogService : IService<Log>
+  public class LogService : ServiceBase
   {
 
     public enum LoggingLayer
@@ -19,12 +20,13 @@ namespace Tete.Api.Services.Logging
       Web = 3
     }
 
-    private MainContext mainContext;
     private string DefaultDomain;
-    public LogService(MainContext mainContext, LoggingLayer layer)
+    public LogService(MainContext mainContext, LoggingLayer layer, UserVM Actor)
     {
       this.mainContext = mainContext;
+      this.Actor = Actor;
       this.DefaultDomain = layer.ToString();
+
     }
 
     public Log New()
@@ -34,12 +36,26 @@ namespace Tete.Api.Services.Logging
 
     public IEnumerable<Log> Get()
     {
-      return this.mainContext.Logs.AsNoTracking().OrderByDescending(l => l.Occured);
+      var rtnLogs = new List<Log>();
+
+      if (this.Actor.Roles.Contains("Admin"))
+      {
+        rtnLogs = this.mainContext.Logs.AsNoTracking().OrderByDescending(l => l.Occured).ToList();
+      }
+
+      return rtnLogs;
     }
 
     public Log Get(string Id)
     {
-      return this.mainContext.Logs.Find(Guid.Parse(Id));
+      var rtnLog = new Log();
+
+      if (this.Actor.Roles.Contains("Admin"))
+      {
+        rtnLog = this.mainContext.Logs.Find(Guid.Parse(Id));
+      }
+
+      return rtnLog;
     }
 
     public void Save(Log Object)
@@ -50,7 +66,7 @@ namespace Tete.Api.Services.Logging
 
     public void Write(string Description, string Data = "", string Domain = "")
     {
-      Save(new Log(Description, Data, (Domain.Length > 0 ? Domain : DefaultDomain)));
+      Save(new Log(Description, this.Actor.UserId, Data, (Domain.Length > 0 ? Domain : DefaultDomain)));
     }
 
   }

@@ -57,4 +57,8 @@ export class TopicService {
   public GetWaitingTopics() {
     return this.apiService.get("/V1/Topic/GetWaitingTopics");
   }
+
+  public GetKeywordTopics(keyword: string) {
+    return this.apiService.get("/V1/Topic/GetKeywordTopics?keyword=" + keyword);
+  }
 }

@@ -1,6 +1,20 @@
 <body>
   <app-nav-menu></app-nav-menu>
+  <div>
+    <div *ngIf="error.display" class="toast toast-alert"
+      style="opacity: 1; margin: 70px 20px; position: absolute; top: 0; right: 0;" role="alert" aria-live="assertive"
+      aria-atomic="true">
+      <div class="toast-header">
+        <strong class="mr-auto">Error</strong>
+      </div>
+      <div class="toast-body">
+        {{error.message}}
+      </div>
+    </div>
+  </div>
+
   <div class="container">
     <router-outlet></router-outlet>
   </div>
+
 </body>

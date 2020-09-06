@@ -15,11 +15,9 @@ namespace Tete.Api.Controllers
   public class TopicController : ControllerRoot
   {
 
-    private Api.Services.Logging.LogService logService;
 
     public TopicController(Contexts.MainContext mainContext) : base(mainContext)
     {
-      this.logService = new Services.Logging.LogService(mainContext, Tete.Api.Services.Logging.LogService.LoggingLayer.Api);
     }
 
     [HttpPost]
@@ -102,6 +100,14 @@ namespace Tete.Api.Controllers
       var service = new Services.Content.TopicService(Context, CurrentUser);
 
       return new Response<TopicVM>(service.GetUsersTopics(userId));
+    }
+
+    [HttpGet]
+    public Response<TopicVM> GetKeywordTopics(string keyword)
+    {
+      var service = new Services.Content.TopicService(Context, CurrentUser);
+
+      return new Response<TopicVM>(service.GetKeywordTopics(keyword));
     }
 
   }

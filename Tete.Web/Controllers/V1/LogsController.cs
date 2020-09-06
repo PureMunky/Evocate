@@ -13,31 +13,17 @@ namespace Tete.Api.Controllers
   public class LogsController : ControllerRoot
   {
 
-    private Api.Services.Logging.LogService service;
 
     public LogsController(Contexts.MainContext mainContext) : base(mainContext)
     {
-      this.service = new Services.Logging.LogService(mainContext, Tete.Api.Services.Logging.LogService.LoggingLayer.Api);
     }
     // GET api/values
     [HttpGet]
     public Response<Log> Get()
     {
-      return new Response<Log>(this.service.Get());
-    }
+      var service = new Services.Logging.LogService(Context, Tete.Api.Services.Logging.LogService.LoggingLayer.Api, CurrentAdmin);
 
-    // GET api/values/5
-    [HttpGet("{id}")]
-    public Response<Log> Get(string id)
-    {
-      return new Response<Log>(this.service.Get(id));
-    }
-
-    // POST api/values
-    [HttpPost]
-    public void Post([FromBody] Log value)
-    {
-      this.service.Save(value);
+      return new Response<Log>(service.Get());
     }
 
   }

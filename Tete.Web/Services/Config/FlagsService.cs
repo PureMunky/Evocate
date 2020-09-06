@@ -1,42 +1,38 @@
 using System.Collections.Generic;
 using Tete.Api.Contexts;
 using Tete.Models.Config;
+using Tete.Models.Authentication;
 
 namespace Tete.Api.Services.Config
 {
 
-  public class FlagService : IService<Flag>
+  public class FlagService : ServiceBase
   {
-    private MainContext mainContext;
-    private Logging.LogService logService;
 
-    public FlagService(MainContext mainContext)
+    public FlagService(MainContext mainContext, UserVM Actor)
     {
       this.mainContext = mainContext;
-      this.logService = new Logging.LogService(mainContext, Tete.Api.Services.Logging.LogService.LoggingLayer.Service);
+      this.Actor = Actor;
     }
 
     public Flag New()
     {
-      this.logService.Write("Get Flag", "New");
       return new Flag();
     }
 
     public IEnumerable<Flag> Get()
     {
-      this.logService.Write("Get Flags", "All");
       return this.mainContext.Flags;
     }
 
     public Flag Get(string Id)
     {
-      this.logService.Write("Getting Flag", Id);
       return this.mainContext.Flags.Find(Id);
     }
 
     public void Save(Flag Object)
     {
-      this.logService.Write("Saving Flag", Object.ToString());
+      LogService.Write("Saving Flag", Object.ToString());
       this.mainContext.Flags.Add(Object);
       this.mainContext.SaveChanges();
     }

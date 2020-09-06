@@ -1,9 +1,9 @@
+# https://www.digitalocean.com/community/tutorials/how-to-automate-deployments-to-digitalocean-kubernetes-with-circleci
 ---
 apiVersion: v1
 kind: Namespace
 metadata:
   name: tete
-
 ---
 apiVersion: v1
 kind: Service
@@ -29,9 +29,14 @@ spec:
   selector:
     app: tete-web
   ports:
-    - protocol: TCP
+    - name: http
+      protocol: TCP
       port: 80
       targetPort: 80
+    - name: https
+      protocol: TCP
+      port: 443
+      targetPort: 443
   type: LoadBalancer
 
 ---
@@ -41,7 +46,7 @@ metadata:
   name: tete-web
   namespace: tete
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: tete-web
@@ -55,6 +60,22 @@ spec:
           image: puremunky/tete-web:latest
           ports:
             - containerPort: 80
+            - containerPort: 443
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: ASPNETCORE_Kestrel__Certificates__Default__Path
+              value: ./Tete.Web.pfx
+            - name: ASPNETCORE_Kestrel__Certificates__Default__Password
+              valueFrom:
+                secretKeyRef:
+                  name: cert-credentials
+                  key: cert-password
+            - name: ConnectionStrings__DefaultConnection # Server=$teteDBServer; Database=Tete; User ID=$teteDBUser; Password=$teteDBPassword
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: connection-string
 
 ---
 apiVersion: apps/v1
@@ -77,3 +98,9 @@ spec:
           image: puremunky/tete-db:latest
           ports:
             - containerPort: 1433
+          env:
+            - name: SA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: password

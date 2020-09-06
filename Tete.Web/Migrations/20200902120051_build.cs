@@ -119,6 +119,7 @@ namespace Tete.Web.Migrations
                 {
                     LogId = table.Column<Guid>(nullable: false),
                     Occured = table.Column<DateTime>(nullable: false),
+                    UserId = table.Column<Guid>(nullable: false),
                     Description = table.Column<string>(nullable: true),
                     MachineName = table.Column<string>(nullable: true),
                     Data = table.Column<string>(nullable: true),
@@ -158,14 +159,14 @@ namespace Tete.Web.Migrations
                 name: "Sessions",
                 columns: table => new
                 {
-                    SessionId = table.Column<Guid>(nullable: false),
                     Token = table.Column<string>(nullable: false),
                     UserId = table.Column<Guid>(nullable: false),
-                    Created = table.Column<DateTime>(nullable: false)
+                    Created = table.Column<DateTime>(nullable: false),
+                    LastUsed = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Sessions", x => x.SessionId);
+                    table.PrimaryKey("PK_Sessions", x => x.Token);
                 });
 
             migrationBuilder.CreateTable(

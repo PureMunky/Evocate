@@ -1,0 +1,32 @@
+<h1>Link Admin</h1>
+<div>
+  <button class="btn btn-primary" (click)="loadLinks()">Reload</button>
+
+  Filters:
+  <button class="btn btn-secondary" (click)="filterAll()">All</button>
+  <button class="btn btn-secondary" (click)="filterUnreviewed()">Unreviewed</button>
+  <button class="btn btn-secondary" (click)="filterActive()">Active</button>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Active</th>
+      <th>Reviewed</th>
+      <th>Name</th>
+      <th>Url</th>
+      <th>Link</th>
+      <th>Controls</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let link of Links">
+      <td><input type="checkbox" [(ngModel)]="link.active"></td>
+      <td><input type="checkbox" [(ngModel)]="link.reviewed"></td>
+      <td><input type="text" [(ngModel)]="link.name" /></td>
+      <td><input type="text" [(ngModel)]="link.destination" /></td>
+      <td><a [href]="link.destination" target="_blank">Open</a></td>
+      <td><button class="btn btn-secondary" (click)="saveLink(link)">Save</button></td>
+    </tr>
+  </tbody>
+</table>

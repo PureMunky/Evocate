@@ -1,51 +1,105 @@
 <div *ngIf="!working.loading">
+  <!-- Header -->
   <div>
+
+    <!-- Topic, Role, and Other Person -->
     <h2>{{currentMentorship.topic.name}}</h2>
-    <p>{{currentMentorship.topic.description}}</p>
+    <div style="margin-left: 10px;">
+      <h6>as a {{currentMentorship.learnerUserId == currentUser.userId ? 'Learner' : 'Mentor'}}</h6>
+      <h6 *ngIf="working.otherPerson">
+        with <teteProfileLink [user]="working.otherPerson" style="font-weight: bold;"></teteProfileLink>
+      </h6>
+    </div>
+
+    <!-- Unsaved Private Details Alert -->
+    <div class="alert alert-info" *ngIf="working.unsavedContact && currentMentorship.hasMentor">
+      Don't forget to update your <strong>private details</strong> specifically for this mentorship. We recommend
+      starting with a way to contact you or some information about what you'd like to get out of this relationship.
+    </div>
+
+    <!-- No Mentor Alert -->
+    <div class="alert alert-info" *ngIf="!currentMentorship.hasMentor">
+      <h4>No mentor yet</h4>
+      While you're waiting, review your <strong>private details</strong> and save them so your new mentor will be able
+      to contact you.
+    </div>
+
+    <!-- Closed Mentorship Alert -->
+    <div class="alert alert-success" *ngIf="working.closed">
+      This mentorship is closed and cannot be edited.
+    </div>
+
+    <h5>Topic Description</h5>
+    <pre>{{currentMentorship.topic.description}}</pre>
   </div>
 
-  <div *ngIf="working.closed">
-    This mentorship is closed and cannot be edited.
+  <!-- Learners's Private Details View -->
+  <div *ngIf="working.showLearner">
+    <div *ngIf="currentMentorship.mentor">
+      <h5>Mentor's private details</h5>
+      <pre *ngIf="currentMentorship.mentorContact">{{currentMentorship.mentorContact}}</pre>
+      <div *ngIf="!currentMentorship.mentorContact">Your mentor has not provided any private details yet.</div>
+    </div>
+
+    <div *ngIf="!working.unsavedContact">
+      <h5>Your private details</h5>
+      <pre>{{currentMentorship.learnerContact}}</pre>
+    </div>
   </div>
 
+  <!-- Mentor's Private Details View -->
+  <div *ngIf="working.showMentor">
+    <div>
+      <h5>Learner's private details</h5>
+      <pre *ngIf="currentMentorship.learnerContact">{{currentMentorship.learnerContact}}</pre>
+      <div *ngIf="!currentMentorship.learnerContact">Your learner has not provided any private details yet.</div>
+    </div>
+
+    <div *ngIf="!working.unsavedContact">
+      <h5>Your private details</h5>
+      <pre>{{currentMentorship.mentorContact}}</pre>
+    </div>
+  </div>
+
+  <!-- Working  Section -->
   <div *ngIf="!working.closed">
-    <div *ngIf="working.editing">
-      <div>Update your contact info for this mentorship.</div>
-      <div class="warning">
-        Don't give personally identifying information to a stranger on the internet.<br />
+
+    <!-- Private Details Form -->
+    <div class="form-group" *ngIf="working.editing">
+      <h4>Editing Private Details</h4>
+      <div class="alert alert-danger">
+        Please don't give personally identifying information to a stranger on the internet.<br />
         We recommend video chatting with them first if that's possible.
       </div>
-      <div *ngIf="working.unsavedContact && working.contactDetails.length > 0">
-        This has not been saved or made visible until you save it.
-      </div>
-      <textarea [(ngModel)]="working.contactDetails"></textarea>
-      <button (click)="save()">Save</button>
-    </div>
-    <button (click)="toggleEdit()">Toggle</button>
-  </div>
 
-  <div>
-    <div *ngIf="currentMentorship.mentor">
-      <teteProfileLink [user]="currentMentorship.mentor" style="font-weight: bold;">
-      </teteProfileLink> - Mentor<br />
-      <span>{{currentMentorship.mentorContact}}</span>
+      <label for="txtContactDetails">Private Details</label>
+      <textarea id="txtContactDetails" class="form-control" [(ngModel)]="working.contactDetails"></textarea>
+      <small id="privateDetails" class="form-text text-muted">
+        <span *ngIf="working.unsavedContact">This is not yet visible to others until you save it.</span>
+        Private information specific to this mentorship, it's never shared with anyone else.
+      </small>
+      <button class="btn btn-primary" (click)="save()">Save</button>
+      <button class="btn btn-secondary" (click)="toggleEdit()">Cancel</button>
     </div>
-    <div *ngIf="!currentMentorship.mentor">No Mentor Yet</div>
-    <div>
-      <teteProfileLink [user]="currentMentorship.learner" style="font-weight: bold;"></teteProfileLink> - Learner<br />
-      <span>{{currentMentorship.learnerContact}}</span>
+
+    <!-- Control Buttons -->
+    <div *ngIf="!(working.editing || working.closing)">
+      <button class="btn"
+        [ngClass]="{ 'btn-primary': working.unsavedContact, 'btn-secondary' : !working.unsavedContact }"
+        (click)="toggleEdit()">Edit Private Details</button>
+      <button class="btn btn-secondary" *ngIf="!working.closing" (click)="beginClose()">Close Mentorship</button>
     </div>
-  </div>
 
-  <div *ngIf="!working.closed">
-    <button *ngIf="!working.closing" (click)="beginClose()">Close Mentorship</button>
-    <div *ngIf="working.closing">
 
+    <div class="form-group" *ngIf="working.closing">
+      <h4>Closing Mentorship</h4>
       <div *ngIf="currentMentorship.mentor">
         <div *ngIf="working.showLearner">
-          <p>By closing this mentorship you agree that you no longer require anything from
-            {{currentMentorship.mentor.displayName}}.</p>
-          <p>How would you rate {{currentMentorship.mentor.displayName}}?</p>
+          <div>
+            By closing this mentorship you agree that you no longer require anything from
+            {{currentMentorship.mentor.displayName}}.
+          </div>
+          <div>How would you rate {{currentMentorship.mentor.displayName}}?</div>
           <input type="number" name="mentorRating" [(ngModel)]="working.evaluation.rating" min="0" max="5">
           <p>Any comments you'd like to leave regarding your experience with {{currentMentorship.mentor.displayName}}?
           </p>
@@ -53,24 +107,32 @@
         </div>
 
         <div *ngIf="working.showMentor">
-          <div>
-            By closing this relationship you agree that this mentorship is complete and that there is nothing remaining
-            for you to teach {{currentMentorship.learner.displayName}} about {{currentMentorship.topic.name}}.
+          <div class="alert alert-warning">
+            By closing this relationship you agree that this mentorship is complete and that there is nothing
+            remaining for you to teach {{currentMentorship.learner.displayName}} about {{currentMentorship.topic.name}}.
           </div>
-          <div>How would you rate {{currentMentorship.learner.displayName}} as a learner?</div>
-          <input type="number" name="learnerRating" [(ngModel)]="working.evaluation.rating" min="0" max="5">
-          <span *ngIf="working.evaluation.rating > 0">{{translateRating(working.evaluation.rating)}}</span>
-          <div>Would you care to elaborate on why {{currentMentorship.learner.displayName}} deserved a
-            {{translateRating(working.evaluation.rating)}} rating?</div>
-          <textarea [(ngModel)]="working.evaluation.comments"></textarea>
+          <label for="learnerRating">
+            How would you rate <strong>{{currentMentorship.learner.displayName}}</strong> as a learner?
+          </label>
+          <input id="learnerRating" class="form-control-range" type="range" min="1" max="5"
+            [(ngModel)]="working.evaluation.rating" />
+          <small class="form-text text-muted">{{translateRating(working.evaluation.rating)}}</small>
+          <label for="mentorComments" class="form-text">
+            Would you care to elaborate on why <strong>{{currentMentorship.learner.displayName}}</strong> deserved a
+            {{translateRating(working.evaluation.rating)}} rating?
+          </label>
+          <textarea id="mentorComments" class="form-control" [(ngModel)]="working.evaluation.comments"></textarea>
         </div>
       </div>
 
       <div *ngIf="!currentMentorship.hasMentor">
         Would you like to end this mentorship before you've been asigned a mentor?
       </div>
-      <button (click)="finishClose()">End Mentorship</button>
-      <button (click)="cancelClose()">Cancel</button>
+
+      <div>
+        <button class="btn btn-warning" (click)="finishClose()">End Mentorship</button>
+        <button class="btn btn-secondary" (click)="cancelClose()">Cancel</button>
+      </div>
     </div>
   </div>
 </div>

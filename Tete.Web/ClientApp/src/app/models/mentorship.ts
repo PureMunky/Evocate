@@ -1,7 +1,11 @@
+import { User } from "./user";
+
 export class Mentorship {
   public mentorshipId: string;
   public learnerUserId: string;
+  public learner: User;
   public learnerContact: string;
+  public mentor: User;
   public mentorUserId: string;
   public mentorContact: string;
   public topicId: string;

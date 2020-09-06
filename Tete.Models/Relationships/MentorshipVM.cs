@@ -15,6 +15,10 @@ namespace Tete.Models.Relationships
     public string Comments { get; set; }
     public int Rating { get; set; }
 
+    public MentorshipVM() : base(Guid.Empty, Guid.Empty)
+    {
+      this.MentorshipId = Guid.NewGuid();
+    }
     public MentorshipVM(Guid LearnerUserId, Guid TopicId, TopicVM Topic) : base(LearnerUserId, TopicId)
     {
       this.Topic = Topic;

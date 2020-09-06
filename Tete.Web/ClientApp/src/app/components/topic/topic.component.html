@@ -1,64 +1,84 @@
+<!-- Admin Controls -->
 <div *ngIf="adminUser">
-  Admin: <button (click)="working.editing = !working.editing">ToggleEdit</button>
+  Admin: <button class="btn btn-secondary" (click)="working.editing = !working.editing">ToggleEdit</button>
 </div>
 
+<!-- Editing Form -->
 <div *ngIf="working.editing">
   <h2>Editing</h2>
-  <div>
+  <div class="form-group">
     <label for="txtName">Name</label>
-    <input id="txtName" type="text" [(ngModel)]="currentTopic.name" />
+    <input id="txtName" type="text" class="form-control" [(ngModel)]="currentTopic.name" />
   </div>
-  <div>
+  <div class="form-group">
     <label for="txtDescription">Description</label>
-    <textarea id="txtDescription" [(ngModel)]="currentTopic.description"></textarea>
+    <textarea id="txtDescription" class="form-control" [(ngModel)]="currentTopic.description"></textarea>
   </div>
+
+  <!-- Admin Section -->
   <div *ngIf="adminUser">
     <h3>Keywords</h3>
     <label for="txtKeyword">Keyword</label>
-    <input id="txtKeyword" type="text" [(ngModel)]="working.keywordName" />
-    <button (click)="addKeyword()">+</button><br />
-    <span *ngFor="let keyword of currentTopic.keywords">
-      {{keyword.name}}
-      <button (click)="removeKeyword(keyword)">-</button>
-    </span>
+    <div class="input-group">
+      <input id="txtKeyword" type="text" class="form-control" [(ngModel)]="working.keywordName" />
+      <div class="input-group-append">
+        <button class="btn btn-secondary" (click)="addKeyword()">+</button><br />
+      </div>
+    </div>
+    <div class="form-group">
+      <span class="badge badge-secondary" *ngFor="let keyword of currentTopic.keywords">
+        {{keyword.name}}
+        <button class="btn btn-sm" (click)="removeKeyword(keyword)">-</button>
+      </span>
+    </div>
+
 
     <h3>Links</h3>
-    <label for="txtLinkName">Name</label>
-    <input id="txtLinkName" type="text" [(ngModel)]="working.linkName" />
-    <label for="txtLinkDestination">Url</label>
-    <input id="txtLinkDestination" type="text" [(ngModel)]="working.linkDestination" />
-    <button (click)="addLink()">+</button>
+    <div class="form-group">
+      <label for="txtLinkName">Name</label>
+      <input id="txtLinkName" type="text" class="form-control" [(ngModel)]="working.linkName" />
+    </div>
+
+    <div class="form-group">
+      <label for="txtLinkDestination">Url</label>
+      <input id="txtLinkDestination" type="text" class="form-control" [(ngModel)]="working.linkDestination" />
+    </div>
+
+    <button class="btn btn-secondary" (click)="addLink()">+</button>
     <div *ngFor="let link of currentTopic.links">
       <a [href]="link.destination" target="_blank">{{link.name}}</a>
-      <button (click)="removeLink(link)">-</button>
+      <button class="btn btn-sm btn-secondary" (click)="removeLink(link)">-</button>
     </div>
   </div>
   <div>
-    <button (click)="save()">Save</button>
+    <button class="btn btn-secondary" (click)="save()">Save</button>
   </div>
 </div>
 
+<!-- Main Display -->
 <div *ngIf="!working.editing">
   <h2>{{currentTopic.name}}</h2>
   <h3 *ngIf="currentTopic.userTopic">Your role: {{currentTopic.userTopic.statusText}}</h3>
   <div *ngIf="currentTopic.keywords.length > 0">
     <span *ngFor="let keyword of currentTopic.keywords">#{{keyword.name}}</span>
   </div>
+
   <div *ngIf="currentTopic.keywords.length > 0">
     <div *ngFor="let link of currentTopic.links">
       <a [href]="link.destination" target="_blank">{{link.name}}</a>
     </div>
   </div>
-  <p>{{currentTopic.description}}</p>
+
+  <pre>{{currentTopic.description}}</pre>
 
   <div *ngIf="(!currentTopic.userTopic) && currentTopic.topicId">
-    <button (click)="learn()">Request a Mentor</button>
-    <button (click)="teach()" *ngIf="!currentTopic.elligible || adminUser">Register as a Mentor</button>
+    <button class="btn btn-secondary" (click)="learn()">Request a Mentor</button>
+    <button class="btn btn-secondary" (click)="teach()" *ngIf="!currentTopic.elligible || adminUser">Register as a Mentor</button>
   </div>
 
   <div *ngIf="currentTopic.userTopic &&  currentTopic.userTopic.status == 4">
     <!-- Mentor Controls -->
-    <button *ngIf="currentTopic.mentorships.length > 0" (click)="claimNextMentorship()">I'm ready for a new
+    <button class="btn btn-secondary" *ngIf="currentTopic.mentorships.length > 0" (click)="claimNextMentorship()">I'm ready for a new
       learner.</button>
     <span *ngIf="currentTopic.mentorships.length == 0">There are no waiting learners at the moment.</span>
   </div>

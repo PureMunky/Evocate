@@ -1,24 +1,21 @@
-<h1>Home</h1>
-
-<div *ngIf="learningMentorships.length > 0">
+<div class="section" *ngIf="learningMentorships.length > 0">
   <h2>Learning</h2>
   <teteMentorList [mentorships]="learningMentorships"></teteMentorList>
 </div>
 
-<div *ngIf="teachingMentorships.length > 0">
+<div class="section" *ngIf="teachingMentorships.length > 0">
   <h2>Teaching</h2>
   <teteMentorList [mentorships]="teachingMentorships"></teteMentorList>
 </div>
 
-<div>
+<div class="section" *ngIf="learningMentorships.length == 0 && teachingMentorships.length == 0">
   <h2>Topic Search</h2>
   <teteTopicSearch></teteTopicSearch>
 </div>
 
-<div *ngIf="currentUserTopics.length > 0">
+<div class="section" *ngIf="currentUserTopics.length > 0">
   <h2>Your Topics</h2>
-  <div *ngFor="let topic of currentUserTopics" class="tile">
-    <teteTopicLink [topic]="topic"></teteTopicLink><br />
-    {{topic.userTopic.statusText}}
+  <div class="card-columns">
+    <teteTile *ngFor="let topic of currentUserTopics" [topic]="topic"></teteTile>
   </div>
 </div>

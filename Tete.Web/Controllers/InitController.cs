@@ -8,6 +8,7 @@ using Tete.Api.Services.Content;
 using Tete.Models.Authentication;
 using Tete.Models.Localization;
 using Tete.Api.Services.Users;
+using Tete.Api.Helpers;
 
 
 namespace Tete.Api.Controllers
@@ -103,19 +104,33 @@ namespace Tete.Api.Controllers
         output.Add("English language already existed.");
       }
 
-      List<Tete.Models.Content.TopicVM> SetupTopics = new List<Models.Content.TopicVM>();
-      SetupTopics.Add(new Models.Content.TopicVM()
+      List<Tete.Models.Content.TopicVM> SetupTopics = new List<Models.Content.TopicVM>()
       {
-        Name = "Support",
-        Description = "Testing support here.",
-        Elligible = true,
-        Keywords = new List<Models.Content.Keyword>() {
-          new Models.Content.Keyword() {
-            Name = "Support",
-            Restricted = true
+        new Models.Content.TopicVM()
+        {
+          Name = "Tete General Questions",
+          Description = "Ask any general questions you have about Tete here.",
+          Elligible = true,
+          Keywords = new List<Models.Content.Keyword>() {
+            new Models.Content.Keyword() {
+              Name = "Support",
+              Restricted = true
+            }
+          }
+        },
+        new Models.Content.TopicVM()
+        {
+          Name = "Tete Issues",
+          Description = "If you're experiencing an error and need help resolving it the reqest a mentor for this topic.",
+          Elligible = true,
+          Keywords = new List<Models.Content.Keyword>() {
+            new Models.Content.Keyword() {
+              Name = "support",
+              Restricted = true
+            }
           }
         }
-      });
+      };
 
       foreach (Tete.Models.Content.TopicVM t in SetupTopics)
       {

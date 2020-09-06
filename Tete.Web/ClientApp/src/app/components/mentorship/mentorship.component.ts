@@ -26,7 +26,8 @@ export class MentorshipComponent {
     showLearner: false,
     showMentor: false,
     loading: true,
-    evaluation: new Evaluation()
+    evaluation: new Evaluation(),
+    otherPerson: new User()
   };
 
   constructor(private userService: UserService,
@@ -98,10 +99,12 @@ export class MentorshipComponent {
     if (this.currentMentorship.learnerUserId == this.currentUser.userId) {
       contactDetails = this.currentMentorship.learnerContact;
       this.working.showLearner = true;
+      this.working.otherPerson = this.currentMentorship.mentor;
       this.working.closed = this.currentMentorship.learnerClosed;
     } else if (this.currentMentorship.mentorUserId == this.currentUser.userId) {
       contactDetails = this.currentMentorship.mentorContact;
       this.working.showMentor = true;
+      this.working.otherPerson = this.currentMentorship.learner;
       this.working.closed = this.currentMentorship.mentorClosed;
     }
 

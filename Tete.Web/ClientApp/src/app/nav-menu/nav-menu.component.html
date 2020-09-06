@@ -1,7 +1,11 @@
 <header>
   <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
     <div class="container">
-      <a class="navbar-brand" [routerLink]="['/']">TêteLearning</a>
+      <a class="navbar-brand" [routerLink]="['/']">Tête <span class="badge badge-primary"
+          style="font-size: .6em; vertical-align: super;">beta</span></a>
+      <div class="spinner-border" role="status" *ngIf="loading">
+        <span class="sr-only">Loading...</span>
+      </div>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse"
         aria-label="Toggle navigation" [attr.aria-expanded]="isExpanded" (click)="toggle()">
         <span class="navbar-toggler-icon"></span>
@@ -17,11 +21,11 @@
           <li *ngIf="adminRole" class="nav-item" [routerLinkActive]="['link-active']">
             <a class="nav-link text-dark" [routerLink]="['/admin']">Admin</a>
           </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']" *ngIf="profileLink.length > 0">
-            <a class="nav-link text-dark" [routerLink]="profileLink">{{currentUser.displayName}}</a>
+          <li class="nav-item" [routerLinkActive]="['link-active']" [routerLinkActiveOptions]="{ exact: true }">
+            <a class="nav-link text-dark" [routerLink]="['/support']">Support</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link text-dark" href="/Login/Logout">Logout</a>
+          <li class="nav-item" [routerLinkActive]="['link-active']" *ngIf="profileLink.length > 0">
+            <a class="nav-link text-dark" [routerLink]="profileLink">Profile</a>
           </li>
         </ul>
       </div>

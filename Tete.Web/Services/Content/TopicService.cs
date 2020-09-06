@@ -13,7 +13,6 @@ namespace Tete.Api.Services.Content
   {
 
     private UserLanguageService userLanguageService;
-    private Logging.LogService logService;
 
     public TopicService(MainContext mainContext, UserVM actor)
     {
@@ -80,6 +79,15 @@ namespace Tete.Api.Services.Content
       return this.mainContext.Topics.Where(t => t.Name.ToLower().Contains(searchText) || t.Description.ToLower().Contains(searchText)).Select(t => new TopicVM(t));
     }
 
+    public IEnumerable<TopicVM> GetKeywordTopics(string keyword)
+    {
+      keyword = keyword.ToLower();
+      return this.mainContext.TopicKeywords
+        .Where(tk => tk.Keyword.Name.ToLower() == keyword)
+        .Join(this.mainContext.Topics, tk => tk.TopicId, t => t.TopicId, (tk, t) => new TopicVM(t))
+        .ToList();
+    }
+
     public TopicVM GetTopicVM(Guid topicId)
     {
       var dbTopic = GetTopic(topicId);
@@ -88,7 +96,7 @@ namespace Tete.Api.Services.Content
       if (dbTopic != null)
       {
 
-        var dbUserTopic = GetUserTopics(this.Actor.UserId, topicId).FirstOrDefault();
+        var dbUserTopic = GetUserTopics(this.Actor.UserId, topicId).Select(ut => new UserTopicVM(ut)).FirstOrDefault();
         rtnTopic = new TopicVM(dbTopic, dbUserTopic);
 
         rtnTopic.Links = this.mainContext.Links.Where(l => l.Active).Join(this.mainContext.TopicLinks.Where(tl => tl.TopicId == rtnTopic.TopicId && tl.Active), l => l.LinkId, tl => tl.LinkId, (l, tl) => l).OrderBy(l => l.Name).ToList();
@@ -126,7 +134,7 @@ namespace Tete.Api.Services.Content
     public IEnumerable<TopicVM> GetUsersTopics(Guid UserId)
     {
       return GetUserTopics(UserId).ToList()
-        .Join(this.mainContext.Topics, ut => ut.TopicId, t => t.TopicId, (ut, t) => new TopicVM(t, ut))
+        .Join(this.mainContext.Topics, ut => ut.TopicId, t => t.TopicId, (ut, t) => new TopicVM(t, new UserTopicVM(ut)))
         .OrderByDescending(tv => tv.UserTopic.Status)
         .ThenBy(tv => tv.Name);
     }
@@ -275,7 +283,6 @@ namespace Tete.Api.Services.Content
       this.mainContext = mainContext;
       this.Actor = actor;
       this.userLanguageService = new UserLanguageService(mainContext, actor);
-      this.logService = new Logging.LogService(mainContext, Logging.LogService.LoggingLayer.Api);
     }
   }
 }

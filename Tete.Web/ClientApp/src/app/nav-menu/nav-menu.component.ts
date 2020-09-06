@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { InitService } from '../services/init.service';
 import { User } from '../models/user';
 import { UserService } from '../services/user.service';
+import { LoadingService } from '../services/loading.service';
 
 @Component({
   selector: 'app-nav-menu',
@@ -11,6 +12,7 @@ import { UserService } from '../services/user.service';
 export class NavMenuComponent {
   public currentUser: User = new User();
   public adminRole: boolean = false;
+  public loading: boolean = true;
   isExpanded = false;
 
   collapse() {
@@ -26,13 +28,18 @@ export class NavMenuComponent {
 
   constructor(
     private initService: InitService,
-    private userServeice: UserService
+    private userService: UserService,
+    private loadingService: LoadingService
   ) {
+    loadingService.Register(loading => this.loadingHandler(loading));
     initService.Register(() => {
-      this.currentUser = userServeice.CurrentUser();
+      this.currentUser = userService.CurrentUser();
       this.profileLink = this.profileLinkPrefix + this.currentUser.userName;
       this.adminRole = this.currentUser.roles.some(r => r == 'Admin');
     });
   }
 
+  private loadingHandler(loading) {
+    this.loading = loading;
+  }
 }

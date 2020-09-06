@@ -11,9 +11,6 @@ namespace Tete.Api.Services.Users
   public class UserService : ServiceBase
   {
 
-    private UserLanguageService userLanguageService;
-    private Logging.LogService logService;
-
     public UserService(MainContext mainContext, UserVM actor)
     {
       FillData(mainContext, actor);
@@ -32,7 +29,7 @@ namespace Tete.Api.Services.Users
 
     public UserVM GetUser(User user)
     {
-      var languages = this.userLanguageService.GetUserLanguages(user.Id);
+      var languages = UserLanguageService.GetUserLanguages(user.Id);
       var profiles = this.mainContext.UserProfiles.Where(p => p.UserId == user.Id).FirstOrDefault();
       var roles = this.mainContext.AccessRoles.Where(r => r.UserId == user.Id).ToList();
       return new UserVM(
@@ -74,8 +71,6 @@ namespace Tete.Api.Services.Users
     {
       this.mainContext = mainContext;
       this.Actor = actor;
-      this.userLanguageService = new UserLanguageService(mainContext, actor);
-      this.logService = new Logging.LogService(mainContext, Logging.LogService.LoggingLayer.Api);
     }
   }
 }

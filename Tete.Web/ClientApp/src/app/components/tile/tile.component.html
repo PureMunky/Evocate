@@ -1,0 +1,29 @@
+<!-- Update all cards on the site to use this component. -->
+<div class="card teteCard">
+  <div class="card-body">
+
+    <h5 class="card-title">
+      <teteTopicLink *ngIf="topic" [topic]="topic"></teteTopicLink>
+      <a *ngIf="mentorship" [routerLink]="['/mentorship/', mentorship.mentorshipId]">{{mentorship.topic.name}}</a>
+    </h5>
+
+    <h6 *ngIf="topic && topic.userTopic" class="card-subtitle">{{topic.userTopic.statusText}}</h6>
+    <h6 class="card-subtitle"
+      *ngIf="mentorship && mentorship.hasMentor && mentorship.mentorUserId != currentUser.userId">
+      Mentor: <teteProfileLink [user]="mentorship.mentor"></teteProfileLink>
+    </h6>
+
+    <h6 class="card-subtitle"
+      *ngIf="mentorship && mentorship.hasMentor && mentorship.mentorUserId == currentUser.userId">
+      Learner: <teteProfileLink [user]="mentorship.learner"></teteProfileLink>
+    </h6>
+
+    <h6 class="card-subtitle" *ngIf="mentorship && !mentorship.hasMentor">Waiting on Mentor</h6>
+
+    <div *ngIf="topic">{{topic.shortDescription}}</div>
+    <div *ngIf="mentorship">{{mentorship.topic.shortDescription}}</div>
+  </div>
+  <div *ngIf="topic && topic.keywords">
+    <span *ngFor="let keyword of topic.keywords">#{{keyword.name}}</span>
+  </div>
+</div>

@@ -1,17 +1,26 @@
-<input type="text" [(ngModel)]="tmp.searchText" (keyup.enter)="Search()" />
-<button (click)="Search()">Go</button>
-<div *ngIf="search.done">
-  <h3>Results</h3>
-  <div *ngFor="let topic of topics">
-    <a [routerLink]="['/topic/', topic.topicId]">{{topic.name}}</a>
-    <div>{{topic.description}}</div>
+<div class="input-group">
+  <input type="text" [(ngModel)]="tmp.searchText" (keyup.enter)="Search()" />
+  <div class="input-group-append">
+    <button class="btn btn-outline-secondary" (click)="Search()">Go</button>
   </div>
-  <div *ngIf="search.newTopic">
-    <h4>Didn't see what you were looking for?</h4>
-    <a [routerLink]="['/topic/create/', search.text]">Create new topic:
-      {{search.text}}</a>
-    <div>
-      Create the topic now to request or become a mentor for whatever you want to do.
+</div>
+
+<div *ngIf="search.done">
+  <h4>Results</h4>
+  <button id="btnClearSearch" class="btn btn-secondary" (click)="search.done = false; tmp.searchText = '';">
+    Clear Results
+  </button>
+  <div class="card-columns">
+    <teteTile *ngFor="let topic of topics" [topic]="topic"></teteTile>
+
+    <div class="card" *ngIf="search.newTopic">
+      <div class="card-body">
+        <h5 class="card-title">Didn't see what you were looking for?</h5>
+        <h6 class="card-subtitle">
+          <a [routerLink]="['/topic/create/', search.text]">Create new topic: {{search.text}}</a>
+        </h6>
+        Create the topic now to request or become a mentor for whatever you want to do.
+      </div>
     </div>
   </div>
 </div>

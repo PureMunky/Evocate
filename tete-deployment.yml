@@ -1,4 +1,6 @@
 # https://www.digitalocean.com/community/tutorials/how-to-automate-deployments-to-digitalocean-kubernetes-with-circleci
+# https://docs.microsoft.com/en-us/sql/linux/tutorial-sql-server-containers-kubernetes?view=sql-server-ver15
+# https://www.microsoft.com/en-us/sql-server/sql-server-2017?rtc=1
 ---
 apiVersion: v1
 kind: Namespace
@@ -71,7 +73,7 @@ spec:
                 secretKeyRef:
                   name: cert-credentials
                   key: cert-password
-            - name: ConnectionStrings__DefaultConnection # Server=$teteDBServer; Database=Tete; User ID=$teteDBUser; Password=$teteDBPassword
+            - name: ConnectionStrings__DefaultConnection
               valueFrom:
                 secretKeyRef:
                   name: db-credentials
@@ -95,10 +97,14 @@ spec:
     spec:
       containers:
         - name: tete-db
-          image: puremunky/tete-db:latest
+          image: mcr.microsoft.com/mssql/server:2017-CU8-ubuntu
           ports:
             - containerPort: 1433
           env:
+            - name: MSSQL_PID
+              value: "Developer"
+            - name: ACCEPT_EULA
+              value: "Y"
             - name: SA_PASSWORD
               valueFrom:
                 secretKeyRef:

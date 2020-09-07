@@ -3,24 +3,19 @@ export teteDBPassword=$(</dev/urandom tr -dc '12345!@#$%qwertQWERTasdfgASDFGzxcv
 # kubectl delete -f tete-deployment.yml
 
 # stop existing container
-docker stop tete-db
 docker stop tete-web
 
 # remove existing container
-docker rm tete-db
 docker rm tete-web
 
 # clean the dotnet build files
 dotnet clean
 
 # build a new version of core
-docker build -f Db.Dockerfile -t tete-db-img .
 docker build -f Web.Dockerfile -t tete-web-img .
 
-docker tag tete-db-img:latest puremunky/tete-db:latest
 docker tag tete-web-img:latest puremunky/tete-web:latest
 
-docker push puremunky/tete-db:latest
 docker push puremunky/tete-web:latest
 
 # Deployment steps

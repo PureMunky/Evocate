@@ -46,6 +46,8 @@ namespace Tete.Web
         opts.MaxAge = TimeSpan.FromHours(2);
       });
 
+      services.AddLettuceEncrypt();
+
       // In production, the Angular files will be served from this directory
       services.AddSpaStaticFiles(configuration =>
       {

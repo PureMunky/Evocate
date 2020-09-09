@@ -21,6 +21,7 @@ import { AdminHome } from "./components/admin/adminHome.component";
 import { SupportComponent } from "./components/support/support.component";
 import { TileComponent } from "./components/tile/tile.component";
 import { LinkAdminComponent } from "./components/linkAdmin/linkAdmin.component";
+import { DashboardAdminComponent } from "./components/dashboardAdmin/dashboardAdmin.component";
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { LinkAdminComponent } from "./components/linkAdmin/linkAdmin.component";
     MentorList,
     SupportComponent,
     TileComponent,
-    LinkAdminComponent
+    LinkAdminComponent,
+    DashboardAdminComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
@@ -50,6 +52,8 @@ import { LinkAdminComponent } from "./components/linkAdmin/linkAdmin.component";
       { path: "", component: HomeComponent, pathMatch: "full" },
       {
         path: "admin", component: AdminHome, children: [
+          { path: "", component: DashboardAdminComponent, pathMatch: "full" },
+          { path: "dashboard", component: DashboardAdminComponent },
           { path: "language", component: LanguageAdminComponent },
           { path: "logging", component: LoggingComponent },
           { path: "link", component: LinkAdminComponent }

@@ -8,7 +8,7 @@ using Tete.Web.Models;
 
 namespace Tete.Api.Controllers
 {
-  [Route("V1/[controller]")]
+  [Route("V1/[controller]/[action]")]
   [ApiController]
   public class LogsController : ControllerRoot
   {
@@ -24,6 +24,14 @@ namespace Tete.Api.Controllers
       var service = new Services.Logging.LogService(Context, Tete.Api.Services.Logging.LogService.LoggingLayer.Api, CurrentAdmin);
 
       return new Response<Log>(service.Get());
+    }
+
+    [HttpGet]
+    public Response<Dashboard> Dashboard()
+    {
+      var service = new Services.Logging.LogService(Context, Tete.Api.Services.Logging.LogService.LoggingLayer.Api, CurrentAdmin);
+      var dashboard = service.GetDashboard();
+      return new Response<Dashboard>(dashboard);
     }
 
   }

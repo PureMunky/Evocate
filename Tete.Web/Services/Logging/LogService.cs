@@ -76,5 +76,25 @@ namespace Tete.Api.Services.Logging
       }
     }
 
+    public Dashboard GetDashboard()
+    {
+      var rtnDashboard = new Dashboard();
+      var startDate = DateTime.UtcNow.AddMonths(-1);
+
+      rtnDashboard.TotalUsers = this.mainContext.Users.AsNoTracking().Count();
+      rtnDashboard.ActiveUsers = this.mainContext.Sessions.AsNoTracking().Where(s => s.LastUsed > startDate).Select(s => s.UserId).Distinct().Count();
+
+      rtnDashboard.TotalTopics = this.mainContext.Topics.AsNoTracking().Count();
+      rtnDashboard.ActiveTopics = this.mainContext.UserTopics.AsNoTracking().Where(ut => ut.CreatedDate > startDate).Select(ut => ut.TopicId).Distinct().Count();
+      rtnDashboard.RecentTopics = this.mainContext.Topics.AsNoTracking().Where(t => t.Created > startDate).Count();
+
+      rtnDashboard.TotalMentorships = this.mainContext.Mentorships.AsNoTracking().Count();
+      rtnDashboard.WaitingMentorships = this.mainContext.Mentorships.AsNoTracking().Where(m => m.Active && m.MentorUserId == Guid.Empty).Count();
+      rtnDashboard.ActiveMentorships = this.mainContext.Mentorships.AsNoTracking().Where(m => m.Active && m.MentorUserId != Guid.Empty).Count();
+      rtnDashboard.CompletedMentorships = this.mainContext.Mentorships.AsNoTracking().Where(m => (!m.Active) && m.LearnerClosed && m.MentorClosed).Count();
+      rtnDashboard.CancelledMentorships = this.mainContext.Mentorships.AsNoTracking().Where(m => (!m.Active) && m.MentorUserId == Guid.Empty).Count();
+
+      return rtnDashboard;
+    }
   }
 }

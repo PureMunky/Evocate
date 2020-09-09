@@ -37,6 +37,9 @@ namespace Tete.Api.Controllers
     public void Post([FromBody] Flag value)
     {
       var service = new Services.Config.FlagService(Context, CurrentAdmin);
+
+      LogService.Write("Update flag (1)", string.Format("Flag:{0};Value{1}", value.Key, value.Value));
+
       service.Save(value);
     }
 
@@ -45,6 +48,7 @@ namespace Tete.Api.Controllers
     public void Put([FromBody] Flag value)
     {
       var service = new Services.Config.FlagService(Context, CurrentAdmin);
+      LogService.Write("Update flag (1)", string.Format("Flag:{0};Value{1}", value.Key, value.Value));
       service.Save(value);
     }
 

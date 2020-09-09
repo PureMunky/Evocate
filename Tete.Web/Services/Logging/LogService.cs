@@ -66,7 +66,14 @@ namespace Tete.Api.Services.Logging
 
     public void Write(string Description, string Data = "", string Domain = "")
     {
-      Save(new Log(Description, this.Actor.UserId, Data, (Domain.Length > 0 ? Domain : DefaultDomain)));
+      try
+      {
+        Save(new Log(Description, (this.Actor != null ? this.Actor.UserId : Guid.Empty), Data, (Domain.Length > 0 ? Domain : DefaultDomain)));
+      }
+      catch
+      {
+
+      }
     }
 
   }

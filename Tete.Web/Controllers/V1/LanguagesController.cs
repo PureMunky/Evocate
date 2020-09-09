@@ -40,6 +40,8 @@ namespace Tete.Api.Controllers
     {
       var service = new Services.Localization.LanguageService(Context, CurrentUser);
 
+      LogService.Write("Create Language", string.Format("Name:{0};ID:{1}", value.Name, value.LanguageId));
+
       return new Response<Language>(service.CreateLanguage(value));
     }
 
@@ -47,6 +49,8 @@ namespace Tete.Api.Controllers
     public Response<Language> Update([FromBody] Language language)
     {
       var service = new Services.Localization.LanguageService(Context, CurrentUser);
+
+      LogService.Write("Update Language", string.Format("Name:{0};ID:{1}", language.Name, language.LanguageId));
 
       return new Response<Language>(service.Update(language));
     }

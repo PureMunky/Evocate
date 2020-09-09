@@ -25,6 +25,8 @@ namespace Tete.Api.Controllers
     {
       var service = new Services.Content.TopicService(Context, CurrentUser);
 
+      LogService.Write("Saved Topic", value.TopicId.ToString());
+
       return new Response<TopicVM>(service.SaveTopic(value));
     }
 
@@ -33,6 +35,8 @@ namespace Tete.Api.Controllers
     {
       var service = new Services.Relationships.MentorshipService(Context, CurrentUser);
       service.RegisterLearner(UserId, TopicId);
+
+      LogService.Write("Registered as Learner", String.Format("User:{0};Topic:{1}", UserId.ToString(), TopicId.ToString()));
 
       return new Response<bool>(true);
     }
@@ -43,6 +47,8 @@ namespace Tete.Api.Controllers
       var service = new Services.Relationships.MentorshipService(Context, CurrentUser);
       service.RegisterMentor(UserId, TopicId);
 
+      LogService.Write("Registered as Mentor", String.Format("User:{0};Topic:{1}", UserId.ToString(), TopicId.ToString()));
+
       return new Response<bool>(true);
     }
 
@@ -50,6 +56,8 @@ namespace Tete.Api.Controllers
     public Response<MentorshipVM> ClaimNextMentorship(Guid UserId, Guid TopicId)
     {
       var service = new Services.Relationships.MentorshipService(Context, CurrentUser);
+
+      LogService.Write("Claim next mentorship", String.Format("User:{0};Topic:{1}", UserId.ToString(), TopicId.ToString()));
 
       return new Response<MentorshipVM>(service.ClaimNextMentorship(UserId, TopicId));
     }

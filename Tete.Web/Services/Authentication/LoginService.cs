@@ -11,7 +11,13 @@ namespace Tete.Api.Services.Authentication
   {
     private MainContext mainContext;
 
-    //TODO: add logging for the login service.
+    public Tete.Api.Services.Logging.LogService LogService
+    {
+      get
+      {
+        return new Logging.LogService(this.mainContext, Tete.Api.Services.Logging.LogService.LoggingLayer.Service, null);
+      }
+    }
 
     public LoginService(MainContext mainContext)
     {
@@ -25,6 +31,7 @@ namespace Tete.Api.Services.Authentication
     /// <returns></returns>
     public SessionVM Login(LoginAttempt login)
     {
+      LogService.Write("Login", login.UserName);
       return GetNewToken(login);
     }
 
@@ -33,6 +40,7 @@ namespace Tete.Api.Services.Authentication
       var session = this.mainContext.Sessions.Where(s => s.Token == Token).FirstOrDefault();
       if (session != null)
       {
+        LogService.Write("Logout", String.Format("User:{0}", session.UserId));
         this.mainContext.Sessions.Remove(session);
         this.mainContext.SaveChanges();
       }
@@ -62,6 +70,7 @@ namespace Tete.Api.Services.Authentication
           PasswordHash = hash
         };
 
+        LogService.Write("Register", String.Format("User:{0}", newUser.Id));
         this.mainContext.Users.Add(newUser);
         this.mainContext.Logins.Add(newLogin);
         this.mainContext.SaveChanges();
@@ -133,6 +142,7 @@ namespace Tete.Api.Services.Authentication
       SessionVM sessionVM = null;
       Session session = null;
       var user = this.mainContext.Users.Where(u => u.UserName == login.UserName).FirstOrDefault();
+      LogService.Write("NewToken Attempt", String.Format("User:{0}", login.UserName));
 
       if (user != null)
       {
@@ -147,6 +157,9 @@ namespace Tete.Api.Services.Authentication
             UserId = user.Id,
             Token = token
           };
+
+          LogService.Write("NewToken", String.Format("User:{0}", user.Id));
+
           this.mainContext.Sessions.Add(session);
           this.mainContext.SaveChanges();
         }
@@ -175,6 +188,7 @@ namespace Tete.Api.Services.Authentication
 
       if (testRole == null)
       {
+        LogService.Write("Grant Role", String.Format("User:{0};Role:{1}", UserId, RoleName));
         created = true;
         var role = new AccessRole(UserId, RoleName);
         role.CreatedBy = CreatedById;
@@ -204,6 +218,7 @@ namespace Tete.Api.Services.Authentication
 
       if (user != null)
       {
+        LogService.Write("ResetPassword", String.Format("User:{0};", user.Id));
         var login = this.mainContext.Logins.Where(l => l.UserId == user.Id).FirstOrDefault();
 
         if (login != null)

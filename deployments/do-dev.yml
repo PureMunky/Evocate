@@ -59,7 +59,7 @@ spec:
     spec:
       containers:
         - name: tete-web
-          image: puremunky/tete-web:latest
+          image: puremunky/tete-web:build-$TRAVIS_BUILD_NUMBER
           imagePullPolicy: Always
           ports:
             - containerPort: 80

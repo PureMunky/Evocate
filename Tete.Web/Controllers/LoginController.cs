@@ -154,8 +154,18 @@ namespace Tete.Web.Controllers
         direction = "/Login";
       }
 
-
       return Redirect(direction);
     }
+
+    [HttpPost]
+    public void Reset(string newPassword)
+    {
+      // TODO: Fix non escaped characters in new passwords.
+      var token = HttpContext.Request.Cookies[Constants.SessionTokenName];
+      var service = new Tete.Api.Services.Authentication.LoginService(this.context);
+
+      service.ResetPassword(token, newPassword);
+    }
+
   }
 }

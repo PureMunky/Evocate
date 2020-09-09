@@ -197,5 +197,24 @@ namespace Tete.Api.Services.Authentication
 
       return userVM;
     }
+
+    public void ResetPassword(string token, string newPassword)
+    {
+      var user = GetUserFromToken(token);
+
+      if (user != null)
+      {
+        var login = this.mainContext.Logins.Where(l => l.UserId == user.Id).FirstOrDefault();
+
+        if (login != null)
+        {
+          string hash = Crypto.Hash(newPassword, user.Salt);
+          login.PasswordHash = hash;
+
+          this.mainContext.Logins.Update(login);
+          this.mainContext.SaveChanges();
+        }
+      }
+    }
   }
 }

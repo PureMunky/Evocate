@@ -1,0 +1,112 @@
+# https://www.digitalocean.com/community/tutorials/how-to-automate-deployments-to-digitalocean-kubernetes-with-circleci
+# https://docs.microsoft.com/en-us/sql/linux/tutorial-sql-server-containers-kubernetes?view=sql-server-ver15
+# https://www.microsoft.com/en-us/sql-server/sql-server-2017?rtc=1
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: tete-local
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tete-db-svc
+  namespace: tete-local
+spec:
+  selector:
+    app: tete-db
+  ports:
+    - protocol: TCP
+      port: 1433
+      targetPort: 1433
+  type: NodePort
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tete-web-svc
+  namespace: tete-local
+spec:
+  selector:
+    app: tete-web
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 80
+    - name: https
+      protocol: TCP
+      port: 443
+      targetPort: 443
+  type: LoadBalancer
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tete-web
+  namespace: tete-local
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tete-web
+  template:
+    metadata:
+      labels:
+        app: tete-web
+    spec:
+      containers:
+        - name: tete-web
+          image: puremunky/tete-web:latest
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: ASPNETCORE_Kestrel__Certificates__Default__Path
+              value: ./Tete.Web.pfx
+            - name: ASPNETCORE_Kestrel__Certificates__Default__Password
+              valueFrom:
+                secretKeyRef:
+                  name: cert-credentials
+                  key: cert-password
+            - name: ConnectionStrings__DefaultConnection
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: connection-string
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tete-db
+  namespace: tete-local
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tete-db
+  template:
+    metadata:
+      labels:
+        app: tete-db
+    spec:
+      containers:
+        - name: tete-db
+          image: mcr.microsoft.com/mssql/server:2017-CU8-ubuntu
+          ports:
+            - containerPort: 1433
+          env:
+            - name: MSSQL_PID
+              value: Express
+            - name: ACCEPT_EULA
+              value: "Y"
+            - name: SA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: password

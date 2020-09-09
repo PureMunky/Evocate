@@ -42,6 +42,13 @@
     </div>
   </div>
   <button (click)="save()">Save</button><button (click)="cancel()">Cancel</button>
+
+  <h2>Password</h2>
+  <div>
+    <label for="txtNewPassword">New Password</label>
+    <input id="txtNewPassword" type="password" [(ngModel)]="working.newPassword" />
+    <button class="btn btn-secondary" (click)="resetPassword()">Reset Password</button>
+  </div>
 </div>
 
 <div *ngIf="!working.editing">

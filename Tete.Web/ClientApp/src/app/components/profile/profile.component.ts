@@ -23,7 +23,8 @@ export class ProfileComponent {
     self: false,
     error: false,
     errorMessage: '',
-    userName: ''
+    userName: '',
+    newPassword: ''
   };
 
   constructor(
@@ -82,5 +83,12 @@ export class ProfileComponent {
 
   public removeLanguage(langId) {
     this.user.languages = this.user.languages.filter(l => l.languageId != langId);
+  }
+
+  public resetPassword() {
+    // TODO: make this more secure.
+    this.apiService.post('/Login/Reset?newPassword=' + this.working.newPassword, {}).then(u => {
+      this.working.editing = false;
+    });
   }
 }

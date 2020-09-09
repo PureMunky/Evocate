@@ -38,5 +38,6 @@ namespace Tete.Api.Controllers
 
       return new Response<UserVM>(service.Search(searchText));
     }
+
   }
 }

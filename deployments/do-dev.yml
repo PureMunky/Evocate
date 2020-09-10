@@ -144,7 +144,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  resouces:
+  resources:
     requests:
       storage: 5Gi
   storageClassName: do-block-storage

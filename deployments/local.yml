@@ -66,8 +66,6 @@ spec:
           env:
             - name: ASPNETCORE_URLS
               value: https://+:443;http://+:80
-            - name: ASPNETCORE_Kestrel__Certificates__Default__Path
-              value: ./Tete.Web.pfx
             - name: ASPNETCORE_Kestrel__Certificates__Default__Password
               valueFrom:
                 secretKeyRef:

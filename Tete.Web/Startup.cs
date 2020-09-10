@@ -47,6 +47,7 @@ namespace Tete.Web
         opts.MaxAge = TimeSpan.FromHours(2);
       });
 
+      // TODO: figure out SSL environment differences (local, dev, prod)
       services
         .AddLettuceEncrypt()
         .PersistDataToDirectory(new System.IO.DirectoryInfo("/var/opt/ssl"), Environment.GetEnvironmentVariable("Certificate_Password"));
@@ -73,7 +74,6 @@ namespace Tete.Web
         app.UseHsts();
       }
 
-      // TODO: Setup automatic SSL Cert handling.
       app.UseHttpsRedirection();
       app.UseStaticFiles();
       app.UseSpaStaticFiles();

@@ -67,9 +67,7 @@ spec:
           env:
             - name: ASPNETCORE_URLS
               value: https://+:443;http://+:80
-            - name: ASPNETCORE_Kestrel__Certificates__Default__Path
-              value: ./Tete.Web.pfx
-            - name: ASPNETCORE_Kestrel__Certificates__Default__Password
+            - name: Certificate_Password
               valueFrom:
                 secretKeyRef:
                   name: cert-credentials
@@ -79,7 +77,13 @@ spec:
                 secretKeyRef:
                   name: db-credentials
                   key: connection-string
-
+          volumeMounts:
+            - name: tete-web-pv
+              mountPath: /var/opt/
+      volumes:
+        - name: tete-web-pv
+          persistentVolumeClaim:
+            claimName: tete-web-pvc
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -130,4 +134,17 @@ spec:
   resources:
     requests:
       storage: 10Gi
+  storageClassName: do-block-storage
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: tete-web-pvc
+  namespace: tete-dev
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resouces:
+    requests:
+      storage: 5Gi
   storageClassName: do-block-storage

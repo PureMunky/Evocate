@@ -121,10 +121,10 @@ namespace Tete.Web.Controllers
     [HttpPost]
     public IActionResult Register(string userName, string userPassword, string userEmail, string userDisplayName)
     {
-      string direction = "/";
+      IActionResult direction = Redirect("/");
 
       var service = new Tete.Api.Services.Authentication.LoginService(this.context);
-      service.Register(
+      var response = service.Register(
         new RegistrationAttempt()
         {
           UserName = userName,
@@ -134,37 +134,43 @@ namespace Tete.Web.Controllers
         }
       );
 
-      var session = service.Login(new LoginAttempt()
+      if (response.Successful)
       {
-        UserName = userName,
-        Password = userPassword
-      });
-
-      if (session != null)
-      {
-        HttpContext.Response.Cookies.Append(Constants.SessionTokenName, session.Token, new Microsoft.AspNetCore.Http.CookieOptions()
+        var session = service.Login(new LoginAttempt()
         {
-          HttpOnly = true,
-          Expires = DateTime.Now.AddYears(Constants.AuthenticationCookieLifeYears),
-          Secure = true
+          UserName = userName,
+          Password = userPassword
         });
+
+        if (session != null)
+        {
+          HttpContext.Response.Cookies.Append(Constants.SessionTokenName, session.Token, new Microsoft.AspNetCore.Http.CookieOptions()
+          {
+            HttpOnly = true,
+            Expires = DateTime.Now.AddYears(Constants.AuthenticationCookieLifeYears),
+            Secure = true
+          });
+        }
+        else
+        {
+          direction = View("Register");
+        }
       }
       else
       {
-        direction = "/Login";
+        direction = View("Register", response);
       }
 
-      return Redirect(direction);
+      return direction;
     }
 
     [HttpPost]
-    public void Reset(string newPassword)
+    public RegistrationResponse Reset([FromBody] PasswordReset passwordReset)
     {
-      // TODO: Fix non escaped characters in new passwords.
       var token = HttpContext.Request.Cookies[Constants.SessionTokenName];
       var service = new Tete.Api.Services.Authentication.LoginService(this.context);
 
-      service.ResetPassword(token, newPassword);
+      return service.ResetPassword(token, passwordReset.Password);
     }
 
   }

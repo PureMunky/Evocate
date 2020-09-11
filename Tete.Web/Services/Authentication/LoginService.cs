@@ -51,34 +51,48 @@ namespace Tete.Api.Services.Authentication
     /// registration attempt.
     /// </summary>
     /// <param name="registration"></param>
-    public void Register(RegistrationAttempt registration)
+    public RegistrationResponse Register(RegistrationAttempt registration)
     {
+      var rtnResponse = ValidatePassword(registration.Password);
+
       if (this.mainContext.Users.Where(u => u.UserName == registration.UserName || u.Email == registration.Email).FirstOrDefault() == null)
       {
-        byte[] salt = Crypto.NewSalt();
-        string hash = Crypto.Hash(registration.Password, salt);
-        var newUser = new User()
+        if (rtnResponse.Successful)
         {
-          UserName = registration.UserName,
-          Email = registration.Email,
-          DisplayName = registration.DisplayName,
-          Salt = salt
-        };
-        var newLogin = new Login()
-        {
-          UserId = newUser.Id,
-          PasswordHash = hash
-        };
+          byte[] salt = Crypto.NewSalt();
+          string hash = Crypto.Hash(registration.Password, salt);
+          var newUser = new User()
+          {
+            UserName = registration.UserName,
+            Email = registration.Email,
+            DisplayName = registration.DisplayName,
+            Salt = salt
+          };
+          var newLogin = new Login()
+          {
+            UserId = newUser.Id,
+            PasswordHash = hash
+          };
 
-        LogService.Write("Register", String.Format("User:{0}", newUser.Id));
-        this.mainContext.Users.Add(newUser);
-        this.mainContext.Logins.Add(newLogin);
-        this.mainContext.SaveChanges();
+          LogService.Write("Register", String.Format("User:{0}", newUser.Id));
+          this.mainContext.Users.Add(newUser);
+          this.mainContext.Logins.Add(newLogin);
+          this.mainContext.SaveChanges();
+        }
       }
       else
       {
-        throw new Exception("User already exists!");
+        rtnResponse.Messages.Insert(0, "Username or Email already used");
+        rtnResponse.Successful = false;
       }
+
+      if (!rtnResponse.Successful)
+      {
+        rtnResponse.Attempt = registration;
+        rtnResponse.Attempt.Password = "";
+      }
+
+      return rtnResponse;
     }
 
     /// <summary>
@@ -212,24 +226,63 @@ namespace Tete.Api.Services.Authentication
       return userVM;
     }
 
-    public void ResetPassword(string token, string newPassword)
+    public RegistrationResponse ResetPassword(string token, string newPassword)
     {
-      var user = GetUserFromToken(token);
+      var rtnResponse = ValidatePassword(newPassword);
 
-      if (user != null)
+      if (rtnResponse.Successful)
       {
-        LogService.Write("ResetPassword", String.Format("User:{0};", user.Id));
-        var login = this.mainContext.Logins.Where(l => l.UserId == user.Id).FirstOrDefault();
+        var user = GetUserFromToken(token);
 
-        if (login != null)
+        if (user != null)
         {
-          string hash = Crypto.Hash(newPassword, user.Salt);
-          login.PasswordHash = hash;
+          LogService.Write("ResetPassword", String.Format("User:{0};", user.Id));
+          var login = this.mainContext.Logins.Where(l => l.UserId == user.Id).FirstOrDefault();
 
-          this.mainContext.Logins.Update(login);
-          this.mainContext.SaveChanges();
+          if (login != null)
+          {
+            string hash = Crypto.Hash(newPassword, user.Salt);
+            login.PasswordHash = hash;
+
+            this.mainContext.Logins.Update(login);
+            this.mainContext.SaveChanges();
+          }
         }
       }
+
+      return rtnResponse;
+    }
+
+    private RegistrationResponse ValidatePassword(string password)
+    {
+      var rtnResponse = new RegistrationResponse();
+
+      if (password == null)
+      {
+        password = "";
+      }
+
+      if (password.Length < 8)
+      {
+        rtnResponse.Messages.Add("Password must be 8 or more characters.");
+        rtnResponse.Successful = false;
+      }
+
+      var special = "!@#$%^&()?";
+      if (!password.ToCharArray().Any(c => special.Contains(c)))
+      {
+        rtnResponse.Messages.Add(String.Format("Password must contain a special character ({0}).", special));
+        rtnResponse.Successful = false;
+      }
+
+      var numbers = "0123456789";
+      if (!password.ToCharArray().Any(c => numbers.Contains(c)))
+      {
+        rtnResponse.Messages.Add(String.Format("Password must contain a special character ({0}).", numbers));
+        rtnResponse.Successful = false;
+      }
+
+      return rtnResponse;
     }
   }
 }

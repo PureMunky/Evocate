@@ -86,8 +86,7 @@ export class ProfileComponent {
   }
 
   public resetPassword() {
-    // TODO: make this more secure.
-    this.apiService.post('/Login/Reset?newPassword=' + this.working.newPassword, {}).then(u => {
+    this.apiService.post('/Login/Reset?newPassword', { password: this.working.newPassword }).then(u => {
       this.working.editing = false;
     });
   }

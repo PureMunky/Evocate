@@ -49,7 +49,7 @@ namespace Tete.Web.Controllers
     [HttpPost]
     public IActionResult Index(string userName, string userPassword)
     {
-      string direction = "/";
+      IActionResult direction = Redirect("/");
       var service = new Tete.Api.Services.Authentication.LoginService(this.context);
       var session = service.Login(
         new LoginAttempt()
@@ -70,11 +70,10 @@ namespace Tete.Web.Controllers
       }
       else
       {
-        direction = "/Login";
+        direction = View("Index", "Invalid Login");
       }
 
-
-      return Redirect(direction);
+      return direction;
     }
 
     [HttpGet]

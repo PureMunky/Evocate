@@ -1,3 +1,4 @@
+@model string
 @{
   Layout = "_Layout";
 }
@@ -6,6 +7,12 @@
 @using(Html.BeginForm())
 {
 <h2>Login</h2>
+@if(Model != null)
+{
+  <ul>
+    <li>@Model</li>
+  </ul>
+}
 <section>
   <div>
     <label for="userName">UserName</label>
@@ -16,7 +23,8 @@
     <input type="password" name="userPassword"/>
   </div>
   <div>
-    <a href="/Login/Register">Register Accont</a>
+    Don't have an account yet?
+    <a href="/Login/Register">Register</a>
   </div>
   <input type="submit">
 </section>

@@ -24,7 +24,9 @@ export class ProfileComponent {
     error: false,
     errorMessage: '',
     userName: '',
-    newPassword: ''
+    newUserName: '',
+    newPassword: '',
+    displayPassword: false
   };
 
   constructor(
@@ -38,10 +40,11 @@ export class ProfileComponent {
       this.currentUser = this.userService.CurrentUser();
       this.route.params.subscribe(params => {
         this.working.userName = params["username"];
-        this.loadUser();
-        if (this.working.userName != this.currentUser.userName) {
-          this.working.self = false;
+        if (this.working.userName) {
+          this.loadUser();
+          this.working.self = (this.working.userName == this.currentUser.userName);
         } else {
+          this.user = JSON.parse(JSON.stringify(this.currentUser));
           this.working.self = true;
         }
       });
@@ -62,9 +65,8 @@ export class ProfileComponent {
   }
 
   public cancel() {
-    this.loadUser().then(x => {
-      this.working.editing = false;
-    });
+    this.user = JSON.parse(JSON.stringify(this.currentUser));
+    this.working.editing = false;
   }
 
   public addLanguage() {
@@ -86,7 +88,22 @@ export class ProfileComponent {
   }
 
   public resetPassword() {
-    this.apiService.post('/Login/Reset?newPassword', { password: this.working.newPassword }).then(u => {
+    this.apiService.post('/Login/ResetPassword', { password: this.working.newPassword }).then(u => {
+      this.working.editing = false;
+    });
+  }
+
+  public updateUserName() {
+    this.apiService.post('/Login/UpdateUserName', { userName: this.working.newUserName }).then(u => {
+      this.working.editing = false;
+    });
+  }
+
+  public registerNewLogin() {
+    this.apiService.post('/Login/RegisterNewLogin', {
+      password: this.working.newPassword,
+      userName: this.working.newUserName
+    }).then(u => {
       this.working.editing = false;
     });
   }

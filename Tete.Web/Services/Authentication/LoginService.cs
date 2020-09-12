@@ -51,16 +51,16 @@ namespace Tete.Api.Services.Authentication
     /// registration attempt.
     /// </summary>
     /// <param name="registration"></param>
-    public RegistrationResponse Register(RegistrationAttempt registration)
+    public RegistrationResponse Register(LoginAttempt login)
     {
-      var rtnResponse = ValidatePassword(registration.Password);
+      var rtnResponse = ValidatePassword(login.Password);
 
-      if (this.mainContext.Users.Where(u => u.UserName == registration.UserName).FirstOrDefault() == null)
+      if (this.mainContext.Users.Where(u => u.UserName == login.UserName).FirstOrDefault() == null)
       {
         if (rtnResponse.Successful)
         {
-          var newUser = RegisterUser(registration);
-          UpdatePassword(newUser.Id, registration.Password, newUser.Salt);
+          var newUser = RegisterUser(login);
+          UpdatePassword(newUser.Id, login.Password, newUser.Salt);
         }
       }
       else
@@ -71,14 +71,14 @@ namespace Tete.Api.Services.Authentication
 
       if (!rtnResponse.Successful)
       {
-        rtnResponse.Attempt = registration;
+        rtnResponse.Attempt = login;
         rtnResponse.Attempt.Password = "";
       }
 
       return rtnResponse;
     }
 
-    private User RegisterUser(RegistrationAttempt registration)
+    private User RegisterUser(LoginAttempt registration)
     {
       byte[] salt = Crypto.NewSalt();
       var newUser = new User()
@@ -170,13 +170,10 @@ namespace Tete.Api.Services.Authentication
 
     public SessionVM GetNewAnonymousSession()
     {
-      // FIXME: two guests could get the same username.
       // TODO: Test the entire new authentication flow.
-      int count = this.mainContext.Users.Count();
-
       var user = RegisterUser(new RegistrationAttempt()
       {
-        UserName = "guest_" + (count + 1),
+        UserName = "",
         DisplayName = "Guest",
         Email = ""
       });
@@ -196,27 +193,29 @@ namespace Tete.Api.Services.Authentication
     /// <returns></returns>
     private SessionVM GetNewToken(LoginAttempt login)
     {
-      // Select UserId from login where passwordhash = login.Password
-      // Select true from user where userId = UserId and email = login.Email
       SessionVM sessionVM = null;
       Session session = null;
-      var user = this.mainContext.Users.Where(u => u.UserName == login.UserName).FirstOrDefault();
-      LogService.Write("NewToken Attempt", String.Format("User:{0}", login.UserName));
 
-      if (user != null)
+      if (login.UserName != null && login.UserName != "")
       {
-        string hash = Crypto.Hash(login.Password, user.Salt);
+        var user = this.mainContext.Users.Where(u => u.UserName == login.UserName).FirstOrDefault();
+        LogService.Write("NewToken Attempt", String.Format("User:{0}", login.UserName));
 
-        var dbLogin = this.mainContext.Logins.Where(l => l.PasswordHash == hash && l.UserId == user.Id).FirstOrDefault();
-        if (dbLogin != null)
+        if (user != null)
         {
-          session = CreateNewSession(user);
-        }
-      }
+          string hash = Crypto.Hash(login.Password, user.Salt);
 
-      if (session != null)
-      {
-        sessionVM = new SessionVM(session);
+          var dbLogin = this.mainContext.Logins.Where(l => l.PasswordHash == hash && l.UserId == user.Id).FirstOrDefault();
+          if (dbLogin != null)
+          {
+            session = CreateNewSession(user);
+          }
+        }
+
+        if (session != null)
+        {
+          sessionVM = new SessionVM(session);
+        }
       }
 
       return sessionVM;
@@ -266,14 +265,17 @@ namespace Tete.Api.Services.Authentication
 
     public UserVM GetUserVMFromUsername(string userName, UserVM actor)
     {
-      var user = this.mainContext.Users.Where(u => u.UserName == userName).FirstOrDefault();
       UserVM userVM = null;
 
-      if (user != null)
+      if (userName != "")
       {
-        userVM = new UserService(mainContext, actor).GetUser(user);
-      }
+        var user = this.mainContext.Users.Where(u => u.UserName == userName).FirstOrDefault();
 
+        if (user != null)
+        {
+          userVM = new UserService(mainContext, actor).GetUser(user);
+        }
+      }
       return userVM;
     }
 
@@ -292,6 +294,28 @@ namespace Tete.Api.Services.Authentication
       }
 
       return rtnResponse;
+    }
+
+    public RegistrationResponse UpdateUserName(string token, string newUserName)
+    {
+      var rtnResponse = ValidateUserName(newUserName);
+
+      if (rtnResponse.Successful)
+      {
+        var user = GetUserFromToken(token);
+
+        if (user != null)
+        {
+          // TODO: Update username
+        }
+      }
+
+      return rtnResponse;
+    }
+
+    public RegistrationResponse RegisterNewLogin(string token, LoginAttempt login)
+    {
+
     }
 
     private RegistrationResponse ValidatePassword(string password)

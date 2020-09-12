@@ -165,13 +165,30 @@ namespace Tete.Web.Controllers
     }
 
     [HttpPost]
-    public RegistrationResponse Reset([FromBody] PasswordReset passwordReset)
+    public RegistrationResponse ResetPassword([FromBody] LoginAttempt login)
     {
       var token = HttpContext.Request.Cookies[Constants.SessionTokenName];
       var service = new Tete.Api.Services.Authentication.LoginService(this.context);
 
-      return service.ResetPassword(token, passwordReset.Password);
+      return service.ResetPassword(token, login.Password);
     }
 
+    [HttpPost]
+    public RegistrationResponse UpdateUserName([FromBody] LoginAttempt login)
+    {
+      var token = HttpContext.Request.Cookies[Constants.SessionTokenName];
+      var service = new Tete.Api.Services.Authentication.LoginService(this.context);
+
+      return service.UpdateUserName(token, login.UserName);
+    }
+
+    [HttpPost]
+    public RegistrationResponse RegisterNewLogin([FromBody] LoginAttempt login)
+    {
+      var token = HttpContext.Request.Cookies[Constants.SessionTokenName];
+      var service = new Tete.Api.Services.Authentication.LoginService(this.context);
+
+      return service.RegisterNewLogin(token, login);
+    }
   }
 }

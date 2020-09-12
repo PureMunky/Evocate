@@ -59,6 +59,7 @@ import { DashboardAdminComponent } from "./components/dashboardAdmin/dashboardAd
           { path: "link", component: LinkAdminComponent }
         ]
       },
+      { path: "profile", component: ProfileComponent },
       { path: "profile/:username", component: ProfileComponent },
       { path: "discovery", component: TopicDiscoveryComponent },
       { path: "topic/create/:name", component: TopicComponent },

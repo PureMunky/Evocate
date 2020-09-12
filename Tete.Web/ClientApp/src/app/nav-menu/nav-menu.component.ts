@@ -23,9 +23,6 @@ export class NavMenuComponent {
     this.isExpanded = !this.isExpanded;
   }
 
-  private profileLinkPrefix: string = '/profile/';
-  public profileLink: string = '';
-
   constructor(
     private initService: InitService,
     private userService: UserService,
@@ -34,7 +31,6 @@ export class NavMenuComponent {
     loadingService.Register(loading => this.loadingHandler(loading));
     initService.Register(() => {
       this.currentUser = userService.CurrentUser();
-      this.profileLink = this.profileLinkPrefix + this.currentUser.userName;
       this.adminRole = this.currentUser.roles.some(r => r == 'Admin');
     });
   }

@@ -7,7 +7,7 @@ namespace Tete.Models.Authentication
     public bool Successful { get; set; }
     public List<string> Messages { get; set; }
 
-    public RegistrationAttempt Attempt { get; set; }
+    public LoginAttempt Attempt { get; set; }
 
     public RegistrationResponse()
     {

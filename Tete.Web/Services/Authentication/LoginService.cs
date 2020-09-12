@@ -55,34 +55,17 @@ namespace Tete.Api.Services.Authentication
     {
       var rtnResponse = ValidatePassword(registration.Password);
 
-      if (this.mainContext.Users.Where(u => u.UserName == registration.UserName || u.Email == registration.Email).FirstOrDefault() == null)
+      if (this.mainContext.Users.Where(u => u.UserName == registration.UserName).FirstOrDefault() == null)
       {
         if (rtnResponse.Successful)
         {
-          byte[] salt = Crypto.NewSalt();
-          string hash = Crypto.Hash(registration.Password, salt);
-          var newUser = new User()
-          {
-            UserName = registration.UserName,
-            Email = registration.Email,
-            DisplayName = registration.DisplayName,
-            Salt = salt
-          };
-          var newLogin = new Login()
-          {
-            UserId = newUser.Id,
-            PasswordHash = hash
-          };
-
-          LogService.Write("Register", String.Format("User:{0}", newUser.Id));
-          this.mainContext.Users.Add(newUser);
-          this.mainContext.Logins.Add(newLogin);
-          this.mainContext.SaveChanges();
+          var newUser = RegisterUser(registration);
+          UpdatePassword(newUser.Id, registration.Password, newUser.Salt);
         }
       }
       else
       {
-        rtnResponse.Messages.Insert(0, "Username or Email already used");
+        rtnResponse.Messages.Insert(0, "Username already used");
         rtnResponse.Successful = false;
       }
 
@@ -93,6 +76,48 @@ namespace Tete.Api.Services.Authentication
       }
 
       return rtnResponse;
+    }
+
+    private User RegisterUser(RegistrationAttempt registration)
+    {
+      byte[] salt = Crypto.NewSalt();
+      var newUser = new User()
+      {
+        UserName = registration.UserName,
+        Email = registration.Email,
+        DisplayName = registration.DisplayName,
+        Salt = salt
+      };
+
+      LogService.Write("Register", String.Format("User:{0}", newUser.Id));
+      this.mainContext.Users.Add(newUser);
+      this.mainContext.SaveChanges();
+
+      return newUser;
+    }
+
+    private void UpdatePassword(Guid UserId, string Password, byte[] Salt)
+    {
+      string hash = Crypto.Hash(Password, Salt);
+      var dbLogin = this.mainContext.Logins.Where(l => l.UserId == UserId).OrderByDescending(l => l.Created).FirstOrDefault();
+
+      if (dbLogin == null)
+      {
+        var newLogin = new Login()
+        {
+          UserId = UserId,
+          PasswordHash = hash
+        };
+        this.mainContext.Logins.Add(newLogin);
+      }
+      else
+      {
+        dbLogin.PasswordHash = hash;
+        this.mainContext.Logins.Update(dbLogin);
+      }
+
+      LogService.Write("Updated Password", String.Format("User:{0};", UserId));
+      this.mainContext.SaveChanges();
     }
 
     /// <summary>
@@ -143,6 +168,26 @@ namespace Tete.Api.Services.Authentication
       return userVM;
     }
 
+    public SessionVM GetNewAnonymousSession()
+    {
+      // FIXME: two guests could get the same username.
+      // TODO: Test the entire new authentication flow.
+      int count = this.mainContext.Users.Count();
+
+      var user = RegisterUser(new RegistrationAttempt()
+      {
+        UserName = "guest_" + (count + 1),
+        DisplayName = "Guest",
+        Email = ""
+      });
+
+      GrantRole(user.Id, user.Id, "Guest");
+
+      var session = CreateNewSession(user);
+
+      return new SessionVM(session);
+    }
+
     /// <summary>
     /// Creates a new session and returns that session
     /// along with it's token for a passed in login attempt.
@@ -165,17 +210,7 @@ namespace Tete.Api.Services.Authentication
         var dbLogin = this.mainContext.Logins.Where(l => l.PasswordHash == hash && l.UserId == user.Id).FirstOrDefault();
         if (dbLogin != null)
         {
-          string token = Crypto.Hash(Guid.NewGuid().ToString() + user.Id, user.Salt);
-          session = new Session()
-          {
-            UserId = user.Id,
-            Token = token
-          };
-
-          LogService.Write("NewToken", String.Format("User:{0}", user.Id));
-
-          this.mainContext.Sessions.Add(session);
-          this.mainContext.SaveChanges();
+          session = CreateNewSession(user);
         }
       }
 
@@ -185,6 +220,22 @@ namespace Tete.Api.Services.Authentication
       }
 
       return sessionVM;
+    }
+
+    private Session CreateNewSession(User user)
+    {
+      string token = Crypto.Hash(Guid.NewGuid().ToString() + user.Id, user.Salt);
+      var session = new Session()
+      {
+        UserId = user.Id,
+        Token = token
+      };
+
+      LogService.Write("NewToken", String.Format("User:{0}", user.Id));
+
+      this.mainContext.Sessions.Add(session);
+      this.mainContext.SaveChanges();
+      return session;
     }
 
     /// <summary>
@@ -236,17 +287,7 @@ namespace Tete.Api.Services.Authentication
 
         if (user != null)
         {
-          LogService.Write("ResetPassword", String.Format("User:{0};", user.Id));
-          var login = this.mainContext.Logins.Where(l => l.UserId == user.Id).FirstOrDefault();
-
-          if (login != null)
-          {
-            string hash = Crypto.Hash(newPassword, user.Salt);
-            login.PasswordHash = hash;
-
-            this.mainContext.Logins.Update(login);
-            this.mainContext.SaveChanges();
-          }
+          UpdatePassword(user.Id, newPassword, user.Salt);
         }
       }
 

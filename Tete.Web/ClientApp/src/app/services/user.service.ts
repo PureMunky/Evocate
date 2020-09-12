@@ -26,4 +26,5 @@ export class UserService {
   public CurrentUser() {
     return this.currentUser;
   }
+
 }

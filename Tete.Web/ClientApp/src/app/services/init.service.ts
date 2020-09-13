@@ -29,7 +29,7 @@ export class InitService {
   }
 
   public Register(func: Function) {
-    if(this.loaded) {
+    if (this.loaded) {
       func();
     } else {
       this.functions.push(func);

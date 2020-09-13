@@ -18,17 +18,7 @@ export class ProfileComponent {
   public tmpModel = {
     language: ''
   };
-  public working = {
-    editing: false,
-    self: false,
-    error: false,
-    errorMessage: '',
-    userName: '',
-    newUserName: '',
-    newPassword: '',
-    displayPassword: false,
-    responseMessages: []
-  };
+  public working: Working = new Working();
 
   constructor(
     private route: ActivatedRoute,
@@ -37,24 +27,26 @@ export class ProfileComponent {
     private initService: InitService,
     private languageService: LanguageService
   ) {
-    this.initService.Register(() => {
-      // FIXME: Invalidate the current user when making profile changes.
-      this.currentUser = this.userService.CurrentUser();
-      this.route.params.subscribe(params => {
-        this.working.userName = params["username"];
-        if (this.working.userName) {
-          this.loadUser();
-          this.working.self = (this.working.userName == this.currentUser.userName);
-        } else {
-          this.user = JSON.parse(JSON.stringify(this.currentUser));
-          this.working.self = true;
-        }
-      });
-
-      this.languages = this.languageService.Languages();
-    });
+    this.initService.Register(() => this.load());
   }
 
+  private load() {
+    this.working = new Working();
+    this.currentUser = this.userService.CurrentUser();
+    this.route.params.subscribe(params => {
+      this.working.userName = params["username"];
+      if (this.working.userName) {
+        this.loadUser();
+        this.working.self = (this.working.userName == this.currentUser.userName);
+      } else {
+        this.user = JSON.parse(JSON.stringify(this.currentUser));
+        this.working.self = true;
+        this.working.editing = true;
+      }
+    });
+
+    this.languages = this.languageService.Languages();
+  }
   private loadUser() {
     return this.userService.Get(this.working.userName).then(u => {
       this.user = u;
@@ -91,30 +83,66 @@ export class ProfileComponent {
 
   public resetPassword() {
     this.apiService
-      .post('/Login/ResetPassword', { password: this.working.newPassword })
+      .post('/Login/ResetPassword', { password: this.working.registration.password })
       .then(r => this.processRegistrationResponse(r[0]));
   }
 
   public updateUserName() {
     this.apiService
-      .post('/Login/UpdateUserName', { userName: this.working.newUserName })
+      .post('/Login/UpdateUserName', { userName: this.working.registration.userName })
       .then(r => this.processRegistrationResponse(r[0]));
   }
 
   public registerNewLogin() {
-    this.apiService.post('/Login/RegisterNewLogin', {
-      password: this.working.newPassword,
-      userName: this.working.newUserName
-    }).then(r => this.processRegistrationResponse(r[0]));
+    this.apiService.post('/Login/RegisterNewLogin', this.working.registration).then(r => this.processRegistrationResponse(r[0]));
+  }
+
+  public login() {
+    this.apiService.post('/Login/Login', this.working.registration).then(r => this.processRegistrationResponse(r[0]));
   }
 
   private processRegistrationResponse(response) {
     {
       if (response.successful) {
+        this.userService.Load().then(() => this.load());
         this.working.editing = false;
       } else {
         this.working.responseMessages = response.messages;
       }
     }
+  }
+}
+
+class Working {
+  public editing: boolean;
+  public self: boolean;
+  public error: boolean;
+  public errorMessage: string;
+  public userName: string;
+  public responseMessages: Array<string>;
+  public registration: Registration;
+
+  constructor() {
+    this.editing = false;
+    this.self = false;
+    this.error = false;
+    this.errorMessage = '';
+    this.userName = '';
+    this.responseMessages = [];
+    this.registration = new Registration();
+  }
+};
+
+class Registration {
+  public checkedTOS: boolean;
+  public displayPassword: boolean;
+  public userName: string;
+  public password: string;
+
+  constructor() {
+    this.checkedTOS = false;
+    this.displayPassword = false;
+    this.userName = '';
+    this.password = '';
   }
 }

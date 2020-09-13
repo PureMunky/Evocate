@@ -70,6 +70,70 @@ namespace Tete.Api.Controllers
       return direction;
     }
 
+    [HttpPost]
+    public Response<RegistrationResponse> Delete([FromBody] LoginAttempt login)
+    {
+      var response = new RegistrationResponse();
+      var service = new Tete.Api.Services.Authentication.LoginService(this.context);
+      var token = HttpContext.Request.Cookies[Constants.SessionTokenName];
+      var user = service.GetUserVMFromToken(token);
+      var session = service.Login(login);
+      var user2 = service.GetUserVMFromToken(session.Token);
+
+      if (user != null && session != null && user2 != null && user.UserId == user2.UserId)
+      {
+        response.Successful = service.DeleteAccount(user.UserId, user);
+      }
+      else
+      {
+        response.Successful = false;
+      }
+
+      if (!response.Successful)
+      {
+        response.Messages.Add("Unable to delete account due to login issues.")
+      }
+
+      return new Response<RegistrationResponse>(response);
+    }
+
+    [HttpPost]
+    public Response<RegistrationResponse> Login([FromBody] LoginAttempt login)
+    {
+      var service = new Tete.Api.Services.Authentication.LoginService(this.context);
+      var token = HttpContext.Request.Cookies[Constants.SessionTokenName];
+      var user = service.GetUserVMFromToken(token);
+      var response = new RegistrationResponse();
+
+      if (user == null || (user != null && user.Roles.Contains("Guest")))
+      {
+        var session = service.Login(login);
+
+        if (session != null)
+        {
+          if (user != null)
+          {
+            service.DeleteAccount(user.UserId, user);
+          }
+
+          SetTokenCookie(session.Token);
+          response.Successful = true;
+        }
+        else
+        {
+          response.Messages.Add("Invalid Login");
+          response.Successful = false;
+        }
+      }
+      else
+      {
+        response.Messages.Add("You're already logged in!");
+        response.Successful = false;
+      }
+
+      return new Response<RegistrationResponse>(response);
+    }
+
     [HttpGet]
     public Response<UserVM> GetUser(string userName)
     {

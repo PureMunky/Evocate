@@ -26,7 +26,8 @@ export class ProfileComponent {
     userName: '',
     newUserName: '',
     newPassword: '',
-    displayPassword: false
+    displayPassword: false,
+    responseMessages: []
   };
 
   constructor(
@@ -37,6 +38,7 @@ export class ProfileComponent {
     private languageService: LanguageService
   ) {
     this.initService.Register(() => {
+      // FIXME: Invalidate the current user when making profile changes.
       this.currentUser = this.userService.CurrentUser();
       this.route.params.subscribe(params => {
         this.working.userName = params["username"];
@@ -88,23 +90,31 @@ export class ProfileComponent {
   }
 
   public resetPassword() {
-    this.apiService.post('/Login/ResetPassword', { password: this.working.newPassword }).then(u => {
-      this.working.editing = false;
-    });
+    this.apiService
+      .post('/Login/ResetPassword', { password: this.working.newPassword })
+      .then(r => this.processRegistrationResponse(r[0]));
   }
 
   public updateUserName() {
-    this.apiService.post('/Login/UpdateUserName', { userName: this.working.newUserName }).then(u => {
-      this.working.editing = false;
-    });
+    this.apiService
+      .post('/Login/UpdateUserName', { userName: this.working.newUserName })
+      .then(r => this.processRegistrationResponse(r[0]));
   }
 
   public registerNewLogin() {
     this.apiService.post('/Login/RegisterNewLogin', {
       password: this.working.newPassword,
       userName: this.working.newUserName
-    }).then(u => {
-      this.working.editing = false;
-    });
+    }).then(r => this.processRegistrationResponse(r[0]));
+  }
+
+  private processRegistrationResponse(response) {
+    {
+      if (response.successful) {
+        this.working.editing = false;
+      } else {
+        this.working.responseMessages = response.messages;
+      }
+    }
   }
 }

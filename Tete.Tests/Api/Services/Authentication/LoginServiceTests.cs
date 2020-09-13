@@ -61,47 +61,6 @@ namespace Tete.Tests.Api.Services.Authentication
     }
 
     [Test]
-    public void RegisterUserTest()
-    {
-      RegistrationAttempt registration = new RegistrationAttempt()
-      {
-        UserName = newUserName,
-        Email = "test@example.com",
-        DisplayName = "def",
-        Password = testPassword
-      };
-
-      this.loginService.Register(registration);
-
-      mockContext.Verify(m => m.SaveChanges(), Times.AtLeastOnce);
-      mockContext.Verify(c => c.Users.Add(It.IsAny<User>()), Times.Once);
-      mockContext.Verify(c => c.Logins.Add(It.IsAny<Login>()), Times.Once);
-    }
-
-    [Test]
-    public void AlreadyRegisteredUserTest()
-    {
-      // Test if you try to register a user that already exists that it errors.
-      var registration = new RegistrationAttempt()
-      {
-        UserName = existingUserName,
-        Email = "test@example.com",
-        DisplayName = "anything",
-        Password = testPassword
-      };
-
-      try
-      {
-        this.loginService.Register(registration);
-        Assert.Fail();
-      }
-      catch (Exception)
-      {
-        Assert.Pass();
-      }
-    }
-
-    [Test]
     public void GetUserFromTokenTest()
     {
       var result = this.loginService.GetUserFromToken(existingUserToken);

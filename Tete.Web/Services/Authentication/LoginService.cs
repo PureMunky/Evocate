@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using Tete.Api.Contexts;
@@ -46,39 +47,39 @@ namespace Tete.Api.Services.Authentication
       }
     }
 
-    /// <summary>
-    /// Attempts to register a new user with the provided
-    /// registration attempt.
-    /// </summary>
-    /// <param name="registration"></param>
-    public RegistrationResponse Register(LoginAttempt login)
-    {
-      var rtnResponse = ValidatePassword(login.Password);
+    // /// <summary>
+    // /// Attempts to register a new user with the provided
+    // /// registration attempt.
+    // /// </summary>
+    // /// <param name="registration"></param>
+    // public RegistrationResponse Register(LoginAttempt login)
+    // {
+    //   var rtnResponse = ValidatePassword(login.Password);
 
-      if (this.mainContext.Users.Where(u => u.UserName == login.UserName).FirstOrDefault() == null)
-      {
-        if (rtnResponse.Successful)
-        {
-          var newUser = RegisterUser(login);
-          UpdatePassword(newUser.Id, login.Password, newUser.Salt);
-        }
-      }
-      else
-      {
-        rtnResponse.Messages.Insert(0, "Username already used");
-        rtnResponse.Successful = false;
-      }
+    //   if (this.mainContext.Users.Where(u => u.UserName == login.UserName).FirstOrDefault() == null)
+    //   {
+    //     if (rtnResponse.Successful)
+    //     {
+    //       var newUser = RegisterUser(login);
+    //       UpdatePassword(newUser.Id, login.Password, newUser.Salt);
+    //     }
+    //   }
+    //   else
+    //   {
+    //     rtnResponse.Messages.Insert(0, "Username already used");
+    //     rtnResponse.Successful = false;
+    //   }
 
-      if (!rtnResponse.Successful)
-      {
-        rtnResponse.Attempt = login;
-        rtnResponse.Attempt.Password = "";
-      }
+    //   if (!rtnResponse.Successful)
+    //   {
+    //     rtnResponse.Attempt = login;
+    //     rtnResponse.Attempt.Password = "";
+    //   }
 
-      return rtnResponse;
-    }
+    //   return rtnResponse;
+    // }
 
-    private User RegisterUser(LoginAttempt registration)
+    private User RegisterUser(RegistrationAttempt registration)
     {
       byte[] salt = Crypto.NewSalt();
       var newUser = new User()
@@ -128,12 +129,12 @@ namespace Tete.Api.Services.Authentication
     /// <returns></returns>
     public User GetUserFromToken(string token)
     {
-      var session = this.mainContext.Sessions.Where(s => s.Token == token).FirstOrDefault();
+      var session = this.mainContext.Sessions.SingleOrDefault(s => s.Token == token);
 
       User user = null;
       if (session != null)
       {
-        user = this.mainContext.Users.Where(u => u.Id == session.UserId).FirstOrDefault();
+        user = this.mainContext.Users.AsNoTracking().Where(u => u.Id == session.UserId).FirstOrDefault();
         if (user != null)
         {
           session.LastUsed = DateTime.UtcNow;
@@ -263,6 +264,22 @@ namespace Tete.Api.Services.Authentication
       return created;
     }
 
+    public bool RemoveRole(Guid UserId, string RoleName)
+    {
+      bool removed = false;
+      var dbRole = this.mainContext.AccessRoles.Where(r => r.UserId == UserId && r.Name == RoleName).FirstOrDefault();
+      if (dbRole != null)
+      {
+        LogService.Write("Removed Role", String.Format("User:{0};Role:{1}", UserId, RoleName));
+        removed = true;
+
+        this.mainContext.AccessRoles.Remove(dbRole);
+        this.mainContext.SaveChanges();
+      }
+
+      return removed;
+    }
+
     public UserVM GetUserVMFromUsername(string userName, UserVM actor)
     {
       UserVM userVM = null;
@@ -306,7 +323,13 @@ namespace Tete.Api.Services.Authentication
 
         if (user != null)
         {
-          // TODO: Update username
+          var dbUser = this.mainContext.Users.Where(u => u.Id == user.Id).FirstOrDefault();
+          if (dbUser != null)
+          {
+            dbUser.UserName = newUserName;
+            this.mainContext.Users.Update(dbUser);
+            this.mainContext.SaveChanges();
+          }
         }
       }
 
@@ -315,7 +338,29 @@ namespace Tete.Api.Services.Authentication
 
     public RegistrationResponse RegisterNewLogin(string token, LoginAttempt login)
     {
+      var rtnResponse = ValidatePassword(login.Password);
+      rtnResponse.Combine(ValidateUserName(login.UserName));
 
+      if (rtnResponse.Successful)
+      {
+        var user = GetUserFromToken(token);
+
+        if (user != null)
+        {
+          var dbUser = this.mainContext.Users.Where(u => u.Id == user.Id).FirstOrDefault();
+          if (dbUser != null)
+          {
+            UpdatePassword(user.Id, login.Password, user.Salt);
+            dbUser.UserName = login.UserName;
+            this.mainContext.Users.Update(dbUser);
+            this.mainContext.SaveChanges();
+            RemoveRole(user.Id, "Guest");
+          }
+
+        }
+      }
+
+      return rtnResponse;
     }
 
     private RegistrationResponse ValidatePassword(string password)
@@ -348,6 +393,30 @@ namespace Tete.Api.Services.Authentication
       }
 
       return rtnResponse;
+    }
+
+    private RegistrationResponse ValidateUserName(string UserName)
+    {
+      var response = new RegistrationResponse();
+
+      if (UserName == null)
+      {
+        UserName = "";
+      }
+
+      if (UserName.Length <= 0)
+      {
+        response.Messages.Add("UserName too short");
+        response.Successful = false;
+      }
+
+      if (response.Successful && this.mainContext.Users.Where(u => u.UserName == UserName).Count() > 0)
+      {
+        response.Messages.Add("UserName already taken");
+        response.Successful = false;
+      }
+
+      return response;
     }
   }
 }

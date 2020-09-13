@@ -14,5 +14,11 @@ namespace Tete.Models.Authentication
       this.Successful = true;
       this.Messages = new List<string>();
     }
+
+    public void Combine(RegistrationResponse response)
+    {
+      this.Messages.AddRange(response.Messages);
+      this.Successful = (this.Successful && response.Successful);
+    }
   }
 }

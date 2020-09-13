@@ -18,7 +18,7 @@ export class UserService {
   }
 
   public Get(userName: String): Promise<User> {
-    return this.apiService.get("/V1/Login/GetUser?username=" + userName).then(u => {
+    return this.apiService.get("/Login/GetUser?username=" + userName).then(u => {
       return u[0];
     });
   }

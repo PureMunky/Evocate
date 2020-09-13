@@ -3,8 +3,9 @@ using System;
 using Microsoft.Extensions.Configuration;
 using Tete.Models.Authentication;
 using Tete.Web.Helpers;
+using Tete.Web.Models;
 
-namespace Tete.Web.Controllers
+namespace Tete.Api.Controllers
 {
   public class LoginController : Controller
   {
@@ -22,12 +23,10 @@ namespace Tete.Web.Controllers
        - user click "reset" on login screen
        - sent an email with magic link
     */
-    private IConfiguration Configuration;
     private Tete.Api.Contexts.MainContext context;
 
-    public LoginController(IConfiguration configuration, Tete.Api.Contexts.MainContext mainContext)
+    public LoginController(Tete.Api.Contexts.MainContext mainContext)
     {
-      Configuration = configuration;
       this.context = mainContext;
     }
 
@@ -69,6 +68,13 @@ namespace Tete.Web.Controllers
       }
 
       return direction;
+    }
+
+    [HttpGet]
+    public Response<UserVM> GetUser(string userName)
+    {
+      var service = new Tete.Api.Services.Authentication.LoginService(this.context);
+      return new Response<UserVM>(service.GetUserVMFromUsername(userName, CurrentUser()));
     }
 
     [HttpGet]
@@ -123,72 +129,72 @@ namespace Tete.Web.Controllers
       return View("Register");
     }
 
-    [HttpPost]
-    public IActionResult Register(string userName, string userPassword, string userEmail, string userDisplayName)
-    {
-      IActionResult direction = Redirect("/");
+    // [HttpPost]
+    // public IActionResult Register(string userName, string userPassword, string userEmail, string userDisplayName)
+    // {
+    //   IActionResult direction = Redirect("/");
 
-      var service = new Tete.Api.Services.Authentication.LoginService(this.context);
-      var response = service.Register(
-        new RegistrationAttempt()
-        {
-          UserName = userName,
-          Password = userPassword,
-          Email = userEmail,
-          DisplayName = userDisplayName
-        }
-      );
+    //   var service = new Tete.Api.Services.Authentication.LoginService(this.context);
+    //   var response = service.Register(
+    //     new RegistrationAttempt()
+    //     {
+    //       UserName = userName,
+    //       Password = userPassword,
+    //       Email = userEmail,
+    //       DisplayName = userDisplayName
+    //     }
+    //   );
 
-      if (response.Successful)
-      {
-        var session = service.Login(new LoginAttempt()
-        {
-          UserName = userName,
-          Password = userPassword
-        });
+    //   if (response.Successful)
+    //   {
+    //     var session = service.Login(new LoginAttempt()
+    //     {
+    //       UserName = userName,
+    //       Password = userPassword
+    //     });
 
-        if (session != null)
-        {
-          SetTokenCookie(session.Token);
-        }
-        else
-        {
-          direction = View("Register");
-        }
-      }
-      else
-      {
-        direction = View("Register", response);
-      }
+    //     if (session != null)
+    //     {
+    //       SetTokenCookie(session.Token);
+    //     }
+    //     else
+    //     {
+    //       direction = View("Register");
+    //     }
+    //   }
+    //   else
+    //   {
+    //     direction = View("Register", response);
+    //   }
 
-      return direction;
-    }
-
-    [HttpPost]
-    public RegistrationResponse ResetPassword([FromBody] LoginAttempt login)
-    {
-      var token = HttpContext.Request.Cookies[Constants.SessionTokenName];
-      var service = new Tete.Api.Services.Authentication.LoginService(this.context);
-
-      return service.ResetPassword(token, login.Password);
-    }
+    //   return direction;
+    // }
 
     [HttpPost]
-    public RegistrationResponse UpdateUserName([FromBody] LoginAttempt login)
+    public Response<RegistrationResponse> ResetPassword([FromBody] LoginAttempt login)
     {
       var token = HttpContext.Request.Cookies[Constants.SessionTokenName];
       var service = new Tete.Api.Services.Authentication.LoginService(this.context);
 
-      return service.UpdateUserName(token, login.UserName);
+      return new Response<RegistrationResponse>(service.ResetPassword(token, login.Password));
     }
 
     [HttpPost]
-    public RegistrationResponse RegisterNewLogin([FromBody] LoginAttempt login)
+    public Response<RegistrationResponse> UpdateUserName([FromBody] LoginAttempt login)
     {
       var token = HttpContext.Request.Cookies[Constants.SessionTokenName];
       var service = new Tete.Api.Services.Authentication.LoginService(this.context);
 
-      return service.RegisterNewLogin(token, login);
+      return new Response<RegistrationResponse>(service.UpdateUserName(token, login.UserName));
+    }
+
+    [HttpPost]
+    public Response<RegistrationResponse> RegisterNewLogin([FromBody] LoginAttempt login)
+    {
+      var token = HttpContext.Request.Cookies[Constants.SessionTokenName];
+      var service = new Tete.Api.Services.Authentication.LoginService(this.context);
+
+      return new Response<RegistrationResponse>(service.RegisterNewLogin(token, login));
     }
   }
 }

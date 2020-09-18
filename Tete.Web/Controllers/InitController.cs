@@ -69,13 +69,10 @@ namespace Tete.Api.Controllers
       }
 
 
-      if (this.loginService.GrantRole(adminUser.Id, adminUser.Id, "Admin"))
+      if (this.mainContext.AccessRoles.Where(ar => ar.UserId == adminUser.Id && ar.Name == "Admin").FirstOrDefault() == null)
       {
-        output.Add("Granted admin role to admin user.");
-      }
-      else
-      {
-        output.Add("Admin role already granted.");
+        this.mainContext.AccessRoles.Add(new AccessRole(adminUser.Id, "Admin"));
+        this.mainContext.SaveChanges();
       }
 
       var adminUserVM = new UserService(mainContext, adminUser).GetUser(adminUser);

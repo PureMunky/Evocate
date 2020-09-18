@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,8 +31,8 @@ namespace Tete.Api.Services.Users
     public UserVM GetUser(User user)
     {
       var languages = UserLanguageService.GetUserLanguages(user.Id);
-      var profiles = this.mainContext.UserProfiles.Where(p => p.UserId == user.Id).FirstOrDefault();
-      var roles = this.mainContext.AccessRoles.Where(r => r.UserId == user.Id).ToList();
+      var profiles = this.mainContext.UserProfiles.AsNoTracking().Where(p => p.UserId == user.Id).FirstOrDefault();
+      var roles = this.mainContext.AccessRoles.AsNoTracking().Where(r => r.UserId == user.Id).ToList();
       return new UserVM(
         user,
         languages,
@@ -51,7 +52,6 @@ namespace Tete.Api.Services.Users
         this.mainContext.Users.Update(dbUser);
         this.mainContext.SaveChanges();
       }
-
     }
 
     public IEnumerable<UserVM> Search(string searchText)
@@ -61,11 +61,83 @@ namespace Tete.Api.Services.Users
 
       if (this.Actor.Roles.Contains("Admin"))
       {
-        users = this.mainContext.Users.Where(u => u.DisplayName.ToLower().Contains(search) || u.Email.ToLower().Contains(search) || u.UserName.ToLower().Contains(search)).Select(u => new UserVM(u));
+        users = this.mainContext.Users.AsNoTracking().Where(u => u.DisplayName.ToLower().Contains(search) || u.Email.ToLower().Contains(search) || u.UserName.ToLower().Contains(search)).Select(u => new UserVM(u));
       }
 
       return users;
     }
+
+    #region Role Management
+    public bool GrantGuestRole(Guid UserId)
+    {
+      return GrantAccessRole(UserId, "Guest");
+    }
+
+    public bool GrantRole(Guid UserId, String RoleName)
+    {
+      bool created = false;
+
+      if (this.Actor.Roles.Contains("Admin"))
+      {
+        created = GrantAccessRole(UserId, RoleName);
+      }
+
+      return created;
+    }
+    private bool GrantAccessRole(Guid UserId, String RoleName)
+    {
+      bool created = false;
+
+      var testRole = this.mainContext.AccessRoles.Where(r => r.UserId == UserId && r.Name == RoleName).FirstOrDefault();
+
+      if (testRole == null)
+      {
+        LogService.Write("Grant Role", String.Format("User:{0};Role:{1}", UserId, RoleName));
+        created = true;
+        var role = new AccessRole(UserId, RoleName);
+        role.CreatedBy = this.Actor.UserId;
+        this.mainContext.AccessRoles.Add(role);
+        this.mainContext.SaveChanges();
+      }
+
+      return created;
+    }
+
+    public bool RemoveGuestRole(Guid UserId)
+    {
+      return RemoveAccessRole(UserId, "Guest");
+    }
+
+    public bool RemoveRole(Guid UserId, string RoleName)
+    {
+      bool removed = false;
+
+      if (this.Actor.Roles.Contains("Admin"))
+      {
+        removed = RemoveAccessRole(UserId, RoleName);
+      }
+
+      return removed;
+    }
+
+    private bool RemoveAccessRole(Guid UserId, string RoleName)
+    {
+      bool removed = false;
+
+      var dbRole = this.mainContext.AccessRoles.Where(r => r.UserId == UserId && r.Name == RoleName).FirstOrDefault();
+      if (dbRole != null)
+      {
+        LogService.Write("Removed Role", String.Format("User:{0};Role:{1}", UserId, RoleName));
+        removed = true;
+
+        this.mainContext.AccessRoles.Remove(dbRole);
+        this.mainContext.SaveChanges();
+      }
+      return removed;
+    }
+
+    #endregion
+
 
     private void FillData(MainContext mainContext, UserVM actor)
     {

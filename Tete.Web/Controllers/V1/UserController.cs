@@ -40,5 +40,13 @@ namespace Tete.Api.Controllers
       return new Response<UserVM>(service.Search(searchText));
     }
 
+    [HttpPost]
+    public Response<string> GrantRole([FromBody] RoleUpdate roleUpdate)
+    {
+      var service = new Services.Users.UserService(Context, CurrentAdmin);
+      var success = service.GrantRole(roleUpdate.UserId, roleUpdate.Name);
+      return new Response<string>(success ? "Successful" : "Failed", !success);
+    }
+
   }
 }

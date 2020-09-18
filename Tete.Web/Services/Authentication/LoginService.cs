@@ -135,46 +135,14 @@ namespace Tete.Api.Services.Authentication
         Email = ""
       });
 
-      GrantRole(user.Id, user.Id, "Guest");
+      new UserService(this.mainContext, new UserVM(user)).GrantGuestRole(user.Id);
 
       var session = CreateNewSession(user);
 
       return new SessionVM(session);
     }
 
-    public bool GrantRole(Guid UserId, Guid CreatedById, String RoleName)
-    {
-      bool created = false;
-      var testRole = this.mainContext.AccessRoles.Where(r => r.UserId == UserId && r.Name == RoleName).FirstOrDefault();
 
-      if (testRole == null)
-      {
-        LogService.Write("Grant Role", String.Format("User:{0};Role:{1}", UserId, RoleName));
-        created = true;
-        var role = new AccessRole(UserId, RoleName);
-        role.CreatedBy = CreatedById;
-        this.mainContext.AccessRoles.Add(role);
-        this.mainContext.SaveChanges();
-      }
-
-      return created;
-    }
-
-    public bool RemoveRole(Guid UserId, string RoleName)
-    {
-      bool removed = false;
-      var dbRole = this.mainContext.AccessRoles.Where(r => r.UserId == UserId && r.Name == RoleName).FirstOrDefault();
-      if (dbRole != null)
-      {
-        LogService.Write("Removed Role", String.Format("User:{0};Role:{1}", UserId, RoleName));
-        removed = true;
-
-        this.mainContext.AccessRoles.Remove(dbRole);
-        this.mainContext.SaveChanges();
-      }
-
-      return removed;
-    }
 
     public UserVM GetUserVMFromUsername(string userName, UserVM actor)
     {
@@ -250,7 +218,7 @@ namespace Tete.Api.Services.Authentication
             dbUser.UserName = login.UserName;
             this.mainContext.Users.Update(dbUser);
             this.mainContext.SaveChanges();
-            RemoveRole(user.Id, "Guest");
+            new UserService(this.mainContext, new UserVM(user)).RemoveGuestRole(user.Id);
           }
 
         }

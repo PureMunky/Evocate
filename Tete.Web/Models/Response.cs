@@ -33,5 +33,19 @@ namespace Tete.Web.Models
       this.Status = HttpStatusCode.OK;
       this.Error = false;
     }
+
+    public Response(T item, bool error)
+    {
+      this.Data = new List<T>() { item };
+      this.Status = (error ? HttpStatusCode.BadRequest : HttpStatusCode.OK);
+      this.Error = error;
+    }
+
+    public Response(IEnumerable<T> items, bool error)
+    {
+      this.Data = items;
+      this.Status = (error ? HttpStatusCode.BadRequest : HttpStatusCode.OK);
+      this.Error = error;
+    }
   }
 }

@@ -91,7 +91,7 @@ namespace Tete.Api.Controllers
 
       if (!response.Successful)
       {
-        response.Messages.Add("Unable to delete account due to login issues.")
+        response.Messages.Add("Unable to delete account due to login issues.");
       }
 
       return new Response<RegistrationResponse>(response);

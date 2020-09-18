@@ -7,6 +7,7 @@ export class User {
   public profile: Profile;
   public languages: Array<any>;
   public roles: Array<string>;
+  public checked: boolean;
 
   constructor() {
     this.userId = '';
@@ -15,5 +16,6 @@ export class User {
     this.profile = new Profile();
     this.languages = [];
     this.roles = [];
+    this.checked = false;
   }
 }

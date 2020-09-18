@@ -1,0 +1,20 @@
+<h2>User Admin</h2>
+
+<div>
+  <h3>Search</h3>
+  <div class="form-group">
+    <input type="text" [(ngModel)]="working.searchText" (keyup.enter)="search()" />
+    <div>
+      <div *ngFor="let user of users">
+        <input type="checkbox" [(ngModel)]="user.checked" />
+        <a [routerLink]="['/profile/', user.userName]">{{user.displayName}} - {{user.userName}}</a>
+      </div>
+
+      <div>
+        Role: <input type="text" [(ngModel)]="working.roleName" />
+        <button class="btn btn-secondary" (click)="grantRole()">Grant</button>
+        <button class="btn btn-secondary" (click)="revokeRole()">Revoke</button>
+      </div>
+    </div>
+  </div>
+</div>

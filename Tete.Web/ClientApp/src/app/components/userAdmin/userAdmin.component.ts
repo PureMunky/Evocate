@@ -30,12 +30,17 @@ export class UserAdminComponent {
 
   public grantRole() {
     var checked = this.users.filter(u => u.checked);
-    checked.forEach(u => {
-      return this.apiService.post('/V1/User/GrantRole', { userId: u.userId, name: this.working.roleName });
+    checked.forEach(async u => {
+      await this.apiService.post('/V1/User/GrantRole', { userId: u.userId, name: this.working.roleName });
+      u.checked = false;
     });
   }
 
   public revokeRole() {
-
+    var checked = this.users.filter(u => u.checked);
+    checked.forEach(async u => {
+      await this.apiService.post('/V1/User/RemoveRole', { userId: u.userId, name: this.working.roleName });
+      u.checked = false;
+    });
   }
 }

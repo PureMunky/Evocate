@@ -73,7 +73,10 @@ namespace Tete.Api.Controllers
     [HttpPost]
     public Response<RegistrationResponse> Delete([FromBody] LoginAttempt login)
     {
-      var response = new RegistrationResponse();
+      var response = new RegistrationResponse()
+      {
+        Successful = false
+      };
       var service = new Tete.Api.Services.Authentication.LoginService(this.context);
       var token = HttpContext.Request.Cookies[Constants.SessionTokenName];
       var user = service.GetUserVMFromToken(token);
@@ -82,16 +85,46 @@ namespace Tete.Api.Controllers
 
       if (user != null && session != null && user2 != null && user.UserId == user2.UserId)
       {
-        response.Successful = service.DeleteAccount(user.UserId, user);
-      }
-      else
-      {
-        response.Successful = false;
+        try
+        {
+          service.DeleteAccount(user.UserId, user);
+          response.Successful = true;
+        }
+        catch { }
       }
 
       if (!response.Successful)
       {
         response.Messages.Add("Unable to delete account due to login issues.");
+      }
+
+      return new Response<RegistrationResponse>(response);
+    }
+
+    [HttpPost]
+    public Response<RegistrationResponse> AdminDelete([FromBody] RoleUpdate login)
+    {
+      var response = new RegistrationResponse()
+      {
+        Successful = false
+      };
+      var service = new Tete.Api.Services.Authentication.LoginService(this.context);
+      var token = HttpContext.Request.Cookies[Constants.SessionTokenName];
+      var user = service.GetUserVMFromToken(token);
+
+      if (user != null)
+      {
+        try
+        {
+          service.DeleteAccount(login.UserId, user);
+          response.Successful = true;
+        }
+        catch { }
+      }
+
+      if (!response.Successful)
+      {
+        response.Messages.Add("Failed to delete account.");
       }
 
       return new Response<RegistrationResponse>(response);

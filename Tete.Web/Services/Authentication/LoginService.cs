@@ -227,29 +227,28 @@ namespace Tete.Api.Services.Authentication
       return rtnResponse;
     }
 
-    public bool DeleteAccount(Guid UserId, UserVM Actor)
+    public void DeleteAccount(Guid UserId, UserVM Actor)
     {
-
       // FIXME: Test the account deletion.
-      var successful = false;
       if (UserId == Actor.UserId || Actor.Roles.Contains("Admin"))
       {
         var user = this.mainContext.Users.Single(u => u.Id == UserId);
-
-        this.mainContext.AccessRoles.RemoveRange(this.mainContext.AccessRoles.Where(ar => ar.UserId == UserId));
-        this.mainContext.Logins.RemoveRange(this.mainContext.Logins.Where(l => l.UserId == UserId));
-        this.mainContext.Sessions.RemoveRange(this.mainContext.Sessions.Where(s => s.UserId == UserId));
-        this.mainContext.UserLanguages.RemoveRange(this.mainContext.UserLanguages.Where(ul => ul.UserId == UserId));
-        this.mainContext.UserProfiles.RemoveRange(this.mainContext.UserProfiles.Where(up => up.UserId == UserId));
-        this.mainContext.UserTopics.RemoveRange(this.mainContext.UserTopics.Where(ut => ut.UserId == UserId));
-        this.mainContext.Users.Remove(user);
-
-        this.mainContext.SaveChanges();
-
-        successful = true;
+        DeleteUser(user);
       }
 
-      return successful;
+    }
+
+    private void DeleteUser(User user)
+    {
+      this.mainContext.AccessRoles.RemoveRange(this.mainContext.AccessRoles.Where(ar => ar.UserId == user.Id));
+      this.mainContext.Logins.RemoveRange(this.mainContext.Logins.Where(l => l.UserId == user.Id));
+      this.mainContext.Sessions.RemoveRange(this.mainContext.Sessions.Where(s => s.UserId == user.Id));
+      this.mainContext.UserLanguages.RemoveRange(this.mainContext.UserLanguages.Where(ul => ul.UserId == user.Id));
+      this.mainContext.UserProfiles.RemoveRange(this.mainContext.UserProfiles.Where(up => up.UserId == user.Id));
+      this.mainContext.UserTopics.RemoveRange(this.mainContext.UserTopics.Where(ut => ut.UserId == user.Id));
+      this.mainContext.Users.Remove(user);
+
+      this.mainContext.SaveChanges();
     }
     #endregion
 

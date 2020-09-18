@@ -43,4 +43,12 @@ export class UserAdminComponent {
       u.checked = false;
     });
   }
+
+  public deleteAccounts() {
+    var checked = this.users.filter(u => u.checked);
+    checked.forEach(async u => {
+      await this.apiService.post('/Login/AdminDelete', { userId: u.userId, name: '' });
+      u.checked = false;
+    });
+  }
 }

@@ -3,7 +3,10 @@
 <div>
   <h3>Search</h3>
   <div class="form-group">
-    <input type="text" [(ngModel)]="working.searchText" (keyup.enter)="search()" />
+    <div>
+      <input type="text" [(ngModel)]="working.searchText" (keyup.enter)="search()" />
+      <button class="btn btn-secondary" (click)="search()">Search</button>
+    </div>
     <div>
       <div *ngFor="let user of users">
         <input type="checkbox" [(ngModel)]="user.checked" />
@@ -14,6 +17,9 @@
         Role: <input type="text" [(ngModel)]="working.roleName" />
         <button class="btn btn-secondary" (click)="grantRole()">Grant</button>
         <button class="btn btn-secondary" (click)="revokeRole()">Revoke</button>
+      </div>
+      <div>
+        <button class="btn btn-secondary" (click)="deleteAccounts()">Delete Accounts</button>
       </div>
     </div>
   </div>

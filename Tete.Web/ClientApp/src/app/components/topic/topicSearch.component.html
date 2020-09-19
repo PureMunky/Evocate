@@ -13,7 +13,7 @@
   <div class="card-columns">
     <teteTile *ngFor="let topic of topics" [topic]="topic"></teteTile>
 
-    <div class="card" *ngIf="search.newTopic">
+    <div class="card" *ngIf="search.newTopic && currentUser.canAction()">
       <div class="card-body">
         <h5 class="card-title">Didn't see what you were looking for?</h5>
         <h6 class="card-subtitle">

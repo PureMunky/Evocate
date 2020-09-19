@@ -30,14 +30,15 @@ namespace Tete.Api.Services.Users
 
     public UserVM GetUser(User user)
     {
-      var languages = UserLanguageService.GetUserLanguages(user.Id);
+      // var languages = UserLanguageService.GetUserLanguages(user.Id);
       var profiles = this.mainContext.UserProfiles.AsNoTracking().Where(p => p.UserId == user.Id).FirstOrDefault();
       var roles = this.mainContext.AccessRoles.AsNoTracking().Where(r => r.UserId == user.Id).ToList();
       return new UserVM(
         user,
-        languages,
+        new List<Models.Localization.UserLanguage>(),
         profiles,
-        roles
+        roles,
+        new UserBlockVM(CurrentBlock(user.Id))
       );
     }
 
@@ -138,6 +139,36 @@ namespace Tete.Api.Services.Users
 
     #endregion
 
+    #region Block
+    public bool Block(UserBlockVM block)
+    {
+      var result = false;
+
+      if (this.Actor.Roles.Contains("Admin"))
+      {
+        if (!CurrentlyBlocked(block.UserId))
+        {
+          var newBlock = new UserBlock(block.UserId, block.EndDate, this.Actor.UserId, block.PublicComments, block.PrivateComments);
+
+          this.mainContext.UserBlocks.Add(newBlock);
+          this.mainContext.SaveChanges();
+          result = true;
+        }
+      }
+
+      return result;
+    }
+
+    private UserBlock CurrentBlock(Guid UserId)
+    {
+      return this.mainContext.UserBlocks.AsNoTracking().Where(b => b.UserId == UserId && b.EndDate >= DateTime.UtcNow).OrderByDescending(b => b.EndDate).FirstOrDefault();
+
+    }
+    private bool CurrentlyBlocked(Guid UserId)
+    {
+      return (CurrentBlock(UserId) != null);
+    }
+    #endregion
 
     private void FillData(MainContext mainContext, UserVM actor)
     {

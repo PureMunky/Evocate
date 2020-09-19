@@ -11,7 +11,12 @@ export class UserAdminComponent {
 
   public working = {
     searchText: '',
-    roleName: ''
+    roleName: '',
+    block: {
+      endDate: new Date().toLocaleDateString(),
+      publicComments: '',
+      privateComments: '',
+    }
   };
 
   public users: Array<User> = [];
@@ -48,6 +53,20 @@ export class UserAdminComponent {
     var checked = this.users.filter(u => u.checked);
     checked.forEach(async u => {
       await this.apiService.post('/Login/AdminDelete', { userId: u.userId, name: '' });
+      u.checked = false;
+    });
+  }
+
+  public blockAccounts() {
+    var checked = this.users.filter(u => u.checked);
+
+    checked.forEach(async u => {
+      await this.apiService.post('/V1/User/Block', {
+        userId: u.userId,
+        endDate: this.working.block.endDate,
+        publicComments: this.working.block.publicComments,
+        privateComments: this.working.block.privateComments
+      });
       u.checked = false;
     });
   }

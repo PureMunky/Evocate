@@ -56,5 +56,14 @@ namespace Tete.Api.Controllers
       return new Response<string>(success ? "Successful" : "Failed", !success);
     }
 
+    [HttpPost]
+    public Response<string> Block([FromBody] UserBlockVM block)
+    {
+      var service = new Services.Users.UserService(Context, CurrentAdmin);
+      var success = service.Block(block);
+
+      return new Response<string>(success ? "Successful" : "Failed", !success);
+    }
+
   }
 }

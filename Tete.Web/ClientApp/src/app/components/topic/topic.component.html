@@ -71,15 +71,19 @@
 
   <pre>{{currentTopic.description}}</pre>
 
-  <div *ngIf="(!currentTopic.userTopic) && currentTopic.topicId">
-    <button class="btn btn-secondary" (click)="learn()">Request a Mentor</button>
-    <button class="btn btn-secondary" (click)="teach()" *ngIf="!currentTopic.elligible || adminUser">Register as a Mentor</button>
-  </div>
+  <div *ngIf="currentUser.canAction()">
+    <div *ngIf="(!currentTopic.userTopic) && currentTopic.topicId">
+      <button class="btn btn-secondary" (click)="learn()">Request a Mentor</button>
+      <button class="btn btn-secondary" (click)="teach()" *ngIf="!currentTopic.elligible || adminUser">Register as a
+        Mentor</button>
+    </div>
 
-  <div *ngIf="currentTopic.userTopic &&  currentTopic.userTopic.status == 4">
-    <!-- Mentor Controls -->
-    <button class="btn btn-secondary" *ngIf="currentTopic.mentorships.length > 0" (click)="claimNextMentorship()">I'm ready for a new
-      learner.</button>
-    <span *ngIf="currentTopic.mentorships.length == 0">There are no waiting learners at the moment.</span>
+    <div *ngIf="currentTopic.userTopic &&  currentTopic.userTopic.status == 4">
+      <!-- Mentor Controls -->
+      <button class="btn btn-secondary" *ngIf="currentTopic.mentorships.length > 0" (click)="claimNextMentorship()">I'm
+        ready for a new
+        learner.</button>
+      <span *ngIf="currentTopic.mentorships.length == 0">There are no waiting learners at the moment.</span>
+    </div>
   </div>
 </div>

@@ -28,14 +28,25 @@ export class User {
     return action;
   }
 
-  constructor() {
-    this.userId = '';
-    this.userName = '';
-    this.displayName = '';
-    this.profile = new Profile();
-    this.languages = [];
-    this.roles = [];
-    this.checked = false;
-    this.block = null;
+  constructor(inner: User) {
+    if (inner) {
+      this.userId = inner.userId;
+      this.userName = inner.userName;
+      this.displayName = inner.displayName;
+      this.profile = inner.profile;
+      this.languages = inner.languages;
+      this.roles = inner.roles;
+      this.checked = false;
+      this.block = inner.block;
+    } else {
+      this.userId = '';
+      this.userName = '';
+      this.displayName = '';
+      this.profile = new Profile();
+      this.languages = [];
+      this.roles = [];
+      this.checked = false;
+      this.block = null;
+    }
   }
 }

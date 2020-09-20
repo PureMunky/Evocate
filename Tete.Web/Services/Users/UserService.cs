@@ -38,7 +38,7 @@ namespace Tete.Api.Services.Users
         new List<Models.Localization.UserLanguage>(),
         profiles,
         roles,
-        new UserBlockVM(CurrentBlock(user.Id))
+        CurrentBlock(user.Id)
       );
     }
 
@@ -159,9 +159,17 @@ namespace Tete.Api.Services.Users
       return result;
     }
 
-    private UserBlock CurrentBlock(Guid UserId)
+    private UserBlockVM CurrentBlock(Guid UserId)
     {
-      return this.mainContext.UserBlocks.AsNoTracking().Where(b => b.UserId == UserId && b.EndDate >= DateTime.UtcNow).OrderByDescending(b => b.EndDate).FirstOrDefault();
+      var block = this.mainContext.UserBlocks.AsNoTracking().Where(b => b.UserId == UserId && b.EndDate >= DateTime.UtcNow).OrderByDescending(b => b.EndDate).FirstOrDefault();
+      UserBlockVM rtnBlock = null;
+
+      if (block != null)
+      {
+        rtnBlock = new UserBlockVM(block);
+      }
+
+      return rtnBlock;
 
     }
     private bool CurrentlyBlocked(Guid UserId)

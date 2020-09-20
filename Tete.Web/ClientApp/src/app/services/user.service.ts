@@ -24,7 +24,7 @@ export class UserService {
   }
 
   public CurrentUser(): User {
-    return this.currentUser;
+    return new User(this.currentUser);
   }
 
 }

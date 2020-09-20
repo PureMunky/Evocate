@@ -60,7 +60,7 @@
   <h2>{{currentTopic.name}}</h2>
   <h3 *ngIf="currentTopic.userTopic">Your role: {{currentTopic.userTopic.statusText}}</h3>
   <div *ngIf="currentTopic.keywords.length > 0">
-    <span *ngFor="let keyword of currentTopic.keywords">#{{keyword.name}}</span>
+    <span class="badge badge-primary" *ngFor="let keyword of currentTopic.keywords">{{keyword.name}}</span>
   </div>
 
   <div *ngIf="currentTopic.keywords.length > 0">

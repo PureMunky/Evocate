@@ -30,7 +30,7 @@ namespace Tete.Api.Controllers
     [HttpGet]
     public Response<KeyValuePair<string, string>> Get()
     {
-      var service = new Services.Config.SettingService(Context, CurrentAdmin);
+      var service = new Services.Config.SettingService(Context, CurrentUser);
 
       return new Response<KeyValuePair<string, string>>(service.Get());
     }

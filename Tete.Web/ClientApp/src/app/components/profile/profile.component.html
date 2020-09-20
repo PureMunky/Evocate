@@ -1,6 +1,7 @@
 <h1>{{user.displayName}} Profile</h1>
 <div class="alert alert-primary" *ngIf="!user.userName">
   This is a guest profile.<br />
+  Register or login to an existing account <a routerLink="/settings">here</a>.<br />
   If you register for a <strong>free</strong> full account you'll be able to:
   <ul>
     <li>Create new topics</li>
@@ -12,19 +13,23 @@
 
 <div *ngIf="working.editing">
   <div *ngIf="user.userName">
-    <h2>About</h2>
+    <div>
+      Go to <a routerLink="/settings">Settings</a> to change your username or password.
+    </div>
     <div>
       <span id="txtDisplaynameLabel">Name</span><br />
-      <input type="text" aria-labelledby="txtDisplaynameLabel" id="txtDisplayName" [(ngModel)]="user.displayName" />
+      <input class="form-control" type="text" aria-labelledby="txtDisplaynameLabel" id="txtDisplayName"
+        [(ngModel)]="user.displayName" />
     </div>
     <div>
       <span id="txtAboutLabel">About</span><br />
-      <textarea id="txtAbout" aria-labelledby="txtAboutLabel" [(ngModel)]="user.profile.about"></textarea>
+      <textarea id="txtAbout" class="form-control" aria-labelledby="txtAboutLabel"
+        [(ngModel)]="user.profile.about"></textarea>
     </div>
 
     <div>
       <span aria-labelledby="txtPrivateAbout">Private About</span><br />
-      <textarea id="txtPrivateAbout" [(ngModel)]="user.profile.privateAbout"></textarea>
+      <textarea id="txtPrivateAbout" class="form-control" [(ngModel)]="user.profile.privateAbout"></textarea>
     </div>
 
     <div *ngIf="false">
@@ -52,43 +57,8 @@
         </div>
       </div>
     </div>
-    <button (click)="save()">Save</button><button (click)="cancel()">Cancel</button>
-  </div>
-
-  <!-- TODO: Add ToS and Privacy Policy -->
-  <h2>Login</h2>
-  <div class="form-group">
-    <div class="alert alert-warning" *ngIf="working.responseMessages.length > 0">
-      <ul>
-        <li *ngFor="let m of working.responseMessages">{{m}}</li>
-      </ul>
-    </div>
-    <div>
-      <label for="txtUsername">Username</label>
-      <input id="txtUsername" type="text" class="form-control" [(ngModel)]="working.registration.userName" />
-      <button class="btn btn-secondary" *ngIf="user.userName" (click)="updateUserName()">Update UserName</button>
-    </div>
-
-    <div>
-      <label for="txtNewPassword">Password</label>
-      <input id="txtNewPassword" [type]="working.registration.displayPassword ? 'text' : 'password'"
-        class="form-control" [(ngModel)]="working.registration.password" />
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" [(ngModel)]="working.registration.displayPassword"
-          id="chkPasswordDisplayToggle">
-        <label class="form-check-label" for="chkPasswordDisplayToggle">Display Password</label>
-      </div>
-      <button class="btn btn-secondary" *ngIf="user.userName" (click)="resetPassword()">Update Password</button>
-    </div>
-    <div *ngIf="!user.userName">
-      <div class="form-check">
-        <input id="chkTOS" class="form-check-input" type="checkbox" [(ngModel)]="working.registration.checkedTOS" />
-        <label class="form-check-label" for="chkTOS">I agree to the ToS and Privacy Policy</label>
-      </div>
-      <button class="btn btn-secondary" (click)="registerNewLogin()"
-        [disabled]="!working.registration.checkedTOS">Register New Acount</button>
-      <button class="btn btn-primary" (click)="login()" [disabled]="!working.registration.checkedTOS">Login</button>
-    </div>
+    <button class="btn btn-secondary" (click)="save()">Save</button>
+    <button class="btn btn-secondary" (click)="cancel()">Cancel</button>
   </div>
 </div>
 
@@ -106,5 +76,4 @@
       </div>
     </div>
   </div>
-  <a class="btn btn-secondary" href="/Login/Logout" *ngIf="working.self">Logout</a>
 </div>

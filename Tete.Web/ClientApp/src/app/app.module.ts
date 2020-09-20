@@ -24,6 +24,8 @@ import { LinkAdminComponent } from "./components/linkAdmin/linkAdmin.component";
 import { DashboardAdminComponent } from "./components/dashboardAdmin/dashboardAdmin.component";
 import { UserAdminComponent } from "./components/userAdmin/userAdmin.component";
 import { SettingAdminComponent } from "./components/settingAdmin/settingAdmin.component";
+import { UserSettingsComponent } from "./components/userSettings/userSettings.component";
+import { TosComponent } from "./components/tos/tos.component";
 
 @NgModule({
   declarations: [
@@ -46,7 +48,9 @@ import { SettingAdminComponent } from "./components/settingAdmin/settingAdmin.co
     LinkAdminComponent,
     DashboardAdminComponent,
     UserAdminComponent,
-    SettingAdminComponent
+    SettingAdminComponent,
+    UserSettingsComponent,
+    TosComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
@@ -66,12 +70,14 @@ import { SettingAdminComponent } from "./components/settingAdmin/settingAdmin.co
         ]
       },
       { path: "profile", component: ProfileComponent },
+      { path: "settings", component: UserSettingsComponent },
       { path: "profile/:username", component: ProfileComponent },
       { path: "discovery", component: TopicDiscoveryComponent },
       { path: "topic/create/:name", component: TopicComponent },
       { path: "topic/:topicId", component: TopicComponent },
       { path: "mentorship/:mentorshipId", component: MentorshipComponent },
-      { path: "support", component: SupportComponent }
+      { path: "support", component: SupportComponent },
+      { path: "tos", component: TosComponent }
     ])
   ],
   providers: [],

@@ -81,36 +81,6 @@ export class ProfileComponent {
     this.user.languages = this.user.languages.filter(l => l.languageId != langId);
   }
 
-  public resetPassword() {
-    this.apiService
-      .post('/Login/ResetPassword', { password: this.working.registration.password })
-      .then(r => this.processRegistrationResponse(r[0]));
-  }
-
-  public updateUserName() {
-    this.apiService
-      .post('/Login/UpdateUserName', { userName: this.working.registration.userName })
-      .then(r => this.processRegistrationResponse(r[0]));
-  }
-
-  public registerNewLogin() {
-    this.apiService.post('/Login/RegisterNewLogin', this.working.registration).then(r => this.processRegistrationResponse(r[0]));
-  }
-
-  public login() {
-    this.apiService.post('/Login/Login', this.working.registration).then(r => this.processRegistrationResponse(r[0]));
-  }
-
-  private processRegistrationResponse(response) {
-    {
-      if (response.successful) {
-        this.userService.Load().then(() => this.load());
-        this.working.editing = false;
-      } else {
-        this.working.responseMessages = response.messages;
-      }
-    }
-  }
 }
 
 class Working {
@@ -120,7 +90,6 @@ class Working {
   public errorMessage: string;
   public userName: string;
   public responseMessages: Array<string>;
-  public registration: Registration;
 
   constructor() {
     this.editing = false;
@@ -129,20 +98,7 @@ class Working {
     this.errorMessage = '';
     this.userName = '';
     this.responseMessages = [];
-    this.registration = new Registration();
   }
 };
 
-class Registration {
-  public checkedTOS: boolean;
-  public displayPassword: boolean;
-  public userName: string;
-  public password: string;
 
-  constructor() {
-    this.checkedTOS = false;
-    this.displayPassword = false;
-    this.userName = '';
-    this.password = '';
-  }
-}

@@ -14,6 +14,11 @@
   </div>
 
   <div class="container">
+    <pre *ngIf="bannerMessage" class="alert alert-primary">{{bannerMessage}}</pre>
+    <div *ngIf="currentUser.block" class="alert alert-danger">
+      Your account has been temporarily blocked until
+      {{currentUser.block.endDate.substr(0, currentUser.block.endDate.indexOf('T'))}}.
+    </div>
     <router-outlet></router-outlet>
   </div>
 

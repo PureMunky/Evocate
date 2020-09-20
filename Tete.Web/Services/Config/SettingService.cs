@@ -33,7 +33,7 @@ namespace Tete.Api.Services.Config
       return this.mainContext.Settings.AsNoTracking().Where(s => s.Key == key).FirstOrDefault();
     }
 
-    public void Save(KeyValuePair<string, string> setting)
+    public void Save(Setting setting)
     {
       if (this.Actor.Roles.Contains("Admin"))
       {

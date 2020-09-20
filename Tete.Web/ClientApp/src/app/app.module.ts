@@ -23,6 +23,7 @@ import { TileComponent } from "./components/tile/tile.component";
 import { LinkAdminComponent } from "./components/linkAdmin/linkAdmin.component";
 import { DashboardAdminComponent } from "./components/dashboardAdmin/dashboardAdmin.component";
 import { UserAdminComponent } from "./components/userAdmin/userAdmin.component";
+import { SettingAdminComponent } from "./components/settingAdmin/settingAdmin.component";
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { UserAdminComponent } from "./components/userAdmin/userAdmin.component";
     TileComponent,
     LinkAdminComponent,
     DashboardAdminComponent,
-    UserAdminComponent
+    UserAdminComponent,
+    SettingAdminComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
@@ -59,7 +61,8 @@ import { UserAdminComponent } from "./components/userAdmin/userAdmin.component";
           { path: "language", component: LanguageAdminComponent },
           { path: "logging", component: LoggingComponent },
           { path: "link", component: LinkAdminComponent },
-          { path: "user", component: UserAdminComponent }
+          { path: "user", component: UserAdminComponent },
+          { path: "settings", component: SettingAdminComponent },
         ]
       },
       { path: "profile", component: ProfileComponent },

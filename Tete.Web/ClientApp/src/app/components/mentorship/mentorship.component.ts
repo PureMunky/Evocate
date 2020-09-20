@@ -14,7 +14,7 @@ import { Evaluation } from "../../models/evaluation";
   templateUrl: "./mentorship.component.html"
 })
 export class MentorshipComponent {
-  public currentUser: User = new User();
+  public currentUser: User = new User(null);
   public currentMentorship: Mentorship = new Mentorship();
 
   public working = {
@@ -27,7 +27,7 @@ export class MentorshipComponent {
     showMentor: false,
     loading: true,
     evaluation: new Evaluation(),
-    otherPerson: new User()
+    otherPerson: new User(null)
   };
 
   constructor(private userService: UserService,

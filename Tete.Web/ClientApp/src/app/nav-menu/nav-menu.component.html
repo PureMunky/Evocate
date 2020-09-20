@@ -32,7 +32,3 @@
     </div>
   </nav>
 </header>
-<div *ngIf="currentUser.block" class="alert alert-danger">
-  You're account has been temporarily blocked until
-  {{currentUser.block.endDate.substr(0, currentUser.block.endDate.indexOf('T'))}}.
-</div>

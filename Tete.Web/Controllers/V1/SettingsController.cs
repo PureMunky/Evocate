@@ -1,12 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using Tete.Models.Content;
-using Tete.Models.Relationships;
 using Tete.Web.Models;
+using Tete.Models.Config;
 
 namespace Tete.Api.Controllers
 {
@@ -21,12 +17,12 @@ namespace Tete.Api.Controllers
     }
 
     [HttpPost]
-    public Response<bool> Post(string key, [FromBody] string value)
+    public Response<bool> Post([FromBody] Setting setting)
     {
       var service = new Services.Config.SettingService(Context, CurrentAdmin);
 
-      LogService.Write("Update Config", string.Format("{0}:{1}", key, value));
-      service.Save(new KeyValuePair<string, string>(key, value));
+      LogService.Write("Update Config", string.Format("{0}:{1}", setting.Key, setting.Value));
+      service.Save(setting);
 
       return new Response<bool>(true);
     }

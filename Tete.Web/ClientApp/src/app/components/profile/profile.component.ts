@@ -12,8 +12,8 @@ import { User } from "../../models/user";
   templateUrl: "./profile.component.html"
 })
 export class ProfileComponent {
-  public user: User = new User();
-  public currentUser: User = new User();
+  public user: User = new User(null);
+  public currentUser: User = new User(null);
   public languages = [];
   public tmpModel = {
     language: ''

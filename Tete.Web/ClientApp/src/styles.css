@@ -1,3 +1,6 @@
+body {
+  margin-bottom: 40px;
+}
 button {
   margin: 3px;
 }
@@ -30,4 +33,17 @@ pre {
 
 div.section {
   margin-bottom: 30px;
+}
+
+.footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  color: #ffffff;
+  font-size: 12px;
+}
+.footer a, .footer a:visited {
+  color: #ffffff;
+  margin-right: 7px;
 }

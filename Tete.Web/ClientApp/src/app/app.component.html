@@ -20,7 +20,20 @@
       {{currentUser.block.endDate.substr(0, currentUser.block.endDate.indexOf('T'))}}.<br />
       Please review our <a routerLink="/tos">Terms of Service</a>.
     </div>
-    <router-outlet></router-outlet>
+    <main role="main">
+      <router-outlet></router-outlet>
+    </main>
   </div>
 
+
 </body>
+<footer class="footer navbar navbar-dark bg-dark border-top box-shadow">
+  <div class="container">
+    <div>
+      <a routerLink="/tos">Terms</a>
+      <a routerLink="/privacy">Privacy</a>
+      <a routerLink="/settings">Settings</a>
+      <a routerLink="/support">Support</a>
+    </div>
+  </div>
+</footer>

@@ -25,7 +25,8 @@ import { DashboardAdminComponent } from "./components/dashboardAdmin/dashboardAd
 import { UserAdminComponent } from "./components/userAdmin/userAdmin.component";
 import { SettingAdminComponent } from "./components/settingAdmin/settingAdmin.component";
 import { UserSettingsComponent } from "./components/userSettings/userSettings.component";
-import { TosComponent } from "./components/tos/tos.component";
+import { TosComponent } from "./components/legal/tos.component";
+import { PrivacyComponent } from "./components/legal/privacy.component";
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { TosComponent } from "./components/tos/tos.component";
     UserAdminComponent,
     SettingAdminComponent,
     UserSettingsComponent,
-    TosComponent
+    TosComponent,
+    PrivacyComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
@@ -77,7 +79,8 @@ import { TosComponent } from "./components/tos/tos.component";
       { path: "topic/:topicId", component: TopicComponent },
       { path: "mentorship/:mentorshipId", component: MentorshipComponent },
       { path: "support", component: SupportComponent },
-      { path: "tos", component: TosComponent }
+      { path: "tos", component: TosComponent },
+      { path: "privacy", component: PrivacyComponent }
     ])
   ],
   providers: [],

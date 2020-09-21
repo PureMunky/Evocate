@@ -13,7 +13,7 @@ namespace Tete.Tests.Models.Config
     {
       var setting = new Setting();
 
-      Assert.IsNull(setting.Key);
+      Assert.IsNotNull(setting.Key);
     }
 
     [Test]
@@ -21,7 +21,7 @@ namespace Tete.Tests.Models.Config
     {
       var setting = new Setting();
 
-      Assert.IsNull(setting.Value);
+      Assert.IsNotNull(setting.Value);
     }
   }
 }

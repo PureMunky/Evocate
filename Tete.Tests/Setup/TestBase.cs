@@ -105,6 +105,8 @@ namespace Tete.Tests.Setup
         new Profile(adminUser.Id)
       }.AsQueryable();
 
+      IQueryable<UserBlock> userBlocks = new List<UserBlock>().AsQueryable();
+
       IQueryable<Language> languages = new List<Language>()
       {
         english
@@ -120,6 +122,7 @@ namespace Tete.Tests.Setup
       var mockUsers = MockContext.MockDBSet<User>(users);
       var mockUserLanguages = MockContext.MockDBSet<UserLanguage>(userLanguages);
       var mockUserProfiles = MockContext.MockDBSet<Profile>(userProfiles);
+      var mockUserBlocks = MockContext.MockDBSet<UserBlock>(userBlocks);
       var mockUserAccessRoles = MockContext.MockDBSet<AccessRole>(userAccessRoles);
       var mockLanguages = MockContext.MockDBSet<Language>(languages);
       var mockElements = MockContext.MockDBSet<Element>(elements);
@@ -128,6 +131,7 @@ namespace Tete.Tests.Setup
       mockContext.Setup(c => c.Users).Returns(mockUsers.Object);
       mockContext.Setup(c => c.UserLanguages).Returns(mockUserLanguages.Object);
       mockContext.Setup(c => c.UserProfiles).Returns(mockUserProfiles.Object);
+      mockContext.Setup(c => c.UserBlocks).Returns(mockUserBlocks.Object);
       mockContext.Setup(c => c.AccessRoles).Returns(mockUserAccessRoles.Object);
       mockContext.Setup(c => c.Languages).Returns(mockLanguages.Object);
       mockContext.Setup(c => c.Elements).Returns(mockElements.Object);

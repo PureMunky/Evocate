@@ -2,7 +2,8 @@ bin/
 obj/
 out/
 coverage/
-secrets/
+*secrets/
 coverage.json
 *.log
 *.pfx
+tete-dev-k8s-1-18-8-do-0-sfo2-1599658100409-kubeconfig.yaml

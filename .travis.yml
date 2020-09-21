@@ -11,9 +11,14 @@ dotnet: 3.1
 script:
   - dotnet restore
   - dotnet test
+  - bash travis-docker-build.sh
 
 deploy:
-  provider: script
-  script: bash docker_push.sh
-  on:
-    branch: develop
+  - provider: script
+    script: bash travis-deploy-dev.sh
+    on:
+      branch: develop
+  - provider: script
+    script: bash travis-deploy-prod.sh
+    on:
+      branch: production

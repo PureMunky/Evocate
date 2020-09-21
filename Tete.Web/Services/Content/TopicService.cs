@@ -74,14 +74,20 @@ namespace Tete.Api.Services.Content
 
     public IEnumerable<TopicVM> Search(string searchText)
     {
-      searchText = searchText.ToLower();
+      if (searchText != null)
+      {
+        searchText = searchText.ToLower();
+      }
 
       return this.mainContext.Topics.Where(t => t.Name.ToLower().Contains(searchText) || t.Description.ToLower().Contains(searchText)).Select(t => new TopicVM(t));
     }
 
     public IEnumerable<TopicVM> GetKeywordTopics(string keyword)
     {
-      keyword = keyword.ToLower();
+      if (keyword != null)
+      {
+        keyword = keyword.ToLower();
+      }
       return this.mainContext.TopicKeywords
         .Where(tk => tk.Keyword.Name.ToLower() == keyword)
         .Join(this.mainContext.Topics, tk => tk.TopicId, t => t.TopicId, (tk, t) => new TopicVM(t))

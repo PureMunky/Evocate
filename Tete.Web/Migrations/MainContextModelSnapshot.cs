@@ -111,6 +111,37 @@ namespace Tete.Web.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Tete.Models.Authentication.UserBlock", b =>
+                {
+                    b.Property<Guid>("UserBlockId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PrivateComments")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PublicComments")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("UserBlockId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserBlocks");
+                });
+
             modelBuilder.Entity("Tete.Models.Config.Flag", b =>
                 {
                     b.Property<string>("Key")
@@ -138,12 +169,19 @@ namespace Tete.Web.Migrations
             modelBuilder.Entity("Tete.Models.Config.Setting", b =>
                 {
                     b.Property<string>("Key")
-                        .HasColumnType("nvarchar(30)")
-                        .HasMaxLength(30);
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("LastUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("LastUpdatedBy")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Value")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Key");
 
@@ -501,6 +539,15 @@ namespace Tete.Web.Migrations
                     b.HasKey("ProfileId");
 
                     b.ToTable("UserProfiles");
+                });
+
+            modelBuilder.Entity("Tete.Models.Authentication.UserBlock", b =>
+                {
+                    b.HasOne("Tete.Models.Authentication.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Tete.Models.Content.TopicKeyword", b =>

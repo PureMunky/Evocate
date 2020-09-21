@@ -52,6 +52,7 @@ namespace Tete.Api.Controllers
     {
       var service = new Services.Relationships.MentorshipService(Context, CurrentUser);
 
+      LogService.Write("Save Contact Details", String.Format("User:{0};Mentorship:{1}", ContactUpdate.UserId, ContactUpdate.MentorshipId));
       return new Response<MentorshipVM>(service.SetContactDetails(ContactUpdate));
     }
 
@@ -60,6 +61,8 @@ namespace Tete.Api.Controllers
     {
       var service = new Services.Relationships.MentorshipService(Context, CurrentUser);
 
+      LogService.Write("Close Mentorship", String.Format("User:{0};Mentorship:{1}", evaluation.UserId, evaluation.MentorshipId));
+
       return new Response<MentorshipVM>(service.CloseMentorship(evaluation));
     }
 
@@ -67,6 +70,8 @@ namespace Tete.Api.Controllers
     public Response<MentorshipVM> CancelMentorship(Guid MentorshipId)
     {
       var service = new Services.Relationships.MentorshipService(Context, CurrentUser);
+
+      LogService.Write("Cancel Mentorship", String.Format("User:{0};Mentorship:{1}", CurrentUser.UserId, MentorshipId));
 
       return new Response<MentorshipVM>(service.CancelMentorship(MentorshipId));
     }

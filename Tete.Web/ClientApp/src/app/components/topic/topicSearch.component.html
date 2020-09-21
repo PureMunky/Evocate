@@ -11,9 +11,12 @@
     Clear Results
   </button>
   <div class="card-columns">
+    <div *ngIf="topics.length == 0">
+      No Topics Found.
+    </div>
     <teteTile *ngFor="let topic of topics" [topic]="topic"></teteTile>
 
-    <div class="card" *ngIf="search.newTopic">
+    <div class="card" *ngIf="search.newTopic && currentUser.canAction()">
       <div class="card-body">
         <h5 class="card-title">Didn't see what you were looking for?</h5>
         <h6 class="card-subtitle">
@@ -22,5 +25,6 @@
         Create the topic now to request or become a mentor for whatever you want to do.
       </div>
     </div>
+
   </div>
 </div>

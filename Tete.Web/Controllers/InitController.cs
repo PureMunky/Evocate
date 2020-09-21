@@ -43,14 +43,21 @@ namespace Tete.Api.Controllers
       var testAdminUser = this.mainContext.Users.Where(u => u.UserName == adminUserName).FirstOrDefault();
       if (testAdminUser == null)
       {
-        var session = this.loginController.Register(new RegistrationAttempt()
+        var session = this.loginService.GetNewAnonymousSession();
+        var response = this.loginService.RegisterNewLogin(session.Token, new LoginAttempt()
         {
           UserName = adminUserName,
-          Email = "admin@example.com",
-          Password = "admin",
-          DisplayName = "Admin"
+          Password = "123admin!"
         });
-        output.Add("User 'Admin' created.");
+
+        if (response.Successful)
+        {
+          output.Add("User 'Admin' created.");
+        }
+        else
+        {
+          output.AddRange(response.Messages);
+        }
 
         adminUser = this.loginService.GetUserFromToken(session.Token);
       }
@@ -62,13 +69,10 @@ namespace Tete.Api.Controllers
       }
 
 
-      if (this.loginService.GrantRole(adminUser.Id, adminUser.Id, "Admin"))
+      if (this.mainContext.AccessRoles.Where(ar => ar.UserId == adminUser.Id && ar.Name == "Admin").FirstOrDefault() == null)
       {
-        output.Add("Granted admin role to admin user.");
-      }
-      else
-      {
-        output.Add("Admin role already granted.");
+        this.mainContext.AccessRoles.Add(new AccessRole(adminUser.Id, "Admin"));
+        this.mainContext.SaveChanges();
       }
 
       var adminUserVM = new UserService(mainContext, adminUser).GetUser(adminUser);

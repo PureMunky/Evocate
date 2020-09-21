@@ -1,0 +1,44 @@
+<h1 *ngIf="currentUser.userName">Settings</h1>
+<h1 *ngIf="!currentUser.userName">Login</h1>
+
+<!-- TODO: Add ToS and Privacy Policy -->
+<div class="form-group">
+  <div class="alert alert-warning" *ngIf="working.responseMessages.length > 0">
+    <ul>
+      <li *ngFor="let m of working.responseMessages">{{m}}</li>
+    </ul>
+  </div>
+  <div>
+    <label for="txtUsername">Username</label>
+    <input id="txtUsername" type="text" class="form-control" [(ngModel)]="working.registration.userName" />
+    <button class="btn btn-secondary" *ngIf="currentUser.userName" (click)="updateUserName()">Update UserName</button>
+  </div>
+
+  <div>
+    <label for="txtNewPassword">Password</label>
+    <input id="txtNewPassword" [type]="working.registration.displayPassword ? 'text' : 'password'" class="form-control"
+      [(ngModel)]="working.registration.password" />
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" [(ngModel)]="working.registration.displayPassword"
+        id="chkPasswordDisplayToggle">
+      <label class="form-check-label" for="chkPasswordDisplayToggle">Display Password</label>
+    </div>
+    <button class="btn btn-secondary" *ngIf="currentUser.userName" (click)="resetPassword()">Update Password</button>
+  </div>
+  <div *ngIf="!currentUser.userName">
+    <div class="form-check">
+      <input id="chkTOS" class="form-check-input" type="checkbox" [(ngModel)]="working.registration.checkedTOS" />
+      <label class="form-check-label" for="chkTOS">
+        I agree to the
+        <a href="/tos" target="TOS">Terms of Service</a> and
+        <a href="/privacy" target="Privacy">Privacy Policy</a>
+      </label>
+    </div>
+    <button class="btn btn-secondary" (click)="registerNewLogin()"
+      [disabled]="!working.registration.checkedTOS">Register New Acount</button>
+    <button class="btn btn-primary" (click)="login()" [disabled]="!working.registration.checkedTOS">Login</button>
+  </div>
+</div>
+<div *ngIf="currentUser.userName">
+  <a class="btn btn-secondary" href="/Login/Logout">Logout</a>
+</div>

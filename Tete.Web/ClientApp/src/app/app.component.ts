@@ -1,5 +1,9 @@
 import { Component } from "@angular/core";
 import { ErrorService } from "./services/error.service";
+import { User } from "./models/user";
+import { InitService } from "./services/init.service";
+import { SettingService } from "./services/settings.service";
+import { UserService } from "./services/user.service";
 
 @Component({
   selector: "app-root",
@@ -7,7 +11,9 @@ import { ErrorService } from "./services/error.service";
   styleUrls: ["./app.component.css"]
 })
 export class AppComponent {
+  public currentUser: User = new User(null);
   public title = "app";
+  public bannerMessage: string = ''
 
   public error: Error = {
     message: '',
@@ -15,8 +21,16 @@ export class AppComponent {
     timer: setTimeout(() => { }, 1)
   };
 
-  constructor(private errorService: ErrorService) {
+  constructor(private errorService: ErrorService,
+    private initService: InitService,
+    private userService: UserService,
+    private settingService: SettingService
+  ) {
     errorService.Register(message => this.errorHandler(message));
+    initService.Register(() => {
+      this.currentUser = userService.CurrentUser();
+      this.bannerMessage = this.settingService.Setting('system.message');
+    })
   }
 
   public errorHandler(message: string) {

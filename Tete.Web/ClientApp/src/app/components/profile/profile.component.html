@@ -1,47 +1,65 @@
 <h1>{{user.displayName}} Profile</h1>
-<span>Username: {{user.userName}}</span>
+<div class="alert alert-primary" *ngIf="!user.userName">
+  This is a guest profile.<br />
+  Register or login to an existing account <a routerLink="/settings">here</a>.<br />
+  If you register for a <strong>free</strong> full account you'll be able to:
+  <ul>
+    <li>Create new topics</li>
+    <li>Register as a mentor</li>
+    <li>Log in from multiple devices</li>
+  </ul>
+</div>
+<span *ngIf="user.userName">Username: {{user.userName}}</span>
 
 <div *ngIf="working.editing">
+  <div *ngIf="user.userName">
+    <div>
+      Go to <a routerLink="/settings">Settings</a> to change your username or password.
+    </div>
+    <div>
+      <span id="txtDisplaynameLabel">Name</span><br />
+      <input class="form-control" type="text" aria-labelledby="txtDisplaynameLabel" id="txtDisplayName"
+        [(ngModel)]="user.displayName" />
+    </div>
+    <div>
+      <span id="txtAboutLabel">About</span><br />
+      <textarea id="txtAbout" class="form-control" aria-labelledby="txtAboutLabel"
+        [(ngModel)]="user.profile.about"></textarea>
+    </div>
 
-  <h2>About</h2>
-  <div>
-    <span id="txtDisplaynameLabel">Name</span><br />
-    <input type="text" aria-labelledby="txtDisplaynameLabel" id="txtDisplayName" [(ngModel)]="user.displayName" />
-  </div>
-  <div>
-    <span id="txtAboutLabel">About</span><br />
-    <textarea id="txtAbout" aria-labelledby="txtAboutLabel" [(ngModel)]="user.profile.about"></textarea>
-  </div>
+    <div>
+      <span aria-labelledby="txtPrivateAbout">Private About</span><br />
+      <textarea id="txtPrivateAbout" class="form-control" [(ngModel)]="user.profile.privateAbout"></textarea>
+    </div>
 
-  <div>
-    <span aria-labelledby="txtPrivateAbout">Private About</span><br />
-    <textarea id="txtPrivateAbout" [(ngModel)]="user.profile.privateAbout"></textarea>
-  </div>
-
-  <h2>Languages</h2>
-  <div>
-    Language
-    <select [(ngModel)]="tmpModel.language">
-      <option>Select</option>
-      <option *ngFor="let lang of languages" value="{{lang.languageId}}">{{lang.name}}</option>
-    </select>
-    <button (click)="addLanguage()">Add</button>
-  </div>
-  <div>
-    <div *ngFor="let lang of user.languages">
-      <h3>{{getLangName(lang.languageId)}}</h3>
-      <button (click)="removeLanguage(lang.languageId)">Remove</button>
+    <div *ngIf="false">
+      <h2>Languages</h2>
       <div>
-        <input id="chkRead.{{lang.languageId}}" type="checkbox" [(ngModel)]="lang.read" title="Read" />
-        <label for="chkRead.{{lang.languageId}}">Read</label>
+        Language
+        <select [(ngModel)]="tmpModel.language">
+          <option>Select</option>
+          <option *ngFor="let lang of languages" value="{{lang.languageId}}">{{lang.name}}</option>
+        </select>
+        <button (click)="addLanguage()">Add</button>
       </div>
       <div>
-        <input id="chkSpeak.{{lang.languageId}}" type="checkbox" [(ngModel)]="lang.speak" />
-        <label for="chkSpeak.{{lang.languageId}}">Speak</label>
+        <div *ngFor="let lang of user.languages">
+          <h3>{{getLangName(lang.languageId)}}</h3>
+          <button (click)="removeLanguage(lang.languageId)">Remove</button>
+          <div>
+            <input id="chkRead.{{lang.languageId}}" type="checkbox" [(ngModel)]="lang.read" title="Read" />
+            <label for="chkRead.{{lang.languageId}}">Read</label>
+          </div>
+          <div>
+            <input id="chkSpeak.{{lang.languageId}}" type="checkbox" [(ngModel)]="lang.speak" />
+            <label for="chkSpeak.{{lang.languageId}}">Speak</label>
+          </div>
+        </div>
       </div>
     </div>
+    <button class="btn btn-secondary" (click)="save()">Save</button>
+    <button class="btn btn-secondary" (click)="cancel()">Cancel</button>
   </div>
-  <button (click)="save()">Save</button><button (click)="cancel()">Cancel</button>
 </div>
 
 <div *ngIf="!working.editing">
@@ -49,13 +67,13 @@
   <div>
     <h2>About</h2>
     <div>{{user.profile.about}}</div>
-    <h2>Languages</h2>
-    <div>
-      <div *ngFor="let lang of user.languages">
-        {{getLangName(lang.languageId)}}
+    <div *ngIf="false">
+      <h2>Languages</h2>
+      <div>
+        <div *ngFor="let lang of user.languages">
+          {{getLangName(lang.languageId)}}
+        </div>
       </div>
     </div>
   </div>
 </div>
-
-<a class="btn btn-secondary" href="/Login/Logout" *ngIf="working.self">Logout</a>

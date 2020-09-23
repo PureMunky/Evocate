@@ -107,6 +107,7 @@ namespace Tete.Api.Services.Content
 
         rtnTopic.Links = this.mainContext.Links.Where(l => l.Active).Join(this.mainContext.TopicLinks.Where(tl => tl.TopicId == rtnTopic.TopicId && tl.Active), l => l.LinkId, tl => tl.LinkId, (l, tl) => l).OrderBy(l => l.Name).ToList();
         rtnTopic.Keywords = this.mainContext.Keywords.Where(k => k.Active).Join(this.mainContext.TopicKeywords.Where(tk => tk.TopicId == rtnTopic.TopicId), k => k.KeywordId, tk => tk.KeywordId, (k, tk) => k).OrderBy(l => l.Name).ToList();
+        rtnTopic.UserMentorships = MentorshipService.GetUserMentorships(this.Actor.UserId, topicId);
 
         if (dbUserTopic != null && rtnTopic.UserTopic.Status == TopicStatus.Mentor)
         {

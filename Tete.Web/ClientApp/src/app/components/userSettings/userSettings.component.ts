@@ -48,9 +48,10 @@ export class UserSettingsComponent {
     this.apiService.post('/Login/Login', this.working.registration).then(r => this.processRegistrationResponse(r[0]));
   }
 
-  private processRegistrationResponse(response) {
+  private async processRegistrationResponse(response) {
     {
       if (response.successful) {
+        await this.initService.Load();
         this.router.navigate(['/'])
       } else {
         this.working.responseMessages = response.messages;

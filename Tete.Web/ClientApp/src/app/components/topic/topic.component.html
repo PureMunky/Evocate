@@ -63,15 +63,23 @@
     <span class="badge badge-primary" *ngFor="let keyword of currentTopic.keywords">{{keyword.name}}</span>
   </div>
 
-  <div *ngIf="currentTopic.keywords.length > 0">
+  <div class="alert alert-info" *ngIf="currentTopic.userMentorships.length > 0">
+    You have an existing mentorship for this topic.
+    Click <a [routerLink]="['/mentorship', currentTopic.userMentorships[0].mentorshipId]">here</a> to open it.
+  </div>
+
+  <div *ngIf="currentTopic.links.length > 0">
     <div *ngFor="let link of currentTopic.links">
       <a [href]="link.destination" target="_blank">{{link.name}}</a>
     </div>
   </div>
 
-  <pre>{{currentTopic.description}}</pre>
-
   <div *ngIf="currentUser.canAction()">
+    <div
+      *ngIf="currentTopic.userMentorships.length == 0 && currentTopic.userTopic && currentTopic.userTopic.status == 1">
+      <button class="btn btn-secondary" (click)="learn()">Request a Mentor</button>
+    </div>
+
     <div *ngIf="(!currentTopic.userTopic) && currentTopic.topicId">
       <button class="btn btn-secondary" (click)="learn()">Request a Mentor</button>
       <button class="btn btn-secondary" (click)="teach()" *ngIf="!currentTopic.elligible || adminUser">Register as a
@@ -83,7 +91,11 @@
       <button class="btn btn-secondary" *ngIf="currentTopic.mentorships.length > 0" (click)="claimNextMentorship()">I'm
         ready for a new
         learner.</button>
-      <span *ngIf="currentTopic.mentorships.length == 0">There are no waiting learners at the moment.</span>
+      <div class="alert alert-info" *ngIf="currentTopic.mentorships.length == 0">
+        There are no waiting learners at the moment.
+      </div>
     </div>
   </div>
+
+  <pre>{{currentTopic.description}}</pre>
 </div>

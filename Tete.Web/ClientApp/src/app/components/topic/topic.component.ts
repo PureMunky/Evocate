@@ -102,7 +102,6 @@ export class TopicComponent {
   }
 
   public learn() {
-    // TODO: Work through how to request a mentor for a topic you've already been mentored in.
     this.topicService.RegisterLearner(this.currentUser.userId, this.currentTopic.topicId).then(() => this.reload());
   }
 

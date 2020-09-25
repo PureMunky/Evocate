@@ -7,6 +7,7 @@ using Tete.Api.Helpers;
 using Tete.Models.Authentication;
 using Tete.Models.Localization;
 using Tete.Models.Users;
+using Tete.Models.Relationships;
 
 namespace Tete.Tests.Setup
 {
@@ -126,6 +127,7 @@ namespace Tete.Tests.Setup
       var mockUserAccessRoles = MockContext.MockDBSet<AccessRole>(userAccessRoles);
       var mockLanguages = MockContext.MockDBSet<Language>(languages);
       var mockElements = MockContext.MockDBSet<Element>(elements);
+      var mockUserTopics = MockContext.MockDBSet<UserTopic>(new List<UserTopic>().AsQueryable());
 
       mockContext = Tete.Tests.Setup.MockContext.GetDefaultContext();
       mockContext.Setup(c => c.Users).Returns(mockUsers.Object);
@@ -135,6 +137,7 @@ namespace Tete.Tests.Setup
       mockContext.Setup(c => c.AccessRoles).Returns(mockUserAccessRoles.Object);
       mockContext.Setup(c => c.Languages).Returns(mockLanguages.Object);
       mockContext.Setup(c => c.Elements).Returns(mockElements.Object);
+      mockContext.Setup(c => c.UserTopics).Returns(mockUserTopics.Object);
 
     }
 

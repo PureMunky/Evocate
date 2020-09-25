@@ -11,7 +11,7 @@
   <div>
     <label for="txtUsername">Username</label>
     <input id="txtUsername" type="text" class="form-control" [(ngModel)]="working.registration.userName" />
-    <button class="btn btn-secondary" *ngIf="currentUser.userName" (click)="updateUserName()">Update UserName</button>
+    <button class="btn btn-secondary" *ngIf="currentUser.userName" (click)="updateUserName()">Update Username</button>
   </div>
 
   <div>
@@ -35,8 +35,9 @@
       </label>
     </div>
     <button class="btn btn-secondary" (click)="registerNewLogin()"
-      [disabled]="!working.registration.checkedTOS">Register New Acount</button>
-    <button class="btn btn-primary" (click)="login()" [disabled]="!working.registration.checkedTOS">Login</button>
+      [disabled]="!working.registration.checkedTOS">Register New Account</button>
+    <button class="btn btn-primary" (click)="login()"
+      [disabled]="working.registration.password != '' && working.registration.userName != ''">Login</button>
   </div>
 </div>
 <div *ngIf="currentUser.userName">

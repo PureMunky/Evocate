@@ -8,6 +8,8 @@ using Tete.Models.Authentication;
 using Tete.Models.Localization;
 using Tete.Models.Users;
 using Tete.Models.Relationships;
+using Tete.Models.Config;
+using Tete.Models.Content;
 
 namespace Tete.Tests.Setup
 {
@@ -25,6 +27,8 @@ namespace Tete.Tests.Setup
       UserName = "admin"
     };
 
+    protected string settingKey = "settingKey1";
+
     public UserVM AdminUserVM
     {
       get
@@ -37,6 +41,9 @@ namespace Tete.Tests.Setup
         };
       }
     }
+
+    public Guid linkId = Guid.NewGuid();
+    public Guid existingTopicId = Guid.NewGuid();
 
     [SetUp]
     public void Setup()
@@ -120,6 +127,29 @@ namespace Tete.Tests.Setup
 
       IQueryable<AccessRole> userAccessRoles = accessRoles.AsQueryable();
 
+      IQueryable<Setting> settings = new List<Setting>()
+      {
+        new Setting() {
+          Key = settingKey,
+          Value = Guid.NewGuid().ToString()
+        }
+      }.AsQueryable();
+
+      IQueryable<Link> links = new List<Link>()
+      {
+        new Link() {
+          LinkId = linkId
+        }
+      }.AsQueryable();
+
+      IQueryable<Topic> topics = new List<Topic>()
+      {
+        new Topic(){
+          TopicId = existingTopicId,
+          Name = "Existing Topic Name"
+        }
+      }.AsQueryable();
+
       var mockUsers = MockContext.MockDBSet<User>(users);
       var mockUserLanguages = MockContext.MockDBSet<UserLanguage>(userLanguages);
       var mockUserProfiles = MockContext.MockDBSet<Profile>(userProfiles);
@@ -127,9 +157,15 @@ namespace Tete.Tests.Setup
       var mockUserAccessRoles = MockContext.MockDBSet<AccessRole>(userAccessRoles);
       var mockLanguages = MockContext.MockDBSet<Language>(languages);
       var mockElements = MockContext.MockDBSet<Element>(elements);
-      var mockUserTopics = MockContext.MockDBSet<UserTopic>(new List<UserTopic>().AsQueryable());
+      var mockUserTopics = MockContext.MockDBSet<UserTopic>();
+      var mockSettings = MockContext.MockDBSet<Setting>(settings);
+      var mockLinks = MockContext.MockDBSet<Link>(links);
+      var mockTopics = MockContext.MockDBSet<Topic>(topics);
+      var mockTopicLinks = MockContext.MockDBSet<TopicLink>();
+      var mockKeywords = MockContext.MockDBSet<Keyword>();
+      var mockTopicKeywords = MockContext.MockDBSet<TopicKeyword>();
 
-      mockContext = Tete.Tests.Setup.MockContext.GetDefaultContext();
+      mockContext = MockContext.GetDefaultContext();
       mockContext.Setup(c => c.Users).Returns(mockUsers.Object);
       mockContext.Setup(c => c.UserLanguages).Returns(mockUserLanguages.Object);
       mockContext.Setup(c => c.UserProfiles).Returns(mockUserProfiles.Object);
@@ -138,6 +174,15 @@ namespace Tete.Tests.Setup
       mockContext.Setup(c => c.Languages).Returns(mockLanguages.Object);
       mockContext.Setup(c => c.Elements).Returns(mockElements.Object);
       mockContext.Setup(c => c.UserTopics).Returns(mockUserTopics.Object);
+      mockContext.Setup(c => c.Settings).Returns(mockSettings.Object);
+      mockContext.Setup(c => c.Links).Returns(mockLinks.Object);
+      mockContext.Setup(c => c.Topics).Returns(mockTopics.Object);
+      mockContext.Setup(c => c.TopicLinks).Returns(mockTopicLinks.Object);
+      mockContext.Setup(c => c.Keywords).Returns(mockKeywords.Object);
+      mockContext.Setup(c => c.TopicKeywords).Returns(mockTopicKeywords.Object);
+
+      mockContext.Setup(c => c.Mentorships)
+        .Returns(MockContext.MockDBSet<Mentorship>().Object);
 
     }
 

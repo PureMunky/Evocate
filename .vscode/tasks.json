@@ -17,7 +17,34 @@
         "build",
         "${workspaceFolder}/Tete.Web/Tete.Web.csproj"
       ],
-      "problemMatcher": "$tsc"
+      "dependsOn": "default-clean",
+      "problemMatcher": "$tsc",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "default-clean",
+      "command": "dotnet",
+      "args": [
+        "clean"
+      ]
+    },
+    {
+      "label": "unit-test",
+      "command": "dotnet",
+      "args": [
+        "test",
+        "-p:CollectCoverage=true",
+        "-p:CoverletOutputFormat=\"opencover,lcov\"",
+        "-p:CoverletOutput=coverage/lcov"
+      ],
+      "problemMatcher": [],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      }
     }
   ]
 }

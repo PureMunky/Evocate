@@ -210,7 +210,7 @@ namespace Tete.Api.Services.Content
 
     public IEnumerable<Keyword> GetKeywords()
     {
-      IEnumerable<Keyword> rtnList = rtnList = this.mainContext.Keywords;
+      IEnumerable<Keyword> rtnList = rtnList = this.mainContext.Keywords.AsNoTracking();
 
       if (!this.Actor.Roles.Contains("Admin"))
       {

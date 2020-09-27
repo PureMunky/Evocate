@@ -16,6 +16,11 @@ namespace Tete.Tests.Setup
       return MockDBSet<T>(new List<T>().AsQueryable());
     }
 
+    public static Mock<DbSet<T>> MockDBSet<T>(List<T> list) where T : class
+    {
+      return MockDBSet<T>(list.AsQueryable());
+    }
+
     public static Mock<DbSet<T>> MockDBSet<T>(IQueryable<T> list) where T : class
     {
       Mock<DbSet<T>> mockSet = new Mock<DbSet<T>>();

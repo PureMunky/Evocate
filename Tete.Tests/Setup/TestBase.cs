@@ -46,6 +46,13 @@ namespace Tete.Tests.Setup
     public Guid existingTopicId = Guid.NewGuid();
 
     public string keyword = "existingkeyword";
+    public Guid englishId = Guid.NewGuid();
+    public Guid spanishId = Guid.NewGuid();
+
+    protected string testLanguageElementKey = "TestKey";
+    protected string testLanguageElementText = "TextText";
+
+    public Guid mentorshipId = Guid.NewGuid();
 
     [SetUp]
     public void Setup()
@@ -65,7 +72,15 @@ namespace Tete.Tests.Setup
 
       Language english = new Language()
       {
+        LanguageId = englishId,
         Name = "English",
+        Active = true
+      };
+
+      Language spanish = new Language()
+      {
+        LanguageId = spanishId,
+        Name = "Spanish",
         Active = true
       };
 
@@ -75,16 +90,17 @@ namespace Tete.Tests.Setup
         Text = "Welcome!",
         LanguageId = english.LanguageId
       };
+      Element testElement = new Element() { Key = testLanguageElementKey, Text = testLanguageElementText};
 
       var userLanguage = new UserLanguage()
       {
-        Language = english,
+        LanguageId = english.LanguageId,
         UserId = existingUserId
       };
 
       var adminUserLanguage = new UserLanguage()
       {
-        Language = english,
+        LanguageId = spanish.LanguageId,
         UserId = adminUser.Id
       };
 
@@ -119,11 +135,13 @@ namespace Tete.Tests.Setup
 
       IQueryable<Language> languages = new List<Language>()
       {
-        english
+        english,
+        spanish
       }.AsQueryable();
 
       IQueryable<Element> elements = new List<Element>()
       {
+        testElement,
         welcome
       }.AsQueryable();
 
@@ -140,17 +158,19 @@ namespace Tete.Tests.Setup
       IQueryable<Link> links = new List<Link>()
       {
         new Link() {
-          LinkId = linkId
+          LinkId = linkId,
+          Name = "Google",
+          Destination = "https://www.google.com"
         }
       }.AsQueryable();
 
-      IQueryable<Topic> topics = new List<Topic>()
+      var topics = new List<Topic>()
       {
         new Topic(){
           TopicId = existingTopicId,
           Name = "Existing Topic Name"
         }
-      }.AsQueryable();
+      };
 
       var existingkeyword = new Keyword()
       {
@@ -169,13 +189,39 @@ namespace Tete.Tests.Setup
           TopicId = existingTopicId,
           KeywordId = existingkeyword.KeywordId
         }
-      }.AsQueryable();
+      };
+
+      var topicLinks = new List<TopicLink>()
+      {
+        new TopicLink()
+        {
+          TopicId = existingTopicId,
+          LinkId = linkId
+        }
+      };
 
       var userTopics = new List<UserTopic>()
       {
         new UserTopic(adminUser.Id, existingTopicId, TopicStatus.Mentor)
-      }.AsQueryable();
+      };
 
+      var mentorships = new List<Mentorship>()
+      {
+        new Mentorship(existingUserId, existingTopicId) {
+          MentorshipId = mentorshipId
+        }
+      };
+
+      for(int i = 0; i < 12; i++)
+      {
+        var t = new Topic() {
+          Name = Guid.NewGuid().ToString()
+        };
+
+        topics.Add(t);
+        userTopics.Add(new UserTopic(existingUserId, t.TopicId, TopicStatus.Novice));
+        mentorships.Add(new Mentorship(existingUserId, t.TopicId));
+      }
       var mockUsers = MockContext.MockDBSet<User>(users);
       var mockUserLanguages = MockContext.MockDBSet<UserLanguage>(userLanguages);
       var mockUserProfiles = MockContext.MockDBSet<Profile>(userProfiles);
@@ -187,7 +233,7 @@ namespace Tete.Tests.Setup
       var mockSettings = MockContext.MockDBSet<Setting>(settings);
       var mockLinks = MockContext.MockDBSet<Link>(links);
       var mockTopics = MockContext.MockDBSet<Topic>(topics);
-      var mockTopicLinks = MockContext.MockDBSet<TopicLink>();
+      var mockTopicLinks = MockContext.MockDBSet<TopicLink>(topicLinks);
       var mockKeywords = MockContext.MockDBSet<Keyword>(keywords);
       var mockTopicKeywords = MockContext.MockDBSet<TopicKeyword>(topicKeywords);
 
@@ -208,7 +254,7 @@ namespace Tete.Tests.Setup
       mockContext.Setup(c => c.TopicKeywords).Returns(mockTopicKeywords.Object);
 
       mockContext.Setup(c => c.Mentorships)
-        .Returns(MockContext.MockDBSet<Mentorship>().Object);
+        .Returns(MockContext.MockDBSet<Mentorship>(mentorships).Object);
 
     }
 

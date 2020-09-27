@@ -6,6 +6,8 @@ import { Topic } from "../models/topic";
   providedIn: "root"
 })
 export class TopicService {
+  private longTimeout = 5 * 60 * 1000; // 5 minutes
+
   constructor(private apiService: ApiService) {
 
   }
@@ -37,7 +39,7 @@ export class TopicService {
   }
 
   public GetTopic(topicId: string) {
-    return this.apiService.get("/V1/Topic/GetTopic?topicId=" + topicId).then(t => {
+    return this.apiService.get("/V1/Topic/GetTopic?topicId=" + topicId, 0).then(t => {
       return t[0];
     });
   }
@@ -47,18 +49,18 @@ export class TopicService {
   }
 
   public GetTopTopics() {
-    return this.apiService.get("/V1/Topic/GetTopTopics");
+    return this.apiService.get("/V1/Topic/GetTopTopics", this.longTimeout);
   }
 
   public GetNewestTopics() {
-    return this.apiService.get("/V1/Topic/GetNewestTopics");
+    return this.apiService.get("/V1/Topic/GetNewestTopics", this.longTimeout);
   }
 
   public GetWaitingTopics() {
-    return this.apiService.get("/V1/Topic/GetWaitingTopics");
+    return this.apiService.get("/V1/Topic/GetWaitingTopics", this.longTimeout);
   }
 
   public GetKeywordTopics(keyword: string) {
-    return this.apiService.get("/V1/Topic/GetKeywordTopics?keyword=" + keyword);
+    return this.apiService.get("/V1/Topic/GetKeywordTopics?keyword=" + keyword, this.longTimeout);
   }
 }

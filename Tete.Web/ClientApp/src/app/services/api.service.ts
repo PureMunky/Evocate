@@ -8,26 +8,39 @@ import { ErrorService } from "./error.service";
 })
 export class ApiService {
   private user;
+  private cache = {};
+  private defaultCacheLimitMS: number = 0;
 
   constructor(private http: HttpClient,
     private loadingService: LoadingService,
     private errorService: ErrorService) {
   }
 
-  get(url): Promise<any[]> {
+  get(url: string, timeout: number = this.defaultCacheLimitMS): Promise<any[]> {
     this.loadingService.Loading();
-    return this.http
-      .get<Response>(url)
-      .toPromise()
-      .then(result => {
-        this.loadingService.FinishedLoading();
-        return result.data;
-      })
-      .catch(err => this.handleError(err));
+    var response: Promise<any[]>;
+    var time = new Date();
+    if (this.cache[url] && ((time.getTime() - this.cache[url].timestamp) <= timeout)) {
+      // Load from local cache.
+      this.loadingService.FinishedLoading();
+      response = Promise.resolve(this.cache[url].data);
+    } else {
+      // Perform full round trip.
+      response = this.http
+        .get<Response>(url)
+        .toPromise()
+        .then(result => {
+          this.loadingService.FinishedLoading();
+          this.cache[url] = new Cache(url, result.data);
+          return result.data;
+        })
+        .catch(err => this.handleError(err));
+    }
+
+    return response;
   }
 
   authTest() {
-    // TODO: Determine the "logged out" functionality for if someone comes to the site before logging in.
     this.loadingService.Loading();
     return this.http
       .get("/Login/CurrentUser")
@@ -40,8 +53,13 @@ export class ApiService {
       .catch(err => this.handleError(err));
   }
 
-  post(url: string, body: object): Promise<any[]> {
+  post(url: string, body: object, flush: Array<string> = []): Promise<any[]> {
     this.loadingService.Loading();
+
+    flush.forEach(flushUrl => {
+      delete this.cache[flushUrl];
+    });
+
     return this.http
       .post<Response>(url, body)
       .toPromise()
@@ -82,4 +100,16 @@ interface Request {
   url: string;
   method: string;
   body: string;
+}
+
+class Cache {
+  public url: string;
+  public data: any[];
+  public timestamp: Date;
+
+  constructor(url: string, data: any[]) {
+    this.url = url;
+    this.data = data;
+    this.timestamp = new Date();
+  }
 }

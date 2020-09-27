@@ -95,7 +95,6 @@ namespace Tete.Api.Services.Authentication
 
     public SessionVM GetNewAnonymousSession()
     {
-      // TODO: Test the entire new authentication flow.
       var user = RegisterUser(new RegistrationAttempt()
       {
         UserName = "",

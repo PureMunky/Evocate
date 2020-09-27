@@ -37,7 +37,6 @@ namespace Tete.Api.Controllers
       var adminUserName = "admin";
       User adminUser;
 
-      // TODO: Automate the database migation build and deploy.
       this.mainContext.Migrate();
 
       var testAdminUser = this.mainContext.Users.Where(u => u.UserName == adminUserName).FirstOrDefault();

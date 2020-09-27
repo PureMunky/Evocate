@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -84,14 +85,24 @@ namespace Tete.Api.Services.Content
 
     public IEnumerable<TopicVM> GetKeywordTopics(string keyword)
     {
+      IEnumerable<TopicVM> results = new List<TopicVM>();
+
       if (keyword != null)
       {
         keyword = keyword.ToLower();
       }
-      return this.mainContext.TopicKeywords
-        .Where(tk => tk.Keyword.Name.ToLower() == keyword)
+
+      var dbKeyword = this.mainContext.Keywords.AsNoTracking().Where(k => k.Name.ToLower() == keyword).FirstOrDefault();
+
+      if (dbKeyword != null)
+      {
+        results = this.mainContext.TopicKeywords
+        .Where(tk => tk.KeywordId == dbKeyword.KeywordId)
         .Join(this.mainContext.Topics, tk => tk.TopicId, t => t.TopicId, (tk, t) => new TopicVM(t))
         .ToList();
+      }
+
+      return results;
     }
 
     public TopicVM GetTopicVM(Guid topicId)

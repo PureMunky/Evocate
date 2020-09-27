@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Moq;
 using NUnit.Framework;
 using Tete.Api.Contexts;
@@ -68,6 +69,35 @@ namespace Tete.Tests.Api.Services.Content
     public void SearchTest()
     {
       var result = this.service.Search("topic");
+
+      var e = result.GetEnumerator();
+      e.MoveNext();
+      mockContext.Verify(m => m.Topics, Times.Once);
+      Assert.IsTrue(e.Current != null);
+    }
+
+    [Test]
+    public void GetKeywordTopicsTest()
+    {
+      var result = this.service.GetKeywordTopics(keyword);
+
+      var e = result.GetEnumerator();
+      e.MoveNext();
+      mockContext.Verify(m => m.Topics, Times.Once);
+      Assert.IsTrue(e.Current != null);
+
+      // Commenting because the VM is not fully populated in this method and it isn't required
+      // to be for the front-end usage.
+      // foreach (TopicVM t in result)
+      // {
+      //   Assert.IsTrue(t.Keywords.AsQueryable().Where(k => k.Name == keyword).Count() > 0);
+      // }
+    }
+
+    [Test]
+    public void GetUsersTopicsTest()
+    {
+      var result = this.service.GetUsersTopics(adminUser.Id);
 
       var e = result.GetEnumerator();
       e.MoveNext();

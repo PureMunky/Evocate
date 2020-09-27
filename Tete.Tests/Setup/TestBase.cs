@@ -45,6 +45,8 @@ namespace Tete.Tests.Setup
     public Guid linkId = Guid.NewGuid();
     public Guid existingTopicId = Guid.NewGuid();
 
+    public string keyword = "existingkeyword";
+
     [SetUp]
     public void Setup()
     {
@@ -150,6 +152,30 @@ namespace Tete.Tests.Setup
         }
       }.AsQueryable();
 
+      var existingkeyword = new Keyword()
+      {
+        Name = keyword
+      };
+
+      var keywords = new List<Keyword>()
+      {
+        existingkeyword
+      }.AsQueryable();
+
+      var topicKeywords = new List<TopicKeyword>()
+      {
+        new TopicKeyword()
+        {
+          TopicId = existingTopicId,
+          KeywordId = existingkeyword.KeywordId
+        }
+      }.AsQueryable();
+
+      var userTopics = new List<UserTopic>()
+      {
+        new UserTopic(adminUser.Id, existingTopicId, TopicStatus.Mentor)
+      }.AsQueryable();
+
       var mockUsers = MockContext.MockDBSet<User>(users);
       var mockUserLanguages = MockContext.MockDBSet<UserLanguage>(userLanguages);
       var mockUserProfiles = MockContext.MockDBSet<Profile>(userProfiles);
@@ -157,13 +183,13 @@ namespace Tete.Tests.Setup
       var mockUserAccessRoles = MockContext.MockDBSet<AccessRole>(userAccessRoles);
       var mockLanguages = MockContext.MockDBSet<Language>(languages);
       var mockElements = MockContext.MockDBSet<Element>(elements);
-      var mockUserTopics = MockContext.MockDBSet<UserTopic>();
+      var mockUserTopics = MockContext.MockDBSet<UserTopic>(userTopics);
       var mockSettings = MockContext.MockDBSet<Setting>(settings);
       var mockLinks = MockContext.MockDBSet<Link>(links);
       var mockTopics = MockContext.MockDBSet<Topic>(topics);
       var mockTopicLinks = MockContext.MockDBSet<TopicLink>();
-      var mockKeywords = MockContext.MockDBSet<Keyword>();
-      var mockTopicKeywords = MockContext.MockDBSet<TopicKeyword>();
+      var mockKeywords = MockContext.MockDBSet<Keyword>(keywords);
+      var mockTopicKeywords = MockContext.MockDBSet<TopicKeyword>(topicKeywords);
 
       mockContext = MockContext.GetDefaultContext();
       mockContext.Setup(c => c.Users).Returns(mockUsers.Object);

@@ -1,7 +1,7 @@
 <h1 *ngIf="currentUser.userName">Settings</h1>
 <h1 *ngIf="!currentUser.userName">Login</h1>
 
-<!-- TODO: Add ToS and Privacy Policy -->
+<!-- FIXME: Add ToS and Privacy Policy -->
 <div class="form-group">
   <div class="alert alert-warning" *ngIf="working.responseMessages.length > 0">
     <ul>
@@ -43,3 +43,5 @@
 <div *ngIf="currentUser.userName">
   <a class="btn btn-secondary" href="/Login/Logout">Logout</a>
 </div>
+<!-- FIXME: Delete account -->
+<!-- TODO: Update email -->

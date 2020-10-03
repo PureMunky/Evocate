@@ -8,6 +8,7 @@ export class User {
   public languages: Array<any>;
   public roles: Array<string>;
   public checked: boolean;
+  public loaded: boolean;
   public block: {
     userId: string,
     endDate: Date,
@@ -38,6 +39,7 @@ export class User {
       this.roles = inner.roles;
       this.checked = false;
       this.block = inner.block;
+      this.loaded = true;
     } else {
       this.userId = '';
       this.userName = '';
@@ -47,6 +49,7 @@ export class User {
       this.roles = [];
       this.checked = false;
       this.block = null;
+      this.loaded = false;
     }
   }
 }

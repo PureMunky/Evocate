@@ -48,6 +48,12 @@ export class UserSettingsComponent {
     this.apiService.post('/Login/Login', this.working.registration).then(r => this.processRegistrationResponse(r[0]));
   }
 
+  public finalizeDelete() {
+    this.apiService.post('/Login/AdminDelete', { userId: this.currentUser.userId, name: '' }).then(() => {
+      location.href = '/Login/Logout';
+    });
+  }
+
   private async processRegistrationResponse(response) {
     {
       if (response.successful) {
@@ -64,10 +70,14 @@ class Working {
 
   public responseMessages: Array<string>;
   public registration: Registration;
+  public deleting: boolean;
+  public deleteText: string;
 
   constructor() {
     this.responseMessages = [];
     this.registration = new Registration();
+    this.deleting = false;
+    this.deleteText = '';
   }
 };
 

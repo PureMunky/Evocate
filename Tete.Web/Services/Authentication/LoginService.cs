@@ -196,7 +196,6 @@ namespace Tete.Api.Services.Authentication
 
     public void DeleteAccount(Guid UserId, UserVM Actor)
     {
-      // FIXME: Test the account deletion.
       if (UserId == Actor.UserId || Actor.Roles.Contains("Admin"))
       {
         var user = this.mainContext.Users.Single(u => u.Id == UserId);

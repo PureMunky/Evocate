@@ -25,6 +25,10 @@ export class User {
     if (this.roles.some(r => r == "Guest")) {
       action = false;
     }
+    
+    if(!this.loaded) {
+      action = false;
+    }
 
     return action;
   }

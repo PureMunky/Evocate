@@ -1,0 +1,53 @@
+#Google Search Engine Robot
+User-agent: Googlebot
+
+Allow: /discover
+Allow: /support
+Allow: /topic/*
+Disallow: /admin/*
+Disallow: /mentorship/*
+Disallow: /profile/*
+Disallow: /settings
+
+#Yahoo! Search Engine Robot
+User-Agent: Slurp
+
+Allow: /discover
+Allow: /support
+Allow: /topic/*
+Disallow: /admin/*
+Disallow: /mentorship/*
+Disallow: /profile/*
+Disallow: /settings
+
+#Yandex Search Engine Robot
+User-agent: Yandex
+
+Allow: /discover
+Allow: /support
+Allow: /topic/*
+Disallow: /admin/*
+Disallow: /mentorship/*
+Disallow: /profile/*
+Disallow: /settings
+
+#Microsoft Search Engine Robot
+User-Agent: msnbot
+Disallow: /
+
+#Bing Search Engine Robot
+User-Agent: bingbot
+Disallow: /
+
+# Every bot that might possibly read and respect this file.
+User-agent: *
+
+Allow: /discover
+Allow: /support
+Allow: /topic/*
+Disallow: /admin/*
+Disallow: /mentorship/*
+Disallow: /profile/*
+Disallow: /settings
+
+Crawl-delay: 1

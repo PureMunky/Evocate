@@ -67,6 +67,8 @@ spec:
           env:
             - name: ASPNETCORE_URLS
               value: https://+:443;http://+:80
+            - name: LettuceEncrypt__DomainNames__0
+              value: "dev.tetelearning.com"
             - name: Certificate_Password
               valueFrom:
                 secretKeyRef:

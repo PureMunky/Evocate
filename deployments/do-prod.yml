@@ -1,0 +1,152 @@
+# https://www.digitalocean.com/community/tutorials/how-to-automate-deployments-to-digitalocean-kubernetes-with-circleci
+# https://docs.microsoft.com/en-us/sql/linux/tutorial-sql-server-containers-kubernetes?view=sql-server-ver15
+# https://www.microsoft.com/en-us/sql-server/sql-server-2017?rtc=1
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: tete-prod
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tete-db-svc
+  namespace: tete-prod
+spec:
+  selector:
+    app: tete-db
+  ports:
+    - protocol: TCP
+      port: 1433
+      targetPort: 1433
+  type: NodePort
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tete-web-svc
+  namespace: tete-prod
+spec:
+  selector:
+    app: tete-web
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 80
+    - name: https
+      protocol: TCP
+      port: 443
+      targetPort: 443
+  type: LoadBalancer
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tete-web
+  namespace: tete-prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tete-web
+  template:
+    metadata:
+      labels:
+        app: tete-web
+    spec:
+      containers:
+        - name: tete-web
+          image: puremunky/tete-web:prod-$TRAVIS_BUILD_NUMBER
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+          env:
+            - name: ASPNETCORE_URLS
+              value: https://+:443;http://+:80
+            - name: LettuceEncrypt__DomainNames__0
+              value: "app.tetelearning.com"
+            - name: Certificate_Password
+              valueFrom:
+                secretKeyRef:
+                  name: cert-credentials
+                  key: cert-password
+            - name: ConnectionStrings__DefaultConnection
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: connection-string
+          volumeMounts:
+            - name: tete-web-pv
+              mountPath: /var/opt/
+      volumes:
+        - name: tete-web-pv
+          persistentVolumeClaim:
+            claimName: tete-web-pvc
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tete-db
+  namespace: tete-prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tete-db
+  template:
+    metadata:
+      labels:
+        app: tete-db
+    spec:
+      containers:
+        - name: tete-db
+          image: mcr.microsoft.com/mssql/server:2017-CU8-ubuntu
+          ports:
+            - containerPort: 1433
+          env:
+            - name: MSSQL_PID
+              value: Express
+            - name: ACCEPT_EULA
+              value: "Y"
+            - name: SA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: password
+          volumeMounts:
+            - name: tete-db-pv
+              mountPath: /var/opt/mssql
+      volumes:
+        - name: tete-db-pv
+          persistentVolumeClaim:
+            claimName: tete-db-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: tete-db-pvc
+  namespace: tete-prod
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: do-block-storage
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: tete-web-pvc
+  namespace: tete-prod
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: do-block-storage

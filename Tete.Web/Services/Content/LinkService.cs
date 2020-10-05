@@ -37,7 +37,7 @@ namespace Tete.Api.Services.Content
           dbLink.Destination = link.Destination;
           dbLink.Active = link.Active;
           dbLink.Reviewed = link.Reviewed;
-          this.mainContext.Update(dbLink);
+          this.mainContext.Links.Update(dbLink);
         }
 
         this.mainContext.SaveChanges();

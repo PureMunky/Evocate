@@ -68,6 +68,14 @@ namespace Tete.Tests.Api.Services.Logging
       mockLogs.Verify(m => m.Add(It.IsAny<Log>()), Times.Once);
       mockContext.Verify(m => m.SaveChanges(), Times.Once);
     }
+
+    [Test]
+    public void GetDashboardTest()
+    {
+      var dashboard = this.logService.GetDashboard();
+
+      Assert.IsNotNull(dashboard);
+    }
   }
 
 }

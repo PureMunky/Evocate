@@ -10,7 +10,7 @@ namespace Tete.Api.Controllers
   public class LoginController : Controller
   {
 
-    /* TODO: Password reset flows
+    /* FIXME: Password reset flows
        1. user guided
        - magic link that a user should bookmark
        - enter their username to be allowed to reset

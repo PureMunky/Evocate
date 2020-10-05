@@ -11,6 +11,13 @@ namespace Tete.Tests.Api.Services.Config
   public class FlagsServiceTests : FlagBase
   {
 
+    [Test]
+    public void GetNewTest()
+    {
+      var flag = this.service.New();
+
+      Assert.IsNotNull(flag);
+    }
 
     [Test]
     public void GetTest()

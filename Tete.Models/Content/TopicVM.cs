@@ -29,6 +29,8 @@ namespace Tete.Models.Content
     public List<Link> Links { get; set; }
     public List<Keyword> Keywords { get; set; }
 
+    public List<MentorshipVM> UserMentorships { get; set; }
+
     public string ShortDescription
     {
       get

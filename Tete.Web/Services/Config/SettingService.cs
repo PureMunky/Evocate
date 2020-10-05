@@ -18,11 +18,6 @@ namespace Tete.Api.Services.Config
       this.Actor = Actor;
     }
 
-    public Flag New()
-    {
-      return new Flag();
-    }
-
     public Dictionary<string, string> Get()
     {
       return this.mainContext.Settings.AsNoTracking().OrderBy(s => s.Key).ToDictionary(s => s.Key, s => s.Value);

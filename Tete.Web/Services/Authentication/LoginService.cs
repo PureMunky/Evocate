@@ -57,38 +57,6 @@ namespace Tete.Api.Services.Authentication
       }
     }
 
-    // /// <summary>
-    // /// Attempts to register a new user with the provided
-    // /// registration attempt.
-    // /// </summary>
-    // /// <param name="registration"></param>
-    // public RegistrationResponse Register(LoginAttempt login)
-    // {
-    //   var rtnResponse = ValidatePassword(login.Password);
-
-    //   if (this.mainContext.Users.Where(u => u.UserName == login.UserName).FirstOrDefault() == null)
-    //   {
-    //     if (rtnResponse.Successful)
-    //     {
-    //       var newUser = RegisterUser(login);
-    //       UpdatePassword(newUser.Id, login.Password, newUser.Salt);
-    //     }
-    //   }
-    //   else
-    //   {
-    //     rtnResponse.Messages.Insert(0, "Username already used");
-    //     rtnResponse.Successful = false;
-    //   }
-
-    //   if (!rtnResponse.Successful)
-    //   {
-    //     rtnResponse.Attempt = login;
-    //     rtnResponse.Attempt.Password = "";
-    //   }
-
-    //   return rtnResponse;
-    // }
-
     public User GetUserFromToken(string token)
     {
       var session = this.mainContext.Sessions.SingleOrDefault(s => s.Token == token);
@@ -127,7 +95,6 @@ namespace Tete.Api.Services.Authentication
 
     public SessionVM GetNewAnonymousSession()
     {
-      // TODO: Test the entire new authentication flow.
       var user = RegisterUser(new RegistrationAttempt()
       {
         UserName = "",
@@ -229,7 +196,6 @@ namespace Tete.Api.Services.Authentication
 
     public void DeleteAccount(Guid UserId, UserVM Actor)
     {
-      // FIXME: Test the account deletion.
       if (UserId == Actor.UserId || Actor.Roles.Contains("Admin"))
       {
         var user = this.mainContext.Users.Single(u => u.Id == UserId);
@@ -246,6 +212,8 @@ namespace Tete.Api.Services.Authentication
       this.mainContext.UserLanguages.RemoveRange(this.mainContext.UserLanguages.Where(ul => ul.UserId == user.Id));
       this.mainContext.UserProfiles.RemoveRange(this.mainContext.UserProfiles.Where(up => up.UserId == user.Id));
       this.mainContext.UserTopics.RemoveRange(this.mainContext.UserTopics.Where(ut => ut.UserId == user.Id));
+      this.mainContext.UserBlocks.RemoveRange(this.mainContext.UserBlocks.Where(ub => ub.UserId == user.Id));
+
       this.mainContext.Users.Remove(user);
 
       this.mainContext.SaveChanges();

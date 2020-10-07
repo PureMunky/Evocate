@@ -7,3 +7,4 @@ coverage.json
 *.log
 *.pfx
 tete-dev-k8s-1-18-8-do-0-sfo2-1599658100409-kubeconfig.yaml
+tete-prod-k8s-1-18-8-do-1-sfo2-1602065310385-kubeconfig.yaml

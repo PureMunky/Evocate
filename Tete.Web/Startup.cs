@@ -47,7 +47,6 @@ namespace Tete.Web
         opts.MaxAge = TimeSpan.FromHours(2);
       });
 
-      // FIXME: Change SSL configuration to be environment variable driven.
       services
         .AddLettuceEncrypt()
         .PersistDataToDirectory(new System.IO.DirectoryInfo("/var/opt/ssl"), Environment.GetEnvironmentVariable("Certificate_Password"));

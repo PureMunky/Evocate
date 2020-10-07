@@ -47,9 +47,9 @@ namespace Tete.Web
         opts.MaxAge = TimeSpan.FromHours(2);
       });
 
-      services
-        .AddLettuceEncrypt()
-        .PersistDataToDirectory(new System.IO.DirectoryInfo("/var/opt/ssl"), Environment.GetEnvironmentVariable("Certificate_Password"));
+      // services
+      //   .AddLettuceEncrypt()
+      //   .PersistDataToDirectory(new System.IO.DirectoryInfo("/var/opt/ssl"), Environment.GetEnvironmentVariable("Certificate_Password"));
 
       // In production, the Angular files will be served from this directory
       services.AddSpaStaticFiles(configuration =>

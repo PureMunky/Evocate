@@ -28,24 +28,24 @@ namespace Tete.Web
       });
       services.AddDbContext<Tete.Api.Contexts.MainContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]));
 
-      services.AddHttpsRedirection(opts =>
-      {
-        opts.RedirectStatusCode = 308;
-        opts.HttpsPort = 443;
-      });
+      // services.AddHttpsRedirection(opts =>
+      // {
+      //   opts.RedirectStatusCode = 308;
+      //   opts.HttpsPort = 443;
+      // });
 
-      services.AddHttpsRedirection(opts =>
-      {
-        opts.RedirectStatusCode = 307;
-        opts.HttpsPort = 443;
-      });
+      // services.AddHttpsRedirection(opts =>
+      // {
+      //   opts.RedirectStatusCode = 307;
+      //   opts.HttpsPort = 443;
+      // });
 
-      services.AddHsts(opts =>
-      {
-        opts.Preload = true;
-        opts.IncludeSubDomains = true;
-        opts.MaxAge = TimeSpan.FromHours(2);
-      });
+      // services.AddHsts(opts =>
+      // {
+      //   opts.Preload = true;
+      //   opts.IncludeSubDomains = true;
+      //   opts.MaxAge = TimeSpan.FromHours(2);
+      // });
 
       // services
       //   .AddLettuceEncrypt()

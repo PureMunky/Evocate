@@ -107,29 +107,44 @@ namespace Tete.Api.Controllers
         output.Add("English language already existed.");
       }
 
+      var supportKeyword = new Models.Content.Keyword()
+      {
+        Name = "support",
+        Restricted = true
+      };
+
       List<Tete.Models.Content.TopicVM> SetupTopics = new List<Models.Content.TopicVM>()
       {
         new Models.Content.TopicVM()
         {
-          Name = "Tete General Questions",
+          Name = "Tête General Questions",
           Description = "Ask any general questions you have about Tete here.",
           Elligible = true,
           Keywords = new List<Models.Content.Keyword>() {
-            new Models.Content.Keyword() {
-              Name = "Support",
-              Restricted = true
-            }
+            supportKeyword
           }
         },
         new Models.Content.TopicVM()
         {
-          Name = "Tete Issues",
+          Name = "Tête Issues",
           Description = "If you're experiencing an error and need help resolving it the reqest a mentor for this topic.",
           Elligible = true,
           Keywords = new List<Models.Content.Keyword>() {
-            new Models.Content.Keyword() {
-              Name = "support",
-              Restricted = true
+            supportKeyword
+          }
+        },
+        new Models.Content.TopicVM()
+        {
+          Name = "Donate to Tête",
+          Description = "If you like what we've got going on here help us out with a few bucks to cover server costs by clicking the \"Donate\" link.",
+          Elligible = true,
+          Keywords = new List<Models.Content.Keyword>() {
+            supportKeyword
+          },
+          Links = new List<Models.Content.Link>() {
+            new Models.Content.Link() {
+              Destination = "https://paypal.me/philcorbettlive?locale.x=en_US",
+              Name = "Donate"
             }
           }
         }

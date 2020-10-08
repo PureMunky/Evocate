@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Moq;
@@ -16,19 +17,32 @@ namespace Tete.Tests.Setup
     protected const string about = "test about";
     protected const string privateAbout = "testing private about";
 
+    protected Guid guestUserId = Guid.NewGuid();
+    protected string guestToken = "guestToken";
+    protected string orphanToken = "orphanToken";
+
     [SetUp]
     public void SetupLogin()
     {
       var salt = Tete.Api.Helpers.Crypto.NewSalt();
       User existingUser = new User()
       {
+        Id = existingUserId,
         UserName = existingUserName,
         Salt = salt
       };
 
       User newUser = new User()
       {
+        Id = newUserId,
         UserName = newUserName,
+        Salt = salt
+      };
+
+      User guestUser = new User()
+      {
+        Id = guestUserId,
+        UserName = "",
         Salt = salt
       };
 
@@ -51,7 +65,8 @@ namespace Tete.Tests.Setup
       };
 
       IQueryable<User> users = new List<User> {
-        existingUser
+        existingUser,
+        guestUser
       }.AsQueryable();
 
       IQueryable<Login> logins = new List<Login> {
@@ -73,9 +88,23 @@ namespace Tete.Tests.Setup
         Token = newUserToken
       };
 
+      Session guestSession = new Session()
+      {
+        UserId = guestUser.Id,
+        Token = guestToken
+      };
+
+      Session orphanSession = new Session()
+      {
+        UserId = Guid.NewGuid(),
+        Token = orphanToken
+      };
+
       IQueryable<Session> sessions = new List<Session> {
         existingUserSession,
-        newUserSession
+        newUserSession,
+        guestSession,
+        orphanSession
       }.AsQueryable();
 
       IQueryable<Tete.Models.Localization.UserLanguage> userLanguages = new List<Tete.Models.Localization.UserLanguage> {

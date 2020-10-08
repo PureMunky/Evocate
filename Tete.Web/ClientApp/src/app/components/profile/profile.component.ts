@@ -12,19 +12,13 @@ import { User } from "../../models/user";
   templateUrl: "./profile.component.html"
 })
 export class ProfileComponent {
-  public user: User = new User();
-  public currentUser: User = new User();
+  public user: User = new User(null);
+  public currentUser: User = new User(null);
   public languages = [];
   public tmpModel = {
     language: ''
   };
-  public working = {
-    editing: false,
-    self: false,
-    error: false,
-    errorMessage: '',
-    userName: ''
-  };
+  public working: Working = new Working();
 
   constructor(
     private route: ActivatedRoute,
@@ -33,22 +27,26 @@ export class ProfileComponent {
     private initService: InitService,
     private languageService: LanguageService
   ) {
-    this.initService.Register(() => {
-      this.currentUser = this.userService.CurrentUser();
-      this.route.params.subscribe(params => {
-        this.working.userName = params["username"];
-        this.loadUser();
-        if (this.working.userName != this.currentUser.userName) {
-          this.working.self = false;
-        } else {
-          this.working.self = true;
-        }
-      });
-
-      this.languages = this.languageService.Languages();
-    });
+    this.initService.Register(() => this.load());
   }
 
+  private load() {
+    this.working = new Working();
+    this.currentUser = this.userService.CurrentUser();
+    this.route.params.subscribe(params => {
+      this.working.userName = params["username"];
+      if (this.working.userName) {
+        this.loadUser();
+        this.working.self = (this.working.userName == this.currentUser.userName);
+      } else {
+        this.user = JSON.parse(JSON.stringify(this.currentUser));
+        this.working.self = true;
+        this.working.editing = true;
+      }
+    });
+
+    this.languages = this.languageService.Languages();
+  }
   private loadUser() {
     return this.userService.Get(this.working.userName).then(u => {
       this.user = u;
@@ -57,13 +55,13 @@ export class ProfileComponent {
   public save() {
     this.apiService.post('/V1/User/Post', this.user).then(u => {
       this.working.editing = false;
+      this.userService.Load();
     });
   }
 
   public cancel() {
-    this.loadUser().then(x => {
-      this.working.editing = false;
-    });
+    this.user = JSON.parse(JSON.stringify(this.currentUser));
+    this.working.editing = false;
   }
 
   public addLanguage() {
@@ -83,4 +81,25 @@ export class ProfileComponent {
   public removeLanguage(langId) {
     this.user.languages = this.user.languages.filter(l => l.languageId != langId);
   }
+
 }
+
+class Working {
+  public editing: boolean;
+  public self: boolean;
+  public error: boolean;
+  public errorMessage: string;
+  public userName: string;
+  public responseMessages: Array<string>;
+
+  constructor() {
+    this.editing = false;
+    this.self = false;
+    this.error = false;
+    this.errorMessage = '';
+    this.userName = '';
+    this.responseMessages = [];
+  }
+};
+
+

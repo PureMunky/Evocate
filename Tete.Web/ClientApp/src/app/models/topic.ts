@@ -1,6 +1,7 @@
 import { UserTopic } from './userTopic';
 import { Keyword } from "./keyword";
 import { Link } from "./link";
+import { Mentorship } from "./mentorship";
 
 export class Topic {
   public topicId: string;
@@ -12,6 +13,7 @@ export class Topic {
   public keywords: Array<Keyword>;
   public links: Array<Link>;
   public shortDescription: string;
+  public userMentorships: Array<Mentorship>;
 
   constructor() {
     this.name = '';
@@ -21,5 +23,6 @@ export class Topic {
     this.userTopic = new UserTopic();
     this.keywords = [];
     this.links = [];
+    this.userMentorships = [];
   }
 }

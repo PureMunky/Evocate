@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using System;
+using LettuceEncrypt;
 
 namespace Tete.Web
 {
@@ -46,6 +47,10 @@ namespace Tete.Web
         opts.MaxAge = TimeSpan.FromHours(2);
       });
 
+      services
+        .AddLettuceEncrypt()
+        .PersistDataToDirectory(new System.IO.DirectoryInfo("/var/opt/ssl"), Environment.GetEnvironmentVariable("Certificate_Password"));
+
       // In production, the Angular files will be served from this directory
       services.AddSpaStaticFiles(configuration =>
       {
@@ -68,7 +73,6 @@ namespace Tete.Web
         app.UseHsts();
       }
 
-      // TODO: Setup automatic SSL Cert handling.
       app.UseHttpsRedirection();
       app.UseStaticFiles();
       app.UseSpaStaticFiles();

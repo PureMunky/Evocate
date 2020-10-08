@@ -24,6 +24,7 @@ namespace Tete.Api.Contexts
     public virtual DbSet<Tete.Models.Users.Profile> UserProfiles { get; set; }
     public virtual DbSet<Tete.Models.Authentication.AccessRole> AccessRoles { get; set; }
     public virtual DbSet<Tete.Models.Users.Evaluation> Evaluations { get; set; }
+    public virtual DbSet<Tete.Models.Authentication.UserBlock> UserBlocks { get; set; }
 
     // Topics
     public virtual DbSet<Tete.Models.Content.Topic> Topics { get; set; }

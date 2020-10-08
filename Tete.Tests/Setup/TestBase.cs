@@ -7,6 +7,9 @@ using Tete.Api.Helpers;
 using Tete.Models.Authentication;
 using Tete.Models.Localization;
 using Tete.Models.Users;
+using Tete.Models.Relationships;
+using Tete.Models.Config;
+using Tete.Models.Content;
 
 namespace Tete.Tests.Setup
 {
@@ -24,6 +27,8 @@ namespace Tete.Tests.Setup
       UserName = "admin"
     };
 
+    protected string settingKey = "settingKey1";
+
     public UserVM AdminUserVM
     {
       get
@@ -36,6 +41,18 @@ namespace Tete.Tests.Setup
         };
       }
     }
+
+    public Guid linkId = Guid.NewGuid();
+    public Guid existingTopicId = Guid.NewGuid();
+
+    public string keyword = "existingkeyword";
+    public Guid englishId = Guid.NewGuid();
+    public Guid spanishId = Guid.NewGuid();
+
+    protected string testLanguageElementKey = "TestKey";
+    protected string testLanguageElementText = "TextText";
+
+    public Guid mentorshipId = Guid.NewGuid();
 
     [SetUp]
     public void Setup()
@@ -55,7 +72,15 @@ namespace Tete.Tests.Setup
 
       Language english = new Language()
       {
+        LanguageId = englishId,
         Name = "English",
+        Active = true
+      };
+
+      Language spanish = new Language()
+      {
+        LanguageId = spanishId,
+        Name = "Spanish",
         Active = true
       };
 
@@ -65,16 +90,17 @@ namespace Tete.Tests.Setup
         Text = "Welcome!",
         LanguageId = english.LanguageId
       };
+      Element testElement = new Element() { Key = testLanguageElementKey, Text = testLanguageElementText };
 
       var userLanguage = new UserLanguage()
       {
-        Language = english,
+        LanguageId = english.LanguageId,
         UserId = existingUserId
       };
 
       var adminUserLanguage = new UserLanguage()
       {
-        Language = english,
+        LanguageId = spanish.LanguageId,
         UserId = adminUser.Id
       };
 
@@ -105,32 +131,134 @@ namespace Tete.Tests.Setup
         new Profile(adminUser.Id)
       }.AsQueryable();
 
+      IQueryable<UserBlock> userBlocks = new List<UserBlock>().AsQueryable();
+
       IQueryable<Language> languages = new List<Language>()
       {
-        english
+        english,
+        spanish
       }.AsQueryable();
 
       IQueryable<Element> elements = new List<Element>()
       {
+        testElement,
         welcome
       }.AsQueryable();
 
       IQueryable<AccessRole> userAccessRoles = accessRoles.AsQueryable();
 
+      IQueryable<Setting> settings = new List<Setting>()
+      {
+        new Setting() {
+          Key = settingKey,
+          Value = Guid.NewGuid().ToString()
+        }
+      }.AsQueryable();
+
+      IQueryable<Link> links = new List<Link>()
+      {
+        new Link() {
+          LinkId = linkId,
+          Name = "Google",
+          Destination = "https://www.google.com"
+        }
+      }.AsQueryable();
+
+      var topics = new List<Topic>()
+      {
+        new Topic(){
+          TopicId = existingTopicId,
+          Name = "Existing Topic Name"
+        }
+      };
+
+      var existingkeyword = new Keyword()
+      {
+        Name = keyword
+      };
+
+      var keywords = new List<Keyword>()
+      {
+        existingkeyword
+      }.AsQueryable();
+
+      var topicKeywords = new List<TopicKeyword>()
+      {
+        new TopicKeyword()
+        {
+          TopicId = existingTopicId,
+          KeywordId = existingkeyword.KeywordId
+        }
+      };
+
+      var topicLinks = new List<TopicLink>()
+      {
+        new TopicLink()
+        {
+          TopicId = existingTopicId,
+          LinkId = linkId
+        }
+      };
+
+      var userTopics = new List<UserTopic>()
+      {
+        new UserTopic(adminUser.Id, existingTopicId, TopicStatus.Mentor)
+      };
+
+      var mentorships = new List<Mentorship>()
+      {
+        new Mentorship(existingUserId, existingTopicId) {
+          MentorshipId = mentorshipId
+        }
+      };
+
+      for (int i = 0; i < 12; i++)
+      {
+        var t = new Topic()
+        {
+          Name = Guid.NewGuid().ToString()
+        };
+
+        topics.Add(t);
+        userTopics.Add(new UserTopic(existingUserId, t.TopicId, TopicStatus.Novice));
+        mentorships.Add(new Mentorship(existingUserId, t.TopicId));
+      }
       var mockUsers = MockContext.MockDBSet<User>(users);
       var mockUserLanguages = MockContext.MockDBSet<UserLanguage>(userLanguages);
       var mockUserProfiles = MockContext.MockDBSet<Profile>(userProfiles);
+      var mockUserBlocks = MockContext.MockDBSet<UserBlock>(userBlocks);
       var mockUserAccessRoles = MockContext.MockDBSet<AccessRole>(userAccessRoles);
       var mockLanguages = MockContext.MockDBSet<Language>(languages);
       var mockElements = MockContext.MockDBSet<Element>(elements);
+      var mockUserTopics = MockContext.MockDBSet<UserTopic>(userTopics);
+      var mockSettings = MockContext.MockDBSet<Setting>(settings);
+      var mockLinks = MockContext.MockDBSet<Link>(links);
+      var mockTopics = MockContext.MockDBSet<Topic>(topics);
+      var mockTopicLinks = MockContext.MockDBSet<TopicLink>(topicLinks);
+      var mockKeywords = MockContext.MockDBSet<Keyword>(keywords);
+      var mockTopicKeywords = MockContext.MockDBSet<TopicKeyword>(topicKeywords);
 
-      mockContext = Tete.Tests.Setup.MockContext.GetDefaultContext();
+      mockContext = MockContext.GetDefaultContext();
       mockContext.Setup(c => c.Users).Returns(mockUsers.Object);
       mockContext.Setup(c => c.UserLanguages).Returns(mockUserLanguages.Object);
       mockContext.Setup(c => c.UserProfiles).Returns(mockUserProfiles.Object);
+      mockContext.Setup(c => c.UserBlocks).Returns(mockUserBlocks.Object);
       mockContext.Setup(c => c.AccessRoles).Returns(mockUserAccessRoles.Object);
       mockContext.Setup(c => c.Languages).Returns(mockLanguages.Object);
       mockContext.Setup(c => c.Elements).Returns(mockElements.Object);
+      mockContext.Setup(c => c.UserTopics).Returns(mockUserTopics.Object);
+      mockContext.Setup(c => c.Settings).Returns(mockSettings.Object);
+      mockContext.Setup(c => c.Links).Returns(mockLinks.Object);
+      mockContext.Setup(c => c.Topics).Returns(mockTopics.Object);
+      mockContext.Setup(c => c.TopicLinks).Returns(mockTopicLinks.Object);
+      mockContext.Setup(c => c.Keywords).Returns(mockKeywords.Object);
+      mockContext.Setup(c => c.TopicKeywords).Returns(mockTopicKeywords.Object);
+
+      mockContext.Setup(c => c.Mentorships)
+        .Returns(MockContext.MockDBSet<Mentorship>(mentorships).Object);
+
+      mockContext.Setup(c => c.Logins)
+        .Returns(MockContext.MockDBSet<Login>().Object);
 
     }
 

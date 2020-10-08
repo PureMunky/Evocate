@@ -21,6 +21,12 @@ import { AdminHome } from "./components/admin/adminHome.component";
 import { SupportComponent } from "./components/support/support.component";
 import { TileComponent } from "./components/tile/tile.component";
 import { LinkAdminComponent } from "./components/linkAdmin/linkAdmin.component";
+import { DashboardAdminComponent } from "./components/dashboardAdmin/dashboardAdmin.component";
+import { UserAdminComponent } from "./components/userAdmin/userAdmin.component";
+import { SettingAdminComponent } from "./components/settingAdmin/settingAdmin.component";
+import { UserSettingsComponent } from "./components/userSettings/userSettings.component";
+import { TosComponent } from "./components/legal/tos.component";
+import { PrivacyComponent } from "./components/legal/privacy.component";
 
 @NgModule({
   declarations: [
@@ -40,7 +46,13 @@ import { LinkAdminComponent } from "./components/linkAdmin/linkAdmin.component";
     MentorList,
     SupportComponent,
     TileComponent,
-    LinkAdminComponent
+    LinkAdminComponent,
+    DashboardAdminComponent,
+    UserAdminComponent,
+    SettingAdminComponent,
+    UserSettingsComponent,
+    TosComponent,
+    PrivacyComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
@@ -50,17 +62,25 @@ import { LinkAdminComponent } from "./components/linkAdmin/linkAdmin.component";
       { path: "", component: HomeComponent, pathMatch: "full" },
       {
         path: "admin", component: AdminHome, children: [
+          { path: "", component: DashboardAdminComponent, pathMatch: "full" },
+          { path: "dashboard", component: DashboardAdminComponent },
           { path: "language", component: LanguageAdminComponent },
           { path: "logging", component: LoggingComponent },
-          { path: "link", component: LinkAdminComponent }
+          { path: "link", component: LinkAdminComponent },
+          { path: "user", component: UserAdminComponent },
+          { path: "settings", component: SettingAdminComponent },
         ]
       },
+      { path: "profile", component: ProfileComponent },
+      { path: "settings", component: UserSettingsComponent },
       { path: "profile/:username", component: ProfileComponent },
       { path: "discovery", component: TopicDiscoveryComponent },
       { path: "topic/create/:name", component: TopicComponent },
       { path: "topic/:topicId", component: TopicComponent },
       { path: "mentorship/:mentorshipId", component: MentorshipComponent },
-      { path: "support", component: SupportComponent }
+      { path: "support", component: SupportComponent },
+      { path: "tos", component: TosComponent },
+      { path: "privacy", component: PrivacyComponent }
     ])
   ],
   providers: [],

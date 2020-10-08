@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { UserService } from "./user.service";
 import { LanguageService } from "./language.service";
+import { SettingService } from "./settings.service";
 
 @Injectable({
   providedIn: "root"
@@ -10,17 +11,17 @@ export class InitService {
   private loaded = false;
 
   constructor(private userService: UserService,
-    private languageService: LanguageService) {
+    private settingService: SettingService) {
     this.Load();
   }
 
   public Load() {
     let inits = [
       this.userService.Load(),
-      this.languageService.Load()
+      this.settingService.Load()
     ];
 
-    Promise.all(inits).then(() => {
+    return Promise.all(inits).then(() => {
       this.loaded = true;
       for (let i = 0; i < this.functions.length; i++) {
         this.functions[i]();
@@ -29,7 +30,7 @@ export class InitService {
   }
 
   public Register(func: Function) {
-    if(this.loaded) {
+    if (this.loaded) {
       func();
     } else {
       this.functions.push(func);

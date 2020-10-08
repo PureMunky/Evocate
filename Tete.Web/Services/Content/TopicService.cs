@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -74,18 +75,34 @@ namespace Tete.Api.Services.Content
 
     public IEnumerable<TopicVM> Search(string searchText)
     {
-      searchText = searchText.ToLower();
+      if (searchText != null)
+      {
+        searchText = searchText.ToLower();
+      }
 
       return this.mainContext.Topics.Where(t => t.Name.ToLower().Contains(searchText) || t.Description.ToLower().Contains(searchText)).Select(t => new TopicVM(t));
     }
 
     public IEnumerable<TopicVM> GetKeywordTopics(string keyword)
     {
-      keyword = keyword.ToLower();
-      return this.mainContext.TopicKeywords
-        .Where(tk => tk.Keyword.Name.ToLower() == keyword)
+      IEnumerable<TopicVM> results = new List<TopicVM>();
+
+      if (keyword != null)
+      {
+        keyword = keyword.ToLower();
+      }
+
+      var dbKeyword = this.mainContext.Keywords.AsNoTracking().Where(k => k.Name.ToLower() == keyword).FirstOrDefault();
+
+      if (dbKeyword != null)
+      {
+        results = this.mainContext.TopicKeywords
+        .Where(tk => tk.KeywordId == dbKeyword.KeywordId)
         .Join(this.mainContext.Topics, tk => tk.TopicId, t => t.TopicId, (tk, t) => new TopicVM(t))
         .ToList();
+      }
+
+      return results;
     }
 
     public TopicVM GetTopicVM(Guid topicId)
@@ -101,6 +118,7 @@ namespace Tete.Api.Services.Content
 
         rtnTopic.Links = this.mainContext.Links.Where(l => l.Active).Join(this.mainContext.TopicLinks.Where(tl => tl.TopicId == rtnTopic.TopicId && tl.Active), l => l.LinkId, tl => tl.LinkId, (l, tl) => l).OrderBy(l => l.Name).ToList();
         rtnTopic.Keywords = this.mainContext.Keywords.Where(k => k.Active).Join(this.mainContext.TopicKeywords.Where(tk => tk.TopicId == rtnTopic.TopicId), k => k.KeywordId, tk => tk.KeywordId, (k, tk) => k).OrderBy(l => l.Name).ToList();
+        rtnTopic.UserMentorships = MentorshipService.GetUserMentorships(this.Actor.UserId, topicId);
 
         if (dbUserTopic != null && rtnTopic.UserTopic.Status == TopicStatus.Mentor)
         {
@@ -192,7 +210,7 @@ namespace Tete.Api.Services.Content
 
     public IEnumerable<Keyword> GetKeywords()
     {
-      IEnumerable<Keyword> rtnList = rtnList = this.mainContext.Keywords;
+      IEnumerable<Keyword> rtnList = rtnList = this.mainContext.Keywords.AsNoTracking();
 
       if (!this.Actor.Roles.Contains("Admin"))
       {

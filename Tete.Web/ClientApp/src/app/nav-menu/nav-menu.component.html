@@ -1,7 +1,8 @@
 <header>
-  <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+  <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark border-bottom box-shadow mb-3"
+    style="background-color: #267b80;">
     <div class="container">
-      <a class="navbar-brand" [routerLink]="['/']">Tête <span class="badge badge-primary"
+      <a class="navbar-brand" [routerLink]="['/']">Tête <span class="badge badge-dark"
           style="font-size: .6em; vertical-align: super;">beta</span></a>
       <div class="spinner-border" role="status" *ngIf="loading">
         <span class="sr-only">Loading...</span>
@@ -13,19 +14,19 @@
       <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse" [ngClass]="{ show: isExpanded }">
         <ul class="navbar-nav flex-grow">
           <li class="nav-item" [routerLinkActive]="['link-active']" [routerLinkActiveOptions]="{ exact: true }">
-            <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
+            <a class="nav-link text-light" [routerLink]="['/']">Home</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']" [routerLinkActiveOptions]="{ exact: true }">
-            <a class="nav-link text-dark" [routerLink]="['/discovery']">Discover</a>
+            <a class="nav-link text-light" [routerLink]="['/discovery']">Discover</a>
           </li>
           <li *ngIf="adminRole" class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/admin']">Admin</a>
+            <a class="nav-link text-light" [routerLink]="['/admin']">Admin</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']" [routerLinkActiveOptions]="{ exact: true }">
-            <a class="nav-link text-dark" [routerLink]="['/support']">Support</a>
+            <a class="nav-link text-light" [routerLink]="['/support']">Support</a>
           </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']" *ngIf="profileLink.length > 0">
-            <a class="nav-link text-dark" [routerLink]="profileLink">Profile</a>
+          <li class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link text-light" [routerLink]="['/profile']">Profile</a>
           </li>
         </ul>
       </div>

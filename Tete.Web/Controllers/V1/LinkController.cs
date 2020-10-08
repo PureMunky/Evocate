@@ -25,6 +25,8 @@ namespace Tete.Api.Controllers
     {
       var service = new Services.Content.LinkService(Context, CurrentAdmin);
 
+      LogService.Write("Update Link", value.LinkId.ToString());
+
       return new Response<Link>(service.SaveLink(value));
     }
 

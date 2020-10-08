@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
 using Tete.Models.Logging;
+using Tete.Models.Authentication;
 
 namespace Tete.Tests.Setup {
   public abstract class LogsBase : TestBase {
@@ -26,7 +27,10 @@ namespace Tete.Tests.Setup {
       }.AsQueryable();
 
       mockLogs = MockContext.MockDBSet<Log>(logs);
+      
       mockContext.Setup(c => c.Logs).Returns(mockLogs.Object);
+      mockContext.Setup(c => c.Sessions)
+        .Returns(MockContext.MockDBSet<Session>().Object);
     }
   }
 }

@@ -61,44 +61,13 @@ namespace Tete.Tests.Api.Services.Authentication
     }
 
     [Test]
-    public void RegisterUserTest()
+    public void LogoutTest()
     {
-      RegistrationAttempt registration = new RegistrationAttempt()
-      {
-        UserName = newUserName,
-        Email = "test@example.com",
-        DisplayName = "def",
-        Password = testPassword
-      };
+      this.loginService.Logout(existingUserToken);
 
-      this.loginService.Register(registration);
-
-      mockContext.Verify(m => m.SaveChanges(), Times.AtLeastOnce);
-      mockContext.Verify(c => c.Users.Add(It.IsAny<User>()), Times.Once);
-      mockContext.Verify(c => c.Logins.Add(It.IsAny<Login>()), Times.Once);
-    }
-
-    [Test]
-    public void AlreadyRegisteredUserTest()
-    {
-      // Test if you try to register a user that already exists that it errors.
-      var registration = new RegistrationAttempt()
-      {
-        UserName = existingUserName,
-        Email = "test@example.com",
-        DisplayName = "anything",
-        Password = testPassword
-      };
-
-      try
-      {
-        this.loginService.Register(registration);
-        Assert.Fail();
-      }
-      catch (Exception)
-      {
-        Assert.Pass();
-      }
+      Assert.IsTrue(true);
+      mockContext.Verify(c => c.Sessions, Times.AtLeastOnce);
+      mockContext.Verify(c => c.SaveChanges(), Times.AtLeastOnce);
     }
 
     [Test]
@@ -131,6 +100,136 @@ namespace Tete.Tests.Api.Services.Authentication
       UserVM result = this.loginService.GetUserVMFromToken("InvalidToken");
 
       Assert.IsNull(result);
+    }
+
+    [Test]
+    public void GetUserFromOrphanTokenTest()
+    {
+      var user = this.loginService.GetUserFromToken(orphanToken);
+
+      Assert.IsNull(user);
+    }
+
+    [Test]
+    public void GetNewAnonymousSessionsTest()
+    {
+      var sessionVM = this.loginService.GetNewAnonymousSession();
+
+      Assert.IsTrue(sessionVM != null);
+    }
+
+    [Test]
+    public void GetUserVMFromUsernameTest()
+    {
+      var user = this.loginService.GetUserVMFromUsername(existingUserName, AdminUserVM);
+
+      Assert.AreEqual(existingUserName, user.UserName);
+    }
+
+    [Test]
+    public void ResetPasswordTest()
+    {
+      var response = this.loginService.ResetPassword(existingUserToken, "abcde1234%");
+
+      Assert.IsTrue(response.Successful);
+    }
+
+    [Test]
+    public void ResetNewPasswordTest()
+    {
+      var response = this.loginService.ResetPassword(guestToken, "abcde1234%");
+
+      Assert.IsTrue(response.Successful);
+    }
+
+    [Test]
+    public void ResetEmptyPasswordTest()
+    {
+      var response = this.loginService.ResetPassword(existingUserToken, null);
+
+      Assert.IsFalse(response.Successful);
+      Assert.AreEqual(3, response.Messages.Count);
+    }
+
+    [Test]
+    public void ResetShortPasswordTest()
+    {
+      var response = this.loginService.ResetPassword(existingUserToken, "abd#3ls");
+
+      Assert.IsFalse(response.Successful);
+      Assert.AreEqual(1, response.Messages.Count);
+    }
+
+    [Test]
+    public void ResetNonSpecialPasswordTest()
+    {
+      var response = this.loginService.ResetPassword(existingUserToken, "3124llls");
+
+      Assert.IsFalse(response.Successful);
+      Assert.AreEqual(1, response.Messages.Count);
+    }
+
+    [Test]
+    public void ResetNonNumberPasswordTest()
+    {
+      var response = this.loginService.ResetPassword(existingUserToken, "abdh#$le");
+
+      Assert.IsFalse(response.Successful);
+      Assert.AreEqual(1, response.Messages.Count);
+    }
+
+    [Test]
+    public void UpdateUserNameTest()
+    {
+      var response = this.loginService.UpdateUserName(existingUserToken, "newusername");
+
+      Assert.IsTrue(response.Successful);
+    }
+
+    [Test]
+    public void UpdateEmptyUserNameTest()
+    {
+      var response = this.loginService.UpdateUserName(existingUserToken, null);
+
+      Assert.IsFalse(response.Successful);
+      Assert.AreEqual(1, response.Messages.Count);
+    }
+
+    [Test]
+    public void UpdateShortUserNameTest()
+    {
+      var response = this.loginService.UpdateUserName(existingUserToken, "");
+
+      Assert.IsFalse(response.Successful);
+      Assert.AreEqual(1, response.Messages.Count);
+    }
+
+    [Test]
+    public void UpdateTakenUserNameTest()
+    {
+      var response = this.loginService.UpdateUserName(existingUserToken, existingUserName);
+
+      Assert.IsFalse(response.Successful);
+      Assert.AreEqual(1, response.Messages.Count);
+    }
+
+    [Test]
+    public void RegisterNewLoginTest()
+    {
+      var response = this.loginService.RegisterNewLogin(existingUserToken, new LoginAttempt()
+      {
+        UserName = "newusername",
+        Password = "newPassword123!@#"
+      });
+
+      Assert.IsTrue(response.Successful);
+    }
+
+    [Test]
+    public void DeleteAccountTest()
+    {
+      this.loginService.DeleteAccount(existingUserId, AdminUserVM);
+      Assert.True(true);
     }
   }
 }

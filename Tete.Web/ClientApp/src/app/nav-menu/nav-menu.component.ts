@@ -3,6 +3,7 @@ import { InitService } from '../services/init.service';
 import { User } from '../models/user';
 import { UserService } from '../services/user.service';
 import { LoadingService } from '../services/loading.service';
+import { SettingService } from '../services/settings.service';
 
 @Component({
   selector: 'app-nav-menu',
@@ -10,7 +11,7 @@ import { LoadingService } from '../services/loading.service';
   styleUrls: ['./nav-menu.component.css']
 })
 export class NavMenuComponent {
-  public currentUser: User = new User();
+  public currentUser: User = new User(null);
   public adminRole: boolean = false;
   public loading: boolean = true;
   isExpanded = false;
@@ -23,18 +24,15 @@ export class NavMenuComponent {
     this.isExpanded = !this.isExpanded;
   }
 
-  private profileLinkPrefix: string = '/profile/';
-  public profileLink: string = '';
-
   constructor(
     private initService: InitService,
     private userService: UserService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private settingService: SettingService
   ) {
     loadingService.Register(loading => this.loadingHandler(loading));
     initService.Register(() => {
       this.currentUser = userService.CurrentUser();
-      this.profileLink = this.profileLinkPrefix + this.currentUser.userName;
       this.adminRole = this.currentUser.roles.some(r => r == 'Admin');
     });
   }

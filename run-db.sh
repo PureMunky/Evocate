@@ -11,10 +11,10 @@ docker stop tete-db
 docker rm tete-db
 
 # build docker image
-docker build -f Db.Dockerfile -t tete-db-img .
+# docker build -f Db.Dockerfile -t tete-db-img .
 
 # run docker image
-docker run -dit --name tete-db -p 1433:1433 -v E:\\Projects\\Tete\\Database:/var/opt/mssql --env SA_PASSWORD=$teteDBPassword tete-db-img
+docker run -dit --name tete-db -p 1433:1433 -v E:\\Projects\\Tete\\Database:/var/opt/mssql -e ACCEPT_EULA=Y -e MSSQL_PID=Express -e SA_PASSWORD=$teteDBPassword mcr.microsoft.com/mssql/server:2017-CU8-ubuntu
 
 # create database migration
 # cd Tete.Web && dotnet-ef migrations add build

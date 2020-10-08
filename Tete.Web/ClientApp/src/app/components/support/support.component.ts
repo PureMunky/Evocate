@@ -11,7 +11,7 @@ import { Topic } from "../../models/topic";
   templateUrl: "./support.component.html"
 })
 export class SupportComponent {
-  public currentUser: User = new User();
+  public currentUser: User = new User(null);
   public topics: Array<Topic> = [];
 
   constructor(

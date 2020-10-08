@@ -14,7 +14,6 @@ namespace Tete.Models.Authentication
 
     public Guid Id { get; set; }
 
-    [Required]
     public string Email { get; set; }
 
     [Required]

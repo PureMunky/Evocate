@@ -1,28 +1,31 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Tete.Models.Config
 {
 
-  /// <summary>
-  /// A system-wide setting.
-  /// </summary>
   public class Setting
   {
-    
-    /// <summary>
-    /// The setting PK.
-    /// </summary>
-    /// <value></value>
+
     [Key]
     [Required]
-    [MaxLength(30)]
     public string Key { get; set; }
 
-    /// <summary>
-    /// The value of the setting.
-    /// </summary>
-    /// <value></value>
-    [MaxLength(100)]
     public string Value { get; set; }
+
+    public DateTime Created { get; set; }
+
+    public DateTime LastUpdated { get; set; }
+
+    public Guid LastUpdatedBy { get; set; }
+
+    public Setting()
+    {
+      this.Key = "";
+      this.Value = "";
+      this.Created = DateTime.UtcNow;
+      this.LastUpdated = DateTime.UtcNow;
+      this.LastUpdatedBy = Guid.Empty;
+    }
   }
 }

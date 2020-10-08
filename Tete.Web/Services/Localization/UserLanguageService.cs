@@ -18,16 +18,10 @@ namespace Tete.Api.Services.Localization
 
     public List<UserLanguage> GetUserLanguages(Guid UserId)
     {
-      var languages = new List<UserLanguage>();
-
-      try
-      {
-        languages = this.mainContext.UserLanguages.Where(l => l.UserId == UserId).OrderBy(l => l.Priority).ToList();
-      }
-      catch (Exception)
-      {
-        languages = new List<UserLanguage>();
-      }
+      var languages = this.mainContext.UserLanguages
+        .Where(l => l.UserId == UserId)
+        .OrderBy(l => l.Priority)
+        .ToList();
 
       return languages;
     }
@@ -60,7 +54,7 @@ namespace Tete.Api.Services.Localization
 
           if (!found)
           {
-            this.mainContext.Add(newUl);
+            this.mainContext.UserLanguages.Add(newUl);
           }
         }
 

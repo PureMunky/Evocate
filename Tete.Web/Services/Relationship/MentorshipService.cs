@@ -76,13 +76,13 @@ namespace Tete.Api.Services.Relationships
       return this.mainContext.Mentorships.Where(m => m.Active && m.TopicId == TopicId && m.MentorUserId == Guid.Empty && m.LearnerUserId != UserId);
     }
 
-    public List<MentorshipVM> GetUserMentorships(Guid UserId)
+    public List<MentorshipVM> GetUserMentorships(Guid UserId, Guid TopicId = new Guid())
     {
       var rtnList = new List<MentorshipVM>();
 
       if (UserId == this.Actor.UserId || this.Actor.Roles.Contains("Admin"))
       {
-        var dbMentorships = this.mainContext.Mentorships.Where(m => m.Active && ((m.LearnerUserId == UserId && !m.LearnerClosed) || (m.MentorUserId == UserId && !m.MentorClosed))).ToList();
+        var dbMentorships = this.mainContext.Mentorships.Where(m => m.Active && (m.TopicId == TopicId || TopicId == Guid.Empty) && ((m.LearnerUserId == UserId && !m.LearnerClosed) || (m.MentorUserId == UserId && !m.MentorClosed))).ToList();
 
         foreach (Mentorship m in dbMentorships)
         {

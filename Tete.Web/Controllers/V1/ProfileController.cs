@@ -27,6 +27,8 @@ namespace Tete.Api.Controllers
       var service = new Services.Users.ProfileService(Context, CurrentUser);
       service.SaveProfile(value);
 
+      LogService.Write("Saved profile", String.Format("User:{0}", value.UserId));
+
       return new Response<Profile>(value);
     }
 

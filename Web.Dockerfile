@@ -10,6 +10,7 @@ RUN apt-get install nodejs -y
 # Copy everything else and build
 COPY . ./
 
+RUN bash markbuild.sh
 RUN dotnet publish -c Release -o out Tete.Web/Tete.Web.csproj
 
 # Build runtime image

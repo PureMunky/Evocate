@@ -9,8 +9,8 @@ export class LanguageService {
   constructor(
     private apiService: ApiService,
     private userService: UserService
-  ) {}
-  
+  ) { }
+
   private languages;
 
   public Load() {
@@ -21,7 +21,7 @@ export class LanguageService {
   }
 
   public Element(key) {
-    this.userService.CurrentUser().Languages[0].elements[key];
+    this.userService.CurrentUser().languages[0].elements[key];
   }
 
   public Languages() {

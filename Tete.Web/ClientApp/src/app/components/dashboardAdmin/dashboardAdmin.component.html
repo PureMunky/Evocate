@@ -1,8 +1,13 @@
 <h1>Dashboard</h1>
 
+<div class="input-group">
+  <button class="btn btn-secondary" (click)="load()">Refresh</button>
+</div>
+
 <div>
   <h3>Users</h3>
   <div>Total: {{stats.totalUsers}}</div>
+  <div>Registered: {{stats.registeredUsers}}</div>
   <div>Active: {{stats.activeUsers}}</div>
 </div>
 

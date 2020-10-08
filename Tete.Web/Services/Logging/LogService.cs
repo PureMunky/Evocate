@@ -82,6 +82,7 @@ namespace Tete.Api.Services.Logging
       var startDate = DateTime.UtcNow.AddMonths(-1);
 
       rtnDashboard.TotalUsers = this.mainContext.Users.AsNoTracking().Count();
+      rtnDashboard.RegisteredUsers = this.mainContext.Logins.AsNoTracking().Count();
       rtnDashboard.ActiveUsers = this.mainContext.Sessions.AsNoTracking().Where(s => s.LastUsed > startDate).Select(s => s.UserId).Distinct().Count();
 
       rtnDashboard.TotalTopics = this.mainContext.Topics.AsNoTracking().Count();

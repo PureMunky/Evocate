@@ -8,6 +8,7 @@ import { ApiService } from "../../services/api.service";
 export class DashboardAdminComponent {
   public stats: DashboardStatistics = {
     totalUsers: 0,
+    registeredUsers: 0,
     activeUsers: 0,
     totalTopics: 0,
     activeTopics: 0,
@@ -35,6 +36,7 @@ export class DashboardAdminComponent {
 
 interface DashboardStatistics {
   totalUsers: number,
+  registeredUsers: number,
   activeUsers: number,
   totalTopics: number,
   activeTopics: number,

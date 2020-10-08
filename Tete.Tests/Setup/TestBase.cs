@@ -90,7 +90,7 @@ namespace Tete.Tests.Setup
         Text = "Welcome!",
         LanguageId = english.LanguageId
       };
-      Element testElement = new Element() { Key = testLanguageElementKey, Text = testLanguageElementText};
+      Element testElement = new Element() { Key = testLanguageElementKey, Text = testLanguageElementText };
 
       var userLanguage = new UserLanguage()
       {
@@ -212,9 +212,10 @@ namespace Tete.Tests.Setup
         }
       };
 
-      for(int i = 0; i < 12; i++)
+      for (int i = 0; i < 12; i++)
       {
-        var t = new Topic() {
+        var t = new Topic()
+        {
           Name = Guid.NewGuid().ToString()
         };
 
@@ -255,6 +256,9 @@ namespace Tete.Tests.Setup
 
       mockContext.Setup(c => c.Mentorships)
         .Returns(MockContext.MockDBSet<Mentorship>(mentorships).Object);
+
+      mockContext.Setup(c => c.Logins)
+        .Returns(MockContext.MockDBSet<Login>().Object);
 
     }
 

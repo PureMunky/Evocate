@@ -13,7 +13,7 @@ using Tete.Api.Helpers;
 
 namespace Tete.Api.Controllers
 {
-  [Route("[controller]")]
+  [Route("[controller]/[action]")]
   [ApiController]
   public class InitController : ControllerBase
   {
@@ -29,9 +29,9 @@ namespace Tete.Api.Controllers
       this.loginController = new LoginController(mainContext);
       this.loginService = new LoginService(mainContext);
     }
-    // GET api/values
+
     [HttpGet]
-    public List<string> Get()
+    public List<string> Populate()
     {
       var output = new List<string>();
       var adminUserName = "admin";
@@ -157,6 +157,24 @@ namespace Tete.Api.Controllers
       }
 
       return output;
+    }
+
+    [HttpGet]
+    public string Migrate()
+    {
+      string response = "";
+
+      try
+      {
+        this.mainContext.Migrate();
+        response = "Success";
+      }
+      catch (Exception)
+      {
+        response = "Error";
+      }
+
+      return response;
     }
   }
 }

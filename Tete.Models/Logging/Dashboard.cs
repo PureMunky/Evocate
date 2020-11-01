@@ -5,6 +5,7 @@ namespace Tete.Models.Logging
   {
 
     public int TotalUsers { get; set; } = 0;
+    public int RegisteredUsers { get; set; } = 0;
     public int ActiveUsers { get; set; } = 0;
 
     public int TotalTopics { get; set; } = 0;
